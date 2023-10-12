@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/card'
 import { useRouter } from 'next/navigation'
 import { Button } from '../ui/button'
+import { DashboardCardLoading } from './DashboardCardLoading'
 
 type Content = {
   key: string
@@ -19,10 +20,15 @@ interface DashboardCardProps {
   description: string
   contents: Content[]
   path: string
+  loading: boolean
 }
 
 export function DashboardCard(props: DashboardCardProps) {
   const router = useRouter()
+
+  if (props.loading) {
+    return <DashboardCardLoading />
+  }
 
   return (
     <Card className="flex flex-col flex-1 items-center">

@@ -1,3 +1,5 @@
+import { GroupItem } from './groupTypes'
+
 export type SearchCustomersResponse = {
   searchCustomers: {
     totalCount: number
@@ -8,7 +10,11 @@ export type SearchCustomersResponse = {
 export type CustomerItem = {
   id: string
   name: string
-  // Add other fields if needed
+  phoneNumber: string
+  groups: GroupItem[]
+  lastPayment: string
+  nextPayment: string
+  active: boolean
 }
 
 export type SearchCustomersVariables = {
