@@ -13,3 +13,25 @@ export const LIST_GROUPS_DASHBOARD_QUERY = gql`
     }
   }
 `
+
+export const CREATE_GROUP_MUTATION = gql`
+  mutation CreateGroup($input: CreateGroupInput!) {
+    createGroup(input: $input) {
+      id
+      name
+      instructor {
+        id
+        name
+      }
+      times {
+        day
+        start_hour
+        finish_hour
+      }
+      customers {
+        id
+        name
+      }
+    }
+  }
+`

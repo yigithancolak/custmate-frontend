@@ -21,3 +21,17 @@ export type ListGroupsVariables = {
   offset: number
   limit: number
 }
+
+export type CreateGroupInput = {
+  name: string
+  instructor: string
+  times: Array<{
+    day: string
+    start_hour: string
+    finish_hour: string
+  }>
+}
+
+export type CreateGroupMutationResponse = {
+  createGroup: GroupItem
+}

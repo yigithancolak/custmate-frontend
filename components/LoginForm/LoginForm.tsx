@@ -15,6 +15,7 @@ import { loginSchema } from '@/lib/validation/auth'
 import { LoginResponse, LoginVariables } from '@/types/authTypes'
 import { useMutation } from '@apollo/client'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { useToast } from '../ui/use-toast'
@@ -25,6 +26,7 @@ export function LoginForm() {
   )
 
   const { toast } = useToast()
+  const router = useRouter()
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
