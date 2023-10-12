@@ -6,3 +6,12 @@ export type InstructorItem = {
   organizationId: string
   groups: GroupItem[]
 }
+
+export type ListInstructorsResponse = {
+  listInstructors: InstructorItem[]
+}
+
+export type ListInstructorsVariables = {
+  offset: number
+  limit: number
+}
