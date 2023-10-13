@@ -75,6 +75,7 @@ export default function GroupsPage() {
             description="Group will be deleted it is permanent. Are you sure ?"
             trigger={<Trash2 size={16} color="red" />}
             fn={() => handleDeleteGroup(cell.getValue<string>())}
+            loading={deleteGroupLoading}
           />
         </div>
       )

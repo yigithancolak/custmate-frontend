@@ -17,6 +17,7 @@ interface DialogBoxProps {
   description: string
   trigger: ReactNode
   fn: () => void
+  loading: boolean
 }
 
 export function DialogBox(props: DialogBoxProps) {
@@ -30,7 +31,10 @@ export function DialogBox(props: DialogBoxProps) {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={() => props.fn()}>
+          <AlertDialogAction
+            onClick={() => props.fn()}
+            disabled={props.loading}
+          >
             Continue
           </AlertDialogAction>
         </AlertDialogFooter>
