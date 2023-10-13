@@ -9,6 +9,14 @@ export const LIST_GROUPS_DASHBOARD_QUERY = gql`
         times {
           day
         }
+        instructor {
+          id
+          name
+        }
+        customers {
+          id
+          name
+        }
       }
     }
   }

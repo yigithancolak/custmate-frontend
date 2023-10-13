@@ -5,6 +5,10 @@ export const LIST_INSTRUCTORS_QUERY = gql`
     listInstructors(offset: $offset, limit: $limit) {
       id
       name
+      groups {
+        id
+        name
+      }
     }
   }
 `
