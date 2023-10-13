@@ -9,15 +9,17 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog'
-import { Ban } from 'lucide-react'
+import { useState } from 'react'
 import { CreateGroupForm } from '../CreateGroupForm/CreateGroupForm'
 import { CreateInstructorForm } from '../CreateInstructorForm/CreateInstructorForm'
 
 interface CreateItemModalProps {
   item: 'groups' | 'customers' | 'instructors' | 'times' | 'payments'
+  refetch: () => void
 }
 
 export function CreateItemModal(props: CreateItemModalProps) {
+  const [isOpen, setIsOpen] = useState(false)
   let FormComponent
 
   switch (props.item) {
@@ -30,12 +32,16 @@ export function CreateItemModal(props: CreateItemModalProps) {
     // case 'customers':
     //   FormComponent = ()=>CreateCustomerForm
     //   break
-    // ... handle other cases as needed
     default:
-      FormComponent = Ban //TODO: CHANGE
+      FormComponent = CreateGroupForm
   }
+
+  const closeFormModal = () => {
+    setIsOpen(false)
+  }
+
   return (
-    <Dialog>
+    <Dialog onOpenChange={() => setIsOpen(!isOpen)} open={isOpen}>
       <DialogTrigger asChild>
         <Button variant="outline">Create {props.item}</Button>
       </DialogTrigger>
@@ -46,7 +52,10 @@ export function CreateItemModal(props: CreateItemModalProps) {
             Enter the {props.item} informations
           </DialogDescription>
         </DialogHeader>
-        <FormComponent />
+        <FormComponent
+          refetch={props.refetch}
+          closeFormModal={closeFormModal}
+        />
       </DialogContent>
     </Dialog>
   )

@@ -5,6 +5,7 @@ export const LIST_GROUPS_DASHBOARD_QUERY = gql`
     listGroupsByOrganization(offset: $offset, limit: $limit) {
       totalCount
       items {
+        id
         name
         times {
           day
@@ -41,5 +42,11 @@ export const CREATE_GROUP_MUTATION = gql`
         name
       }
     }
+  }
+`
+
+export const DELETE_GROUP_MUTATION = gql`
+  mutation DeleteGroup($id: ID!) {
+    deleteGroup(id: $id)
   }
 `

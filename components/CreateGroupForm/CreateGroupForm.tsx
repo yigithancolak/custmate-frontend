@@ -37,7 +37,12 @@ import {
 } from '../ui/form'
 import { toast } from '../ui/use-toast'
 
-export function CreateGroupForm() {
+interface CreateGroupFormProps {
+  refetch: () => void
+  closeFormModal: () => void
+}
+
+export function CreateGroupForm(props: CreateGroupFormProps) {
   const { data, loading, error } = useQuery<
     ListInstructorsResponse,
     ListInstructorsVariables
@@ -83,6 +88,8 @@ export function CreateGroupForm() {
         toast({
           description: `Group named ${data.createGroup.name} successfully created`
         })
+        props.refetch()
+        props.closeFormModal()
       },
       onError: (err) => {
         toast({

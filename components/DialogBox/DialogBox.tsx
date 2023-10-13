@@ -10,11 +10,12 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger
 } from '@/components/ui/alert-dialog'
+import { ReactNode } from 'react'
 
 interface DialogBoxProps {
   title: string
   description: string
-  trigger: String
+  trigger: ReactNode
   fn: () => void
 }
 

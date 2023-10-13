@@ -35,3 +35,11 @@ export type CreateGroupInput = {
 export type CreateGroupMutationResponse = {
   createGroup: GroupItem
 }
+
+export type DeleteGroupResponse = {
+  deleteGroup: boolean
+}
+
+export type DeleteGroupVariables = {
+  id: string
+}
