@@ -9,13 +9,31 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog'
+import { Ban } from 'lucide-react'
 import { CreateGroupForm } from '../CreateGroupForm/CreateGroupForm'
+import { CreateInstructorForm } from '../CreateInstructorForm/CreateInstructorForm'
 
 interface CreateItemModalProps {
-  item: string
+  item: 'groups' | 'customers' | 'instructors' | 'times' | 'payments'
 }
 
 export function CreateItemModal(props: CreateItemModalProps) {
+  let FormComponent
+
+  switch (props.item) {
+    case 'groups':
+      FormComponent = CreateGroupForm
+      break
+    case 'instructors':
+      FormComponent = CreateInstructorForm
+      break
+    // case 'customers':
+    //   FormComponent = ()=>CreateCustomerForm
+    //   break
+    // ... handle other cases as needed
+    default:
+      FormComponent = Ban //TODO: CHANGE
+  }
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -28,7 +46,7 @@ export function CreateItemModal(props: CreateItemModalProps) {
             Enter the {props.item} informations
           </DialogDescription>
         </DialogHeader>
-        <CreateGroupForm />
+        <FormComponent />
       </DialogContent>
     </Dialog>
   )

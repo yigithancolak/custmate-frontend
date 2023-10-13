@@ -1,5 +1,4 @@
 'use client'
-
 import { envVariables } from '@/lib/envVariables'
 import { ApolloLink, HttpLink } from '@apollo/client'
 import {

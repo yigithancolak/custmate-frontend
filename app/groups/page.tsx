@@ -25,7 +25,7 @@ export default function GroupsPage() {
     <main className="flex flex-col items-center w-full h-full">
       <h3 className="text-2xl text-center py-6">Groups Of Organization</h3>
       <div className="flex w-10/12 md:w-10/12 flex-col gap-4">
-        <CreateItemModal item="Group" />
+        <CreateItemModal item="groups" />
         <DataTable columns={groupColumns} data={groups} loading={loading} />
       </div>
     </main>

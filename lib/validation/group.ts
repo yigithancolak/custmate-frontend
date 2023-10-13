@@ -28,7 +28,7 @@ const timeSchema = z.object({
 })
 
 export const createGroupSchema = z.object({
-  name: z.string(),
-  instructorId: z.string(),
+  name: z.string().min(2, 'Min length must be 2'),
+  instructorId: z.string().uuid('Not valid uuid'),
   times: z.array(timeSchema)
 })

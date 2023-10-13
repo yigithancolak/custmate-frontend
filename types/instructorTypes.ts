@@ -15,3 +15,15 @@ export type ListInstructorsVariables = {
   offset: number
   limit: number
 }
+
+export type CreateInstructorResponse = {
+  createInstructor: {
+    name: string
+  }
+}
+
+export type CreateInstructorVariables = {
+  input: {
+    name: string
+  }
+}

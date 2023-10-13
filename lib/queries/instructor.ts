@@ -8,3 +8,11 @@ export const LIST_INSTRUCTORS_QUERY = gql`
     }
   }
 `
+
+export const CREATE_INSTRUCTOR_MUTATION = gql`
+  mutation CreateInstructor($input: CreateInstructorInput!) {
+    createInstructor(input: $input) {
+      name
+    }
+  }
+`
