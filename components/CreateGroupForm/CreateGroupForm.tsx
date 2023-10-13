@@ -37,12 +37,12 @@ import {
 } from '../ui/form'
 import { toast } from '../ui/use-toast'
 
-interface CreateGroupFormProps {
+export interface CreateItemFormProps {
   refetch: () => void
   closeFormModal: () => void
 }
 
-export function CreateGroupForm(props: CreateGroupFormProps) {
+export function CreateGroupForm(props: CreateItemFormProps) {
   const { data, loading, error } = useQuery<
     ListInstructorsResponse,
     ListInstructorsVariables
@@ -152,11 +152,6 @@ export function CreateGroupForm(props: CreateGroupFormProps) {
                         <SelectValue placeholder="Select instructor" />
                       </SelectTrigger>
                       <SelectContent>
-                        {/* TODO:DELETE */}
-                        <SelectItem value="c7fb633e-36a1-42db-8214-91826e73b7a3">
-                          Ahmet
-                        </SelectItem>
-
                         {data?.listInstructors.map((instructor) => {
                           return (
                             <SelectItem

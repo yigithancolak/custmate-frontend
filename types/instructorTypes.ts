@@ -27,3 +27,11 @@ export type CreateInstructorVariables = {
     name: string
   }
 }
+
+export type DeleteInstructorResponse = {
+  deleteInstructor: boolean
+}
+
+export type DeleteInstructorVariables = {
+  id: string
+}

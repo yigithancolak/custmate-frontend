@@ -20,3 +20,9 @@ export const CREATE_INSTRUCTOR_MUTATION = gql`
     }
   }
 `
+
+export const DELETE_INSTRUCTOR_MUTATION = gql`
+  mutation DeleteInstructor($id: ID!) {
+    deleteInstructor(id: $id)
+  }
+`

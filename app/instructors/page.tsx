@@ -2,15 +2,24 @@
 
 import { CreateItemModal } from '@/components/CreateItemModal/CreateItemModal'
 import { DataTable } from '@/components/DataTable/DataTable'
-import { LIST_INSTRUCTORS_QUERY } from '@/lib/queries/instructor'
+import { DialogBox } from '@/components/DialogBox/DialogBox'
+import { Button } from '@/components/ui/button'
+import { toast } from '@/components/ui/use-toast'
+import {
+  DELETE_INSTRUCTOR_MUTATION,
+  LIST_INSTRUCTORS_QUERY
+} from '@/lib/queries/instructor'
 import { GroupItem } from '@/types/groupTypes'
 import {
+  DeleteInstructorResponse,
+  DeleteInstructorVariables,
   InstructorItem,
   ListInstructorsResponse,
   ListInstructorsVariables
 } from '@/types/instructorTypes'
-import { useQuery } from '@apollo/client'
+import { useMutation, useQuery } from '@apollo/client'
 import { ColumnDef } from '@tanstack/react-table'
+import { PenSquare, Trash2 } from 'lucide-react'
 
 export default function InstructorsPage() {
   const { data, loading, error, refetch } = useQuery<
@@ -23,10 +32,49 @@ export default function InstructorsPage() {
     }
   })
 
+  const [deleteInstructor, { loading: deleteInstructorLoading }] = useMutation<
+    DeleteInstructorResponse,
+    DeleteInstructorVariables
+  >(DELETE_INSTRUCTOR_MUTATION)
+
+  const handleDeleteInstructor = (id: string) => {
+    deleteInstructor({
+      variables: {
+        id
+      },
+      onCompleted: () => {
+        toast({
+          description: "Instructor and instructor's groups successfully deleted"
+        })
+        refetch()
+      },
+      onError: (err) => {
+        toast({
+          variant: 'destructive',
+          description: err.message
+        })
+      }
+    })
+  }
+
   const instructorColumns: ColumnDef<InstructorItem>[] = [
     {
+      header: 'Operations',
       accessorKey: 'id',
-      header: 'Instructor ID'
+      cell: (cell) => (
+        <div className="flex flex-1 py-2">
+          <Button variant="outline" size="icon" className="mr-2">
+            <PenSquare size={16} />
+          </Button>
+          <DialogBox
+            title="Deleting group"
+            description="Group will be deleted it is permanent. Are you sure ?"
+            trigger={<Trash2 size={16} color="red" />}
+            fn={() => handleDeleteInstructor(cell.getValue<string>())}
+            loading={deleteInstructorLoading}
+          />
+        </div>
+      )
     },
     {
       accessorKey: 'name',

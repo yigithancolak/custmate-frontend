@@ -22,9 +22,10 @@ import { Save } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
+import { CreateItemFormProps } from '../CreateGroupForm/CreateGroupForm'
 import { useToast } from '../ui/use-toast'
 
-export function CreateInstructorForm() {
+export function CreateInstructorForm(props: CreateItemFormProps) {
   const [createInstructor, { loading: createInstructorLoading }] = useMutation<
     CreateInstructorResponse,
     CreateInstructorVariables
@@ -51,6 +52,8 @@ export function CreateInstructorForm() {
         toast({
           description: `Instructor named ${data.createInstructor.name} has successfully created`
         })
+        props.refetch()
+        props.closeFormModal()
       },
       onError: (err) => {
         toast({
