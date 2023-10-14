@@ -12,10 +12,10 @@ import {
 import { Input } from '@/components/ui/input'
 import { LOGIN_MUTATION } from '@/lib/queries/auth'
 import { loginSchema } from '@/lib/validation/auth'
+import { useAuth } from '@/providers/AuthProvider'
 import { LoginResponse, LoginVariables } from '@/types/authTypes'
 import { useMutation } from '@apollo/client'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { useToast } from '../ui/use-toast'
@@ -26,7 +26,7 @@ export function LoginForm() {
   )
 
   const { toast } = useToast()
-  const router = useRouter()
+  const { login: setLogin } = useAuth()
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -43,10 +43,10 @@ export function LoginForm() {
         password: values.password
       },
       onCompleted: (data) => {
-        localStorage.setItem('accessToken', data.login.accessToken)
         toast({
           description: 'User Successfully Logged In'
         })
+        setLogin(data.login.accessToken)
       },
       onError: (err) => {
         toast({

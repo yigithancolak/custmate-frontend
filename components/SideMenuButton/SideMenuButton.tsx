@@ -7,6 +7,7 @@ import {
   SheetTitle,
   SheetTrigger
 } from '@/components/ui/sheet'
+import { useAuth } from '@/providers/AuthProvider'
 import {
   AlignJustify,
   DollarSign,
@@ -59,10 +60,10 @@ const tabs: SideMenuTabComponents[] = [
 export function SideMenuButton() {
   const router = useRouter()
   const [isSheetOpen, setIsSheetOpen] = useState(false)
+  const { logout: setLogout } = useAuth()
 
   const logOut = () => {
-    localStorage.removeItem('accessToken')
-    router.push('/auth')
+    setLogout()
     setIsSheetOpen(false)
   }
 
