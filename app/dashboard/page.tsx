@@ -2,7 +2,7 @@
 
 import { DashboardCard } from '@/components/DashboardCard/DashboardCard'
 import { SEARCH_CUSTOMERS_QUERY } from '@/lib/queries/customer'
-import { LIST_GROUPS_DASHBOARD_QUERY } from '@/lib/queries/group'
+import { LIST_GROUPS_BY_ORGANIZATION } from '@/lib/queries/group'
 import { LIST_PAYMENTS_FOR_MONTH } from '@/lib/queries/payment'
 import {
   SearchCustomersResponse,
@@ -21,7 +21,7 @@ export default function DashboardPage() {
     loading: groupsLoading,
     error: groupsError
   } = useQuery<ListGroupsResponse, ListGroupsVariables>(
-    LIST_GROUPS_DASHBOARD_QUERY,
+    LIST_GROUPS_BY_ORGANIZATION,
     {
       variables: {
         offset: 0,

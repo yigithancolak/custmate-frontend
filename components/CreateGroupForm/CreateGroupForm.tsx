@@ -35,7 +35,7 @@ import {
   FormLabel,
   FormMessage
 } from '../ui/form'
-import { toast } from '../ui/use-toast'
+import { useToast } from '../ui/use-toast'
 
 export interface CreateItemFormProps {
   refetch: () => void
@@ -43,6 +43,8 @@ export interface CreateItemFormProps {
 }
 
 export function CreateGroupForm(props: CreateItemFormProps) {
+  const { toast } = useToast()
+
   const { data, loading, error } = useQuery<
     ListInstructorsResponse,
     ListInstructorsVariables

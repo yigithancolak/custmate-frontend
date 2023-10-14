@@ -30,3 +30,23 @@ export type SearchCustomerFilter = {
   latePayment?: boolean
   upcomingPayment?: boolean
 }
+
+export type DeleteCustomerResponse = {
+  deleteCustomer: boolean
+}
+
+export type DeleteCustomerVariables = {
+  id: string
+}
+
+export type CreateCustomerResponse = {
+  createCustomer: CustomerItem
+}
+
+export type CreateCustomerInput = {
+  name: string
+  phoneNumber: string
+  groups: string[]
+  lastPayment: string // formatted as YYYY-MM-DD
+  nextPayment: string // formatted as YYYY-MM-DD
+}

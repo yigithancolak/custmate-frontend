@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-export const LIST_GROUPS_DASHBOARD_QUERY = gql`
+export const LIST_GROUPS_BY_ORGANIZATION = gql`
   query ListGroupsByOrganization($offset: Int = 0, $limit: Int = 10) {
     listGroupsByOrganization(offset: $offset, limit: $limit) {
       totalCount
@@ -18,6 +18,18 @@ export const LIST_GROUPS_DASHBOARD_QUERY = gql`
           id
           name
         }
+      }
+    }
+  }
+`
+
+export const LIST_GROUPS_BY_ORGANIZATION_NO_SUB_ELEMENTS = gql`
+  query ListGroupsByOrganization($offset: Int = 0, $limit: Int = 10) {
+    listGroupsByOrganization(offset: $offset, limit: $limit) {
+      totalCount
+      items {
+        id
+        name
       }
     }
   }

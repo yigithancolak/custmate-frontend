@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
 import {
   DELETE_GROUP_MUTATION,
-  LIST_GROUPS_DASHBOARD_QUERY
+  LIST_GROUPS_BY_ORGANIZATION
 } from '@/lib/queries/group'
 import { CustomerItem } from '@/types/customerTypes'
 import {
@@ -27,7 +27,7 @@ export default function GroupsPage() {
     error,
     refetch: refetchGroups
   } = useQuery<ListGroupsResponse, ListGroupsVariables>(
-    LIST_GROUPS_DASHBOARD_QUERY,
+    LIST_GROUPS_BY_ORGANIZATION,
     {
       variables: {
         offset: 0,

@@ -11,7 +11,34 @@ export const SEARCH_CUSTOMERS_QUERY = gql`
       items {
         id
         name
+        phoneNumber
+        groups {
+          id
+          name
+        }
+        lastPayment
+        nextPayment
+        active
       }
+    }
+  }
+`
+
+export const DELETE_CUSTOMER_MUTATION = gql`
+  mutation DeleteCustomer($id: ID!) {
+    deleteCustomer(id: $id)
+  }
+`
+
+export const CREATE_CUSTOMER_MUTATION = gql`
+  mutation CreateCustomer($input: CreateCustomerInput!) {
+    createCustomer(input: $input) {
+      id
+      name
+      # groups
+      # phoneNumber
+      # lastPayment
+      # nextPayment
     }
   }
 `

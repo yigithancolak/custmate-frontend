@@ -10,6 +10,7 @@ import {
   DialogTrigger
 } from '@/components/ui/dialog'
 import { useState } from 'react'
+import { CreateCustomerForm } from '../CreateCustomerForm/CreateCustomerForm'
 import { CreateGroupForm } from '../CreateGroupForm/CreateGroupForm'
 import { CreateInstructorForm } from '../CreateInstructorForm/CreateInstructorForm'
 
@@ -29,9 +30,9 @@ export function CreateItemModal(props: CreateItemModalProps) {
     case 'instructors':
       FormComponent = CreateInstructorForm
       break
-    // case 'customers':
-    //   FormComponent = ()=>CreateCustomerForm
-    //   break
+    case 'customers':
+      FormComponent = CreateCustomerForm
+      break
     default:
       FormComponent = CreateGroupForm
   }
