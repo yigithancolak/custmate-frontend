@@ -181,8 +181,6 @@ export function CreateCustomerForm(props: CreateItemFormProps) {
                           <Checkbox
                             checked={field.value?.includes(group.id)}
                             onCheckedChange={(checked) => {
-                              console.log(field.value)
-
                               return checked
                                 ? field.onChange([...field.value, group.id])
                                 : field.onChange(

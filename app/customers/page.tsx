@@ -86,11 +86,19 @@ export default function CustomersPage() {
     },
     {
       header: 'Last Payment',
-      accessorKey: 'lastPayment'
+      accessorKey: 'lastPayment',
+      cell: (cell) => {
+        const date = cell.getValue<string>()
+        return date.split('T')[0]
+      }
     },
     {
       header: 'Next Payment',
-      accessorKey: 'nextPayment'
+      accessorKey: 'nextPayment',
+      cell: (cell) => {
+        const date = cell.getValue<string>()
+        return date.split('T')[0]
+      }
     },
     {
       header: 'Phone Number',
@@ -99,23 +107,32 @@ export default function CustomersPage() {
     {
       header: 'Is Active',
       accessorKey: 'active'
-    },
-    {
-      header: 'Groups Count',
-      accessorKey: 'groups.length'
     }
+    //TODO: ADD GROUPS TO SEARCH CUSTOMERS RESULT IN BACKEND
+    // {
+    //   header: 'Groups Count',
+    //   accessorKey: 'groups',
+    //   cell: (cell) => {
+    //     const groupsOfCustomer = cell.getValue<GroupItem[]>()
+    //     return groupsOfCustomer.length
+    //   }
+    // }
   ]
 
   if (error) return <p>Error: {error.message}</p>
 
-  const groups = data?.searchCustomers.items || []
+  const customers = data?.searchCustomers.items || []
 
   return (
     <main className="flex flex-col items-center w-full h-full">
-      <h3 className="text-2xl text-center py-6">Groups Of Organization</h3>
+      <h3 className="text-2xl text-center py-6">Customers Of Organization</h3>
       <div className="flex w-10/12 md:w-10/12 flex-col gap-4">
         <CreateItemModal item="customers" refetch={refetchCustomers} />
-        <DataTable columns={customerColumns} data={groups} loading={loading} />
+        <DataTable
+          columns={customerColumns}
+          data={customers}
+          loading={loading}
+        />
       </div>
     </main>
   )
