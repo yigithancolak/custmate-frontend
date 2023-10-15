@@ -16,11 +16,17 @@ import {
   ListGroupsResponse,
   ListGroupsVariables
 } from '@/types/groupTypes'
+import { TimeItem } from '@/types/timeTypes'
 import { useMutation, useQuery } from '@apollo/client'
-import { ColumnDef } from '@tanstack/react-table'
+import { ColumnDef, PaginationState } from '@tanstack/react-table'
 import { PenSquare, Trash2 } from 'lucide-react'
+import { useState } from 'react'
 
 export default function GroupsPage() {
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10
+  })
   const {
     data,
     loading,
@@ -30,8 +36,8 @@ export default function GroupsPage() {
     LIST_GROUPS_BY_ORGANIZATION,
     {
       variables: {
-        offset: 0,
-        limit: 10
+        offset: pagination.pageIndex * pagination.pageSize,
+        limit: pagination.pageSize
       }
     }
   )
@@ -89,8 +95,14 @@ export default function GroupsPage() {
       header: 'Instructor'
     },
     {
-      accessorKey: 'times.length',
-      header: 'Number of Times'
+      accessorKey: 'times',
+      header: 'Days',
+      cell: (item) =>
+        item.cell.getValue<TimeItem[]>().map((t, i) => (
+          <p key={i}>
+            {t.day} {t.start_hour.slice(0, -3)} - {t.finish_hour.slice(0, -3)}
+          </p>
+        ))
     },
     {
       accessorKey: 'customers',
@@ -102,13 +114,25 @@ export default function GroupsPage() {
   if (error) return <p>Error: {error.message}</p>
 
   const groups = data?.listGroupsByOrganization.items || []
+  const pageCount =
+    Math.ceil(
+      (data?.listGroupsByOrganization.totalCount as number) /
+        pagination.pageSize
+    ) || 0
 
   return (
     <main className="flex flex-col items-center w-full h-full">
       <h3 className="text-2xl text-center py-6">Groups Of Organization</h3>
       <div className="flex w-10/12 md:w-10/12 flex-col gap-4">
         <CreateItemModal item="groups" refetch={refetchGroups} />
-        <DataTable columns={groupColumns} data={groups} loading={loading} />
+        <DataTable
+          columns={groupColumns}
+          data={groups}
+          loading={loading}
+          pageCount={pageCount}
+          pagination={pagination}
+          setPagination={setPagination}
+        />
       </div>
     </main>
   )

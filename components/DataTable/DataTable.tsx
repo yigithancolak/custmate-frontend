@@ -2,8 +2,10 @@
 
 import {
   ColumnDef,
+  PaginationState,
   flexRender,
   getCoreRowModel,
+  getPaginationRowModel,
   useReactTable
 } from '@tanstack/react-table'
 
@@ -15,73 +17,98 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
+import { Dispatch, SetStateAction } from 'react'
 import { SkeletonRow } from './SkeletonRow'
+import { DataTablePagination } from './TablePagination'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   loading: boolean
+  pageCount: number
+  pagination: PaginationState
+  setPagination: Dispatch<SetStateAction<PaginationState>>
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
-  loading
+  loading,
+  pageCount,
+  pagination,
+  setPagination
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
     columns,
-    getCoreRowModel: getCoreRowModel()
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    pageCount,
+    state: {
+      pagination
+    },
+    manualPagination: true,
+    onPaginationChange: setPagination
   })
 
   return (
-    <div className="rounded-md border">
-      <Table>
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TableHead>
-                )
-              })}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {loading ? (
-            Array.from({ length: 5 }).map((_, rowIndex) => (
-              <SkeletonRow key={rowIndex} columnsCount={columns.length} />
-            ))
-          ) : table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && 'selected'}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
+    <div className="mb-10">
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
+                  )
+                })}
               </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {loading ? (
+              Array.from({ length: 5 }).map((_, rowIndex) => (
+                <SkeletonRow key={rowIndex} columnsCount={columns.length} />
+              ))
+            ) : table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && 'selected'}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+
+      <DataTablePagination table={table} />
     </div>
   )
 }

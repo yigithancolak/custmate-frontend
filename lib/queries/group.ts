@@ -9,6 +9,8 @@ export const LIST_GROUPS_BY_ORGANIZATION = gql`
         name
         times {
           day
+          start_hour
+          finish_hour
         }
         instructor {
           id
