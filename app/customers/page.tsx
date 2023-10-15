@@ -16,10 +16,16 @@ import {
   SearchCustomersVariables
 } from '@/types/customerTypes'
 import { useMutation, useQuery } from '@apollo/client'
-import { ColumnDef } from '@tanstack/react-table'
+import { ColumnDef, PaginationState } from '@tanstack/react-table'
 import { PenSquare, Trash2 } from 'lucide-react'
+import { useState } from 'react'
 
 export default function CustomersPage() {
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10
+  })
+
   const {
     data,
     loading,
@@ -29,8 +35,8 @@ export default function CustomersPage() {
     SEARCH_CUSTOMERS_QUERY,
     {
       variables: {
-        offset: 0,
-        limit: 10,
+        offset: pagination.pageIndex * pagination.pageSize,
+        limit: pagination.pageSize,
         filter: {}
       }
     }
@@ -122,6 +128,10 @@ export default function CustomersPage() {
   if (error) return <p>Error: {error.message}</p>
 
   const customers = data?.searchCustomers.items || []
+  const pageCount =
+    Math.ceil(
+      (data?.searchCustomers.totalCount as number) / pagination.pageSize
+    ) || 0
 
   return (
     <main className="flex flex-col items-center w-full h-full">
@@ -132,6 +142,9 @@ export default function CustomersPage() {
           columns={customerColumns}
           data={customers}
           loading={loading}
+          pageCount={pageCount}
+          pagination={pagination}
+          setPagination={setPagination}
         />
       </div>
     </main>
