@@ -52,7 +52,7 @@ export function DataTable<TData, TValue>({
   })
 
   return (
-    <div className="mb-10">
+    <div className="mb-10 flex flex-col">
       <div className="rounded-md border">
         <Table>
           <TableHeader>
