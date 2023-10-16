@@ -15,25 +15,17 @@ import { ControllerRenderProps } from 'react-hook-form'
 import { Calendar } from '../ui/calendar'
 import { Popover, PopoverTrigger } from '../ui/popover'
 
-interface FormDatePickerItemProps<K extends 'nextPayment' | 'lastPayment'> {
-  field: ControllerRenderProps<
-    {
-      name: string
-      phoneNumber: string
-      groups: string[]
-      lastPayment: Date
-      nextPayment: Date
-    },
-    K
-  >
+interface FormDatePickerItemProps<
+  K extends 'nextPayment' | 'lastPayment' | 'date' | 'nextPaymentDate'
+> {
+  field: ControllerRenderProps<any, K>
   label: string
-  description: string
 }
 
-export function FormDatePickerItem<K extends 'nextPayment' | 'lastPayment'>(
-  props: FormDatePickerItemProps<K>
-) {
-  const { field, label, description } = props
+export function FormDatePickerItem<
+  K extends 'nextPayment' | 'lastPayment' | 'date' | 'nextPaymentDate'
+>(props: FormDatePickerItemProps<K>) {
+  const { field, label } = props
   return (
     <FormItem className="w-full">
       <FormLabel className="mr-3">{label}</FormLabel>
@@ -66,7 +58,7 @@ export function FormDatePickerItem<K extends 'nextPayment' | 'lastPayment'>(
             selected={field.value}
             onSelect={field.onChange}
             disabled={(date) =>
-              field.name === 'nextPayment'
+              field.name === 'nextPayment' || field.name === 'nextPaymentDate'
                 ? date < new Date()
                 : date < new Date('1900-01-01')
             }

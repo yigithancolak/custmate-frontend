@@ -90,6 +90,8 @@ export function CreateCustomerForm(props: CreateItemFormProps) {
     })
   }
 
+  console.log(form.formState.errors.groups)
+
   if (groupsLoading) {
     return <p>Loading</p>
   }
@@ -135,11 +137,7 @@ export function CreateCustomerForm(props: CreateItemFormProps) {
           control={form.control}
           name="lastPayment"
           render={({ field }) => (
-            <FormDatePickerItem
-              field={field}
-              label="Last Payment"
-              description="Choose the last payment of customer"
-            />
+            <FormDatePickerItem field={field} label="Last Payment" />
           )}
         />
 
@@ -147,18 +145,14 @@ export function CreateCustomerForm(props: CreateItemFormProps) {
           control={form.control}
           name="nextPayment"
           render={({ field }) => (
-            <FormDatePickerItem
-              field={field}
-              label="Next Payment"
-              description="Choose the next payment of customer"
-            />
+            <FormDatePickerItem field={field} label="Next Payment" />
           )}
         />
 
         <FormField
           control={form.control}
           name="groups"
-          render={({ field }) => (
+          render={() => (
             <FormItem>
               <div className="mb-4">
                 <FormLabel className="text-base">Groups</FormLabel>

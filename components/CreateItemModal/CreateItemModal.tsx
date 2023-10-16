@@ -13,6 +13,7 @@ import { useState } from 'react'
 import { CreateCustomerForm } from '../CreateCustomerForm/CreateCustomerForm'
 import { CreateGroupForm } from '../CreateGroupForm/CreateGroupForm'
 import { CreateInstructorForm } from '../CreateInstructorForm/CreateInstructorForm'
+import { CreatePaymentForm } from '../CreatePaymentForm/CreatePaymentForm'
 
 interface CreateItemModalProps {
   item: 'groups' | 'customers' | 'instructors' | 'times' | 'payments'
@@ -33,8 +34,11 @@ export function CreateItemModal(props: CreateItemModalProps) {
     case 'customers':
       FormComponent = CreateCustomerForm
       break
+    case 'payments':
+      FormComponent = CreatePaymentForm
+      break
     default:
-      FormComponent = CreateGroupForm
+      return
   }
 
   const closeFormModal = () => {
@@ -46,7 +50,7 @@ export function CreateItemModal(props: CreateItemModalProps) {
       <DialogTrigger asChild>
         <Button variant="outline">Create {props.item}</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] overflow-y-auto max-h-[70vh]">
+      <DialogContent className="flex flex-col sm:max-w-[425px] overflow-y-auto max-h-[70vh]">
         <DialogHeader>
           <DialogTitle>Create {props.item}</DialogTitle>
           <DialogDescription>

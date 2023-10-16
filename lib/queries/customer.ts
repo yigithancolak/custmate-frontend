@@ -24,6 +24,16 @@ export const SEARCH_CUSTOMERS_QUERY = gql`
   }
 `
 
+export const LIST_CUSTOMERS_BY_GROUP = gql`
+  query ListCustomersByGroup($groupId: ID!, $offset: Int, $limit: Int) {
+    listCustomersByGroup(groupId: $groupId, offset: $offset, limit: $limit) {
+      id
+      name
+      phoneNumber
+    }
+  }
+`
+
 export const DELETE_CUSTOMER_MUTATION = gql`
   mutation DeleteCustomer($id: ID!) {
     deleteCustomer(id: $id)

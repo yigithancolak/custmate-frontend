@@ -33,3 +33,25 @@ export type ListPaymentsVariables = {
   startDate: string
   endDate: string
 }
+
+export type DeletePaymentResponse = {
+  deletePayment: boolean
+}
+
+export type DeletePaymentVariables = {
+  id: string
+}
+
+export type CreatePaymentInput = {
+  amount: number
+  date: string
+  nextPaymentDate: string
+  paymentType: PaymentType
+  currency: Currency
+  customerId: string
+  groupId: string
+}
+
+export type CreatePaymentResponse = {
+  createPayment: PaymentItem
+}

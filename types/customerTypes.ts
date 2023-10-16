@@ -50,3 +50,13 @@ export type CreateCustomerInput = {
   lastPayment: string // formatted as YYYY-MM-DD
   nextPayment: string // formatted as YYYY-MM-DD
 }
+
+export type ListCustomersByGroupResponse = {
+  listCustomersByGroup: CustomerItem[]
+}
+
+export type ListCustomersByGroupVariables = {
+  groupId: string
+  offset?: number
+  limit?: number
+}
