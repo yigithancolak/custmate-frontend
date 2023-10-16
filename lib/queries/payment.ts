@@ -52,6 +52,18 @@ export const LIST_PAYMENTS_BY_ORGANIZATION = gql`
   }
 `
 
+export const GET_PAYMENT_BY_ID = gql`
+  query GetPayment($id: ID!) {
+    getPayment(id: $id) {
+      id
+      amount
+      currency
+      date
+      paymentType
+    }
+  }
+`
+
 export const DELETE_PAYMENT_MUTATION = gql`
   mutation DeletePayment($id: ID!) {
     deletePayment(id: $id)
@@ -67,5 +79,11 @@ export const CREATE_PAYMENT_MUTATION = gql`
       paymentType
       currency
     }
+  }
+`
+
+export const UPDATE_PAYMENT_MUTATION = gql`
+  mutation UpdatePayment($id: ID!, $input: UpdatePaymentInput!) {
+    updatePayment(id: $id, input: $input)
   }
 `

@@ -40,6 +40,8 @@ import { useToast } from '../ui/use-toast'
 export interface CreateItemFormProps {
   refetch: () => void
   closeFormModal: () => void
+  type: 'create' | 'update'
+  itemId?: string
 }
 
 export function CreateGroupForm(props: CreateItemFormProps) {

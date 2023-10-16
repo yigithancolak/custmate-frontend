@@ -34,6 +34,14 @@ export type ListPaymentsVariables = {
   endDate: string
 }
 
+export type GetPaymentResponse = {
+  getPayment: PaymentItem
+}
+
+export type GetPaymentVariables = {
+  id: string
+}
+
 export type DeletePaymentResponse = {
   deletePayment: boolean
 }
@@ -54,4 +62,15 @@ export type CreatePaymentInput = {
 
 export type CreatePaymentResponse = {
   createPayment: PaymentItem
+}
+
+export type UpdatePaymentInput = {
+  amount?: number
+  date?: string
+  paymentType?: PaymentType // Adjust as per the actual PaymentType enum values
+  currency?: Currency // Adjust as per the actual Currency enum values
+}
+
+export type UpdatePaymentResponse = {
+  updatePayment: string
 }

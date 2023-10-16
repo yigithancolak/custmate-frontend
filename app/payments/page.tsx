@@ -2,8 +2,8 @@
 import { CreateItemModal } from '@/components/CreateItemModal/CreateItemModal'
 import { DataTable } from '@/components/DataTable/DataTable'
 import { DialogBox } from '@/components/DialogBox/DialogBox'
-import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
+import { adjustDateStringFormat } from '@/lib/helpers/dateHelpers'
 import {
   DELETE_PAYMENT_MUTATION,
   LIST_PAYMENTS_BY_ORGANIZATION
@@ -17,7 +17,7 @@ import {
 } from '@/types/paymentTypes'
 import { useMutation, useQuery } from '@apollo/client'
 import { ColumnDef, PaginationState } from '@tanstack/react-table'
-import { PenSquare, Trash2 } from 'lucide-react'
+import { Trash2 } from 'lucide-react'
 import { useState } from 'react'
 
 export default function PaymentsPage() {
@@ -73,9 +73,12 @@ export default function PaymentsPage() {
       accessorKey: 'id',
       cell: (cell) => (
         <div className="flex flex-1 py-2">
-          <Button variant="outline" size="icon" className="mr-2">
-            <PenSquare size={16} />
-          </Button>
+          <CreateItemModal
+            item="payments"
+            refetch={refetchPayments}
+            type="update"
+            itemId={cell.getValue<string>()}
+          />
           <DialogBox
             title="Deleting payment"
             description="Payment will be deleted it is permanent. Are you sure ?"
@@ -92,7 +95,11 @@ export default function PaymentsPage() {
     },
     {
       accessorKey: 'date',
-      header: 'Date'
+      header: 'Date',
+      cell: (cell) => {
+        const date = cell.getValue<string>()
+        return adjustDateStringFormat(date)
+      }
     },
     {
       accessorKey: 'paymentType',
@@ -118,7 +125,11 @@ export default function PaymentsPage() {
     <main className="flex flex-col items-center w-full h-full">
       <h3 className="text-2xl text-center py-6">Payments Of Organization</h3>
       <div className="flex w-10/12 md:w-10/12 flex-col gap-4">
-        <CreateItemModal item="payments" refetch={refetchPayments} />
+        <CreateItemModal
+          item="payments"
+          refetch={refetchPayments}
+          type="create"
+        />
         <DataTable
           columns={paymentColumns}
           data={payments}
