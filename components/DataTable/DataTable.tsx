@@ -17,6 +17,7 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
+import { calculatePageCount } from '@/lib/helpers/mathHelpers'
 import { Dispatch, SetStateAction } from 'react'
 import { SkeletonRow } from './SkeletonRow'
 import { DataTablePagination } from './TablePagination'
@@ -25,7 +26,7 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   loading: boolean
-  pageCount: number
+  totalCount: number
   pagination: PaginationState
   setPagination: Dispatch<SetStateAction<PaginationState>>
 }
@@ -34,16 +35,16 @@ export function DataTable<TData, TValue>({
   columns,
   data,
   loading,
-  pageCount,
   pagination,
-  setPagination
+  setPagination,
+  totalCount
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    pageCount,
+    pageCount: calculatePageCount(totalCount, pagination.pageSize),
     state: {
       pagination
     },
@@ -108,7 +109,7 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
 
-      <DataTablePagination table={table} />
+      <DataTablePagination table={table} totalCount={totalCount} />
     </div>
   )
 }

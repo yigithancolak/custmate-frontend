@@ -9,6 +9,7 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog'
+import { ItemType } from '@/layouts/PageLayout/PageLayout'
 import { PenSquare } from 'lucide-react'
 import { useState } from 'react'
 import { CreateCustomerForm } from '../CreateCustomerForm/CreateCustomerForm'
@@ -17,7 +18,7 @@ import { CreateInstructorForm } from '../CreateInstructorForm/CreateInstructorFo
 import { CreatePaymentForm } from '../CreatePaymentForm/CreatePaymentForm'
 
 interface CreateItemModalProps {
-  item: 'groups' | 'customers' | 'instructors' | 'times' | 'payments'
+  item: ItemType
   refetch: () => void
   type: 'create' | 'update'
   itemId?: string

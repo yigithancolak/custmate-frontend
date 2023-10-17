@@ -1,9 +1,8 @@
 'use client'
-import { CreateItemModal } from '@/components/CreateItemModal/CreateItemModal'
-import { DataTable } from '@/components/DataTable/DataTable'
 import { DialogBox } from '@/components/DialogBox/DialogBox'
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
+import { PageLayout } from '@/layouts/PageLayout/PageLayout'
 import {
   DELETE_GROUP_MUTATION,
   LIST_GROUPS_BY_ORGANIZATION
@@ -20,9 +19,11 @@ import { TimeItem } from '@/types/timeTypes'
 import { useMutation, useQuery } from '@apollo/client'
 import { ColumnDef, PaginationState } from '@tanstack/react-table'
 import { PenSquare, Trash2 } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function GroupsPage() {
+  const [groups, setGroups] = useState<GroupItem[]>([])
+  const [totalCount, setTotalCount] = useState(0)
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10
@@ -111,29 +112,25 @@ export default function GroupsPage() {
     }
   ]
 
+  useEffect(() => {
+    if (data?.listGroupsByOrganization.items) {
+      setGroups(data?.listGroupsByOrganization.items)
+      setTotalCount(data.listGroupsByOrganization.totalCount)
+    }
+  }, [data])
+
   if (error) return <p>Error: {error.message}</p>
 
-  const groups = data?.listGroupsByOrganization.items || []
-  const pageCount =
-    Math.ceil(
-      (data?.listGroupsByOrganization.totalCount as number) /
-        pagination.pageSize
-    ) || 0
-
   return (
-    <main className="flex flex-col items-center w-full h-full">
-      <h3 className="text-2xl text-center py-6">Groups Of Organization</h3>
-      <div className="flex w-10/12 md:w-10/12 flex-col gap-4">
-        <CreateItemModal item="groups" refetch={refetchGroups} />
-        <DataTable
-          columns={groupColumns}
-          data={groups}
-          loading={loading}
-          pageCount={pageCount}
-          pagination={pagination}
-          setPagination={setPagination}
-        />
-      </div>
-    </main>
+    <PageLayout
+      columns={groupColumns}
+      data={groups}
+      item="groups"
+      loading={loading}
+      totalCount={totalCount}
+      pagination={pagination}
+      refetch={refetchGroups}
+      setPagination={setPagination}
+    />
   )
 }

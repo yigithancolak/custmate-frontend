@@ -1,9 +1,8 @@
 'use client'
-import { CreateItemModal } from '@/components/CreateItemModal/CreateItemModal'
-import { DataTable } from '@/components/DataTable/DataTable'
 import { DialogBox } from '@/components/DialogBox/DialogBox'
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
+import { PageLayout } from '@/layouts/PageLayout/PageLayout'
 import {
   DELETE_CUSTOMER_MUTATION,
   SEARCH_CUSTOMERS_QUERY
@@ -18,9 +17,11 @@ import {
 import { useMutation, useQuery } from '@apollo/client'
 import { ColumnDef, PaginationState } from '@tanstack/react-table'
 import { PenSquare, Trash2 } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function CustomersPage() {
+  const [customers, setCustomers] = useState<CustomerItem[]>([])
+  const [totalCount, setTotalCount] = useState(0)
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10
@@ -125,28 +126,25 @@ export default function CustomersPage() {
     // }
   ]
 
+  useEffect(() => {
+    if (data?.searchCustomers.items) {
+      setCustomers(data?.searchCustomers.items)
+      setTotalCount(data.searchCustomers.totalCount)
+    }
+  }, [data])
+
   if (error) return <p>Error: {error.message}</p>
 
-  const customers = data?.searchCustomers.items || []
-  const pageCount =
-    Math.ceil(
-      (data?.searchCustomers.totalCount as number) / pagination.pageSize
-    ) || 0
-
   return (
-    <main className="flex flex-col items-center w-full h-full">
-      <h3 className="text-2xl text-center py-6">Customers Of Organization</h3>
-      <div className="flex w-10/12 md:w-10/12 flex-col gap-4">
-        <CreateItemModal item="customers" refetch={refetchCustomers} />
-        <DataTable
-          columns={customerColumns}
-          data={customers}
-          loading={loading}
-          pageCount={pageCount}
-          pagination={pagination}
-          setPagination={setPagination}
-        />
-      </div>
-    </main>
+    <PageLayout
+      columns={customerColumns}
+      data={customers}
+      item="customers"
+      loading={loading}
+      pagination={pagination}
+      refetch={refetchCustomers}
+      setPagination={setPagination}
+      totalCount={totalCount}
+    />
   )
 }
