@@ -22,8 +22,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ApolloWrapper>
-          <AuthProvider>
+        <AuthProvider>
+          <ApolloWrapper>
             <ThemeProvider
               attribute="class"
               defaultTheme="system"
@@ -34,8 +34,8 @@ export default function RootLayout({
               <Toaster />
               {children}
             </ThemeProvider>
-          </AuthProvider>
-        </ApolloWrapper>
+          </ApolloWrapper>
+        </AuthProvider>
       </body>
     </html>
   )

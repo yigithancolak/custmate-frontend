@@ -1,25 +1,39 @@
-import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client'
+import {
+  ApolloClient,
+  InMemoryCache,
+  ServerError,
+  createHttpLink
+} from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
-import { registerApolloClient } from '@apollo/experimental-nextjs-app-support/rsc'
+import { onError } from '@apollo/client/link/error'
 import { envVariables } from './envVariables'
 
-const httpLink = createHttpLink({
-  uri: `${envVariables.SERVER_URL}/query`
-})
+export const createApolloClient = (logout: () => void) => {
+  const httpLink = createHttpLink({
+    uri: `${envVariables.SERVER_URL}/query`,
+    credentials: 'same-origin'
+  })
 
-const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem('accessToken')
-  return {
-    headers: {
-      ...headers,
-      Authorization: token ? `Bearer ${token}` : ''
+  const authLink = setContext((_, { headers }) => {
+    const token = localStorage.getItem('accessToken')
+    return {
+      headers: {
+        ...headers,
+        Authorization: token ? `Bearer ${token}` : ''
+      }
     }
-  }
-})
+  })
 
-export const { getClient } = registerApolloClient(() => {
+  const errorLink = onError(({ networkError }) => {
+    if (networkError && (networkError as ServerError).statusCode === 403) {
+      logout()
+    }
+  })
+
+  const link = authLink.concat(httpLink)
+
   return new ApolloClient({
     cache: new InMemoryCache(),
-    link: authLink.concat(httpLink)
+    link: errorLink.concat(link)
   })
-})
+}

@@ -61,12 +61,6 @@ export function CreatePaymentForm(props: CreateItemFormProps) {
   const [searchedGroup, setSearchedGroup] = useState('')
   const [selectedGroupId, setSelectedGroupId] = useState('')
 
-  const [formDefaultValues, setFormDefaultValues] = useState({
-    amount: '0',
-    currency: Currency.TRY,
-    date: new Date(),
-    paymentType: PaymentType.CASH
-  })
   const { toast } = useToast()
 
   const [createPayment, { loading: createPaymentLoading }] = useMutation<
