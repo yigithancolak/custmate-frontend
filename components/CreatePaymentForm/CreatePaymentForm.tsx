@@ -2,12 +2,6 @@
 
 import { Button } from '@/components/ui/button'
 import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandItem
-} from '@/components/ui/command'
-import {
   Form,
   FormControl,
   FormField,
@@ -24,7 +18,6 @@ import {
   GET_PAYMENT_BY_ID,
   UPDATE_PAYMENT_MUTATION
 } from '@/lib/queries/payment'
-import { cn } from '@/lib/utils'
 import {
   createPaymentSchema,
   updatePaymentSchema
@@ -47,35 +40,41 @@ import {
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { format } from 'date-fns'
-import { Check, ChevronsUpDown, Save } from 'lucide-react'
+import { Save } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { CreateItemFormProps } from '../CreateGroupForm/CreateGroupForm'
+import { FormComboboxItem } from '../FormComboboxItem/FormComboboxItem'
 import { FormDatePickerItem } from '../FormDatePickerItem/FormDatePickerItem'
 import { FormRadioItem } from '../FormRadioItem/FormRadioItem'
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { useToast } from '../ui/use-toast'
 
 export function CreatePaymentForm(props: CreateItemFormProps) {
   const [searchedGroup, setSearchedGroup] = useState('')
+  const [searchedCustomer, setSearchedCustomer] = useState('')
   const [selectedGroupId, setSelectedGroupId] = useState('')
 
   const { toast } = useToast()
+
+  const handleGroupSearchChange = (search: string) => {
+    setSearchedGroup(search)
+  }
+
+  const hadleCustomerSearchChange = (search: string) => {
+    setSearchedCustomer(search)
+  }
+
+  const handleGroupSelect = (groupId: string) => {
+    setSelectedGroupId(groupId)
+  }
 
   const [createPayment, { loading: createPaymentLoading }] = useMutation<
     CreatePaymentResponse,
     { input: CreatePaymentInput }
   >(CREATE_PAYMENT_MUTATION)
 
-  const [
-    updatePayment,
-    {
-      data: updatePaymentData,
-      loading: updatePaymentLoading,
-      error: updatePaymentError
-    }
-  ] = useMutation<
+  const [updatePayment] = useMutation<
     UpdatePaymentResponse,
     { id: string; input: UpdatePaymentInput }
   >(UPDATE_PAYMENT_MUTATION)
@@ -94,23 +93,16 @@ export function CreatePaymentForm(props: CreateItemFormProps) {
     }
   )
 
-  const [
-    getCustomersOfGroups,
-    {
-      data: custormersOfGroupData,
-      loading: custormersOfGroupLoading,
-      error: custormersOfGroupError
+  const [getCustomersOfGroups, { data: custormersOfGroupData }] = useLazyQuery<
+    ListCustomersByGroupResponse,
+    ListCustomersByGroupVariables
+  >(LIST_CUSTOMERS_BY_GROUP, {
+    variables: {
+      limit: 10000,
+      offset: 0,
+      groupId: selectedGroupId
     }
-  ] = useLazyQuery<ListCustomersByGroupResponse, ListCustomersByGroupVariables>(
-    LIST_CUSTOMERS_BY_GROUP,
-    {
-      variables: {
-        limit: 10000,
-        offset: 0,
-        groupId: selectedGroupId
-      }
-    }
-  )
+  })
 
   const {
     loading: getPaymentLoading,
@@ -134,6 +126,12 @@ export function CreatePaymentForm(props: CreateItemFormProps) {
       })
     }
   }, [getPaymentData])
+
+  useEffect(() => {
+    if (selectedGroupId) {
+      getCustomersOfGroups()
+    }
+  }, [selectedGroupId])
 
   const schema =
     props.type === 'create' ? createPaymentSchema : updatePaymentSchema
@@ -301,66 +299,15 @@ export function CreatePaymentForm(props: CreateItemFormProps) {
               control={form.control}
               name="groupId"
               render={({ field }) => (
-                <FormItem className="flex flex-col w-full ">
-                  <FormLabel>Choose Group</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant="outline"
-                          role="combobox"
-                          className={cn(
-                            'w-[240px] justify-between',
-                            !field.value && 'text-muted-foreground'
-                          )}
-                        >
-                          {field.value
-                            ? groups.find((g) => g.id === field.value)?.name
-                            : 'Select group'}
-                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-[240px] p-0">
-                      <Command>
-                        <Input
-                          className="w-full"
-                          value={searchedGroup}
-                          onChange={(e) => setSearchedGroup(e.target.value)}
-                          placeholder="Search group..."
-                        />
-                        <CommandEmpty>No group found.</CommandEmpty>
-                        <CommandGroup>
-                          {groups.map(
-                            (g) =>
-                              g.name.toLowerCase().includes(searchedGroup) && (
-                                <CommandItem
-                                  value={g.id}
-                                  key={g.id}
-                                  onSelect={() => {
-                                    form.setValue('groupId', g.id)
-                                    setSelectedGroupId(g.id)
-                                    getCustomersOfGroups()
-                                  }}
-                                >
-                                  <Check
-                                    className={cn(
-                                      'mr-2 h-4 w-4',
-                                      g.id === field.value
-                                        ? 'opacity-100'
-                                        : 'opacity-0'
-                                    )}
-                                  />
-                                  {g.name}
-                                </CommandItem>
-                              )
-                          )}
-                        </CommandGroup>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
-                  <FormMessage />
-                </FormItem>
+                <FormComboboxItem
+                  field={field}
+                  fieldName="groupId"
+                  form={form}
+                  handleItemSelect={handleGroupSelect}
+                  handleSearchTermChange={handleGroupSearchChange}
+                  items={groups}
+                  searchTerm={searchedGroup}
+                />
               )}
             />
 
@@ -369,68 +316,14 @@ export function CreatePaymentForm(props: CreateItemFormProps) {
                 control={form.control}
                 name="customerId"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col w-full ">
-                    <FormLabel>Choose Customer</FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant="outline"
-                            role="combobox"
-                            className={cn(
-                              'w-[240px] justify-between',
-                              !field.value && 'text-muted-foreground'
-                            )}
-                          >
-                            {field.value
-                              ? customersOfGroup.find(
-                                  (c) => c.id === field.value
-                                )?.name
-                              : 'Select customer'}
-                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-[240px] p-0">
-                        <Command>
-                          <Input
-                            className="w-full"
-                            value={searchedGroup}
-                            onChange={(e) => setSearchedGroup(e.target.value)}
-                            placeholder="Search customer..."
-                          />
-                          <CommandEmpty>No group found.</CommandEmpty>
-                          <CommandGroup>
-                            {customersOfGroup.map(
-                              (c) =>
-                                c.name
-                                  .toLowerCase()
-                                  .includes(searchedGroup) && (
-                                  <CommandItem
-                                    value={c.id}
-                                    key={c.id}
-                                    onSelect={() => {
-                                      form.setValue('customerId', c.id)
-                                    }}
-                                  >
-                                    <Check
-                                      className={cn(
-                                        'mr-2 h-4 w-4',
-                                        c.id === field.value
-                                          ? 'opacity-100'
-                                          : 'opacity-0'
-                                      )}
-                                    />
-                                    {c.name}
-                                  </CommandItem>
-                                )
-                            )}
-                          </CommandGroup>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
-                    <FormMessage />
-                  </FormItem>
+                  <FormComboboxItem
+                    field={field}
+                    fieldName="customerId"
+                    form={form}
+                    handleSearchTermChange={hadleCustomerSearchChange}
+                    items={customersOfGroup}
+                    searchTerm={searchedCustomer}
+                  />
                 )}
               />
             )}
