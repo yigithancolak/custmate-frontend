@@ -1,5 +1,6 @@
 import { CreateItemModal } from '@/components/CreateItemModal/CreateItemModal'
 import { DataTable } from '@/components/DataTable/DataTable'
+import { capitalizeFirstLetter } from '@/lib/helpers/stringHelpers'
 import { ColumnDef, PaginationState } from '@tanstack/react-table'
 import { Dispatch, SetStateAction } from 'react'
 
@@ -25,7 +26,7 @@ export function PageLayout<T extends any>(props: PageLayoutProps<T>) {
   return (
     <main className="flex flex-col items-center w-full h-full">
       <h3 className="text-2xl text-center py-6">
-        {props.item} Of Organization
+        {capitalizeFirstLetter(props.item)} Of Organization
       </h3>
       <div className="flex w-10/12 md:w-10/12 flex-col gap-4">
         <CreateItemModal
