@@ -23,11 +23,12 @@ interface FormComboboxItemProps {
   field:
     | ControllerRenderProps<any, 'groupId'>
     | ControllerRenderProps<any, 'customerId'>
+    | ControllerRenderProps<any, `groups.${number}`>
   items: GroupItem[] | CustomerItem[]
   form: UseFormReturn<any, any, undefined>
   searchTerm: string
   handleSearchTermChange: (search: string) => void
-  fieldName: 'groupId' | 'customerId'
+  fieldName: 'groupId' | 'customerId' | `groups.${number}`
   handleItemSelect?: (itemId: string) => void
 }
 
@@ -63,7 +64,7 @@ export function FormComboboxItem(props: FormComboboxItemProps) {
             </Button>
           </FormControl>
         </PopoverTrigger>
-        <PopoverContent className="w-[240px] p-0">
+        <PopoverContent className="w-[240px] p-0 max-h-[200px] overflow-y-auto">
           <Command>
             <Input
               className="w-full"

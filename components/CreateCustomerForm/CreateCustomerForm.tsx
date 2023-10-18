@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -18,20 +17,40 @@ import {
   CreateCustomerInput,
   CreateCustomerResponse
 } from '@/types/customerTypes'
-import { ListGroupsResponse, ListGroupsVariables } from '@/types/groupTypes'
+import {
+  GroupItem,
+  ListGroupsResponse,
+  ListGroupsVariables
+} from '@/types/groupTypes'
 import { useMutation, useQuery } from '@apollo/client'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { format } from 'date-fns'
-import { Save } from 'lucide-react'
+import { Save, X } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { CreateItemFormProps } from '../CreateGroupForm/CreateGroupForm'
+import { FormComboboxItem } from '../FormComboboxItem/FormComboboxItem'
 import { FormDatePickerItem } from '../FormDatePickerItem/FormDatePickerItem'
-import { Checkbox } from '../ui/checkbox'
 import { useToast } from '../ui/use-toast'
 
 export function CreateCustomerForm(props: CreateItemFormProps) {
+  const [groups, setGroups] = useState<GroupItem[]>([])
+  const [searchedGroup, setSearchedGroup] = useState('')
+  const [groupFieldCount, setGroupFieldCount] = useState(1)
   const { toast } = useToast()
+
+  const handleGroupSearchChange = (search: string) => {
+    setSearchedGroup(search)
+  }
+
+  const addGroupField = () => {
+    setGroupFieldCount((prevCount) => prevCount + 1)
+  }
+
+  const removeGroupField = () => {
+    setGroupFieldCount((prevCount) => prevCount - 1)
+  }
 
   const {
     data: groupsData,
@@ -90,7 +109,11 @@ export function CreateCustomerForm(props: CreateItemFormProps) {
     })
   }
 
-  console.log(form.formState.errors.groups)
+  useEffect(() => {
+    if (groupsData?.listGroupsByOrganization.items) {
+      setGroups(groupsData.listGroupsByOrganization.items)
+    }
+  }, [groupsData])
 
   if (groupsLoading) {
     return <p>Loading</p>
@@ -149,57 +172,40 @@ export function CreateCustomerForm(props: CreateItemFormProps) {
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="groups"
-          render={() => (
-            <FormItem>
-              <div className="mb-4">
-                <FormLabel className="text-base">Groups</FormLabel>
-                <FormDescription>
-                  Select the groups for the customer.
-                </FormDescription>
-              </div>
-              {groupsData?.listGroupsByOrganization.items.map((group) => (
-                <FormField
-                  key={group.id}
-                  control={form.control}
-                  name="groups"
-                  render={({ field }) => {
-                    return (
-                      <FormItem
-                        key={group.id}
-                        className="flex flex-row items-start space-x-3 space-y-0"
-                      >
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value?.includes(group.id)}
-                            onCheckedChange={(checked) => {
-                              return checked
-                                ? field.onChange([...field.value, group.id])
-                                : field.onChange(
-                                    field.value?.filter(
-                                      (value) => value !== group.id
-                                    )
-                                  )
-                            }}
-                          />
-                        </FormControl>
-                        <FormLabel className="font-normal">
-                          {group.name}{' '}
-                          {/* Assuming the group object has a name property */}
-                        </FormLabel>
-                      </FormItem>
-                    )
-                  }}
+        {Array.from({ length: groupFieldCount }).map((_, idx) => (
+          <div key={idx} className="flex items-center w-full">
+            <FormField
+              control={form.control}
+              name={`groups.${idx}`}
+              render={({ field }) => (
+                <FormComboboxItem
+                  field={field}
+                  fieldName={`groups.${idx}`}
+                  form={form}
+                  handleSearchTermChange={handleGroupSearchChange}
+                  items={groups}
+                  searchTerm={searchedGroup}
                 />
-              ))}
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+              )}
+            />
+            {idx !== 0 && (
+              <X
+                onClick={() => removeGroupField()}
+                className="cursor-pointer mt-6 mr-6"
+              />
+            )}
+          </div>
+        ))}
 
-        <Button type="submit" disabled={createCustomerLoading} className="mt-3">
+        <Button type="button" onClick={addGroupField} className="mt-3 w-full">
+          Add Group
+        </Button>
+
+        <Button
+          type="submit"
+          disabled={createCustomerLoading}
+          className="mt-3 w-full"
+        >
           <Save className="mr-2" />
           <span>Save</span>
         </Button>
