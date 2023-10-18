@@ -7,58 +7,42 @@ import {
   SheetTitle,
   SheetTrigger
 } from '@/components/ui/sheet'
+import { ItemType } from '@/layouts/PageLayout/PageLayout'
 import { useAuth } from '@/providers/AuthProvider'
-import {
-  AlignJustify,
-  DollarSign,
-  GraduationCap,
-  Group,
-  LayoutDashboard,
-  LogOut,
-  LucideIcon,
-  Users
-} from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { AlignJustify, LogOut } from 'lucide-react'
 import { useState } from 'react'
 import { SideMenuTab } from '../SideMenuTab/SideMenuTab'
 import { Button } from '../ui/button'
 
 export type SideMenuTabComponents = {
-  text: string
-  icon: LucideIcon
+  type: 'dashboard' | ItemType
   path: string
 }
 
 const tabs: SideMenuTabComponents[] = [
   {
-    text: 'Dashboard',
-    icon: LayoutDashboard,
+    type: 'dashboard',
     path: '/dashboard'
   },
   {
-    text: 'Groups',
-    icon: Group,
+    type: 'groups',
     path: '/groups'
   },
   {
-    text: 'Customers',
-    icon: Users,
+    type: 'customers',
     path: '/customers'
   },
   {
-    text: 'Payments',
-    icon: DollarSign,
+    type: 'payments',
     path: '/payments'
   },
   {
-    text: 'Instructors',
-    icon: GraduationCap,
+    type: 'instructors',
     path: '/instructors'
   }
 ]
 
 export function SideMenuButton() {
-  const router = useRouter()
   const [isSheetOpen, setIsSheetOpen] = useState(false)
   const { logout: setLogout } = useAuth()
 
@@ -85,8 +69,7 @@ export function SideMenuButton() {
             return (
               <SideMenuTab
                 key={i}
-                text={t.text}
-                icon={t.icon}
+                type={t.type}
                 path={t.path}
                 closeSheet={() => setIsSheetOpen(false)}
               />

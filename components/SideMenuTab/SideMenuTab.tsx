@@ -1,5 +1,7 @@
 'use client'
+import { capitalizeFirstLetter } from '@/lib/helpers/stringHelpers'
 import { useRouter } from 'next/navigation'
+import { ItemIcon } from '../ItemIcon/DashboardCardIcon'
 import { SideMenuTabComponents } from '../SideMenuButton/SideMenuButton'
 import { Button } from '../ui/button'
 
@@ -21,8 +23,8 @@ export function SideMenuTab(props: SideMenuTabProps) {
         className="w-full h-full p-4 relative"
         onClick={() => handleTabClick()}
       >
-        <props.icon className="absolute left-5" />
-        <span className="ml-2">{props.text}</span>
+        <ItemIcon type={props.type} className="absolute left-5" />
+        <span className="ml-2">{capitalizeFirstLetter(props.type)}</span>
       </Button>
     </li>
   )

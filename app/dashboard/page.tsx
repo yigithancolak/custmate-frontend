@@ -94,7 +94,7 @@ export default function DashboardPage() {
       </h3>
       <div className="flex w-10/12 md:w-8/12 flex-col gap-4">
         <DashboardCard
-          title="Groups"
+          type="groups"
           description="Groups Info"
           contents={[
             {
@@ -102,12 +102,12 @@ export default function DashboardPage() {
               value: String(groupsData?.listGroupsByOrganization.totalCount)
             }
           ]}
-          path="/auth"
+          path="/groups"
           loading={groupsLoading}
         />
 
         <DashboardCard
-          title="Customers"
+          type="customers"
           description="Customers Info"
           contents={[
             {
@@ -123,14 +123,14 @@ export default function DashboardPage() {
               value: String(latePaymentData?.searchCustomers.totalCount)
             }
           ]}
-          path="/auth"
+          path="/customers"
           loading={
             customersLoading || upcomingPaymentLoading || latePaymentLoading
           }
         />
 
         <DashboardCard
-          title="Payments"
+          type="payments"
           description="Payments info"
           contents={[
             {
@@ -140,7 +140,7 @@ export default function DashboardPage() {
               )
             }
           ]}
-          path="/auth"
+          path="/payments"
           loading={monthlyPaymentLoading}
         />
       </div>

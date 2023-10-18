@@ -6,7 +6,10 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card'
+import { ItemType } from '@/layouts/PageLayout/PageLayout'
+import { capitalizeFirstLetter } from '@/lib/helpers/stringHelpers'
 import { useRouter } from 'next/navigation'
+import { ItemIcon } from '../ItemIcon/DashboardCardIcon'
 import { Button } from '../ui/button'
 import { DashboardCardLoading } from './DashboardCardLoading'
 
@@ -16,7 +19,7 @@ type Content = {
 }
 
 interface DashboardCardProps {
-  title: string
+  type: ItemType
   description: string
   contents: Content[]
   path: string
@@ -31,9 +34,12 @@ export function DashboardCard(props: DashboardCardProps) {
   }
 
   return (
-    <Card className="flex flex-col flex-1 items-center">
+    <Card className="relative flex flex-col flex-1 items-center">
+      <div className="absolute left-10 top-1/2 -translate-y-1/2 hidden md:block w-1/6">
+        <ItemIcon className="w-full h-full" type={props.type} />
+      </div>
       <CardHeader>
-        <CardTitle>{props.title}</CardTitle>
+        <CardTitle>{capitalizeFirstLetter(props.type)}</CardTitle>
         <CardDescription>{props.description}</CardDescription>
       </CardHeader>
       {props.contents.map((c) => {
