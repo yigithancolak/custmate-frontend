@@ -8,9 +8,12 @@ import {
   SheetTrigger
 } from '@/components/ui/sheet'
 import { ItemType } from '@/layouts/PageLayout/PageLayout'
+import { GET_ORGANIZATION } from '@/lib/queries/organization'
 import { useAuth } from '@/providers/AuthProvider'
+import { GetOrganizationResponse } from '@/types/organizationTypes'
+import { useQuery } from '@apollo/client'
 import { AlignJustify, LogOut } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { SideMenuTab } from '../SideMenuTab/SideMenuTab'
 import { Button } from '../ui/button'
 
@@ -45,11 +48,21 @@ const tabs: SideMenuTabComponents[] = [
 export function SideMenuButton() {
   const [isSheetOpen, setIsSheetOpen] = useState(false)
   const { logout: setLogout } = useAuth()
+  const [orgName, setOrgName] = useState<string>('')
 
   const logOut = () => {
     setLogout()
     setIsSheetOpen(false)
   }
+
+  const { data, loading, error } =
+    useQuery<GetOrganizationResponse>(GET_ORGANIZATION)
+
+  useEffect(() => {
+    if (data && data.getOrganization) {
+      setOrgName(data.getOrganization.name)
+    }
+  }, [data])
 
   return (
     <Sheet onOpenChange={() => setIsSheetOpen(!isSheetOpen)} open={isSheetOpen}>
@@ -58,10 +71,10 @@ export function SideMenuButton() {
       </SheetTrigger>
       <SheetContent side="left">
         <SheetHeader>
-          <SheetTitle>Welcome $username$.</SheetTitle>
+          <SheetTitle>Welcome {orgName} </SheetTitle>
           <SheetDescription>
-            Start management of your organization now. Use the navigation button
-            below to see your performance.
+            Start management of your organization now. Use the tabs below to see
+            your performance.
           </SheetDescription>
         </SheetHeader>
         <ul className="flex flex-1 flex-col gap-4 mt-10">
@@ -77,7 +90,7 @@ export function SideMenuButton() {
           })}
         </ul>
 
-        <div className="flex flex-1 flex-row-reverse mt-10">
+        <div className="flex flex-row-reverse mt-10">
           <Button onClick={() => logOut()}>
             <LogOut />
           </Button>

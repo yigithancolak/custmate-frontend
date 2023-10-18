@@ -29,11 +29,13 @@ export function PageLayout<T extends any>(props: PageLayoutProps<T>) {
         {capitalizeFirstLetter(props.item)} Of Organization
       </h3>
       <div className="flex w-10/12 md:w-10/12 flex-col gap-4">
-        <CreateItemModal
-          item={props.item}
-          refetch={props.refetch}
-          type="create"
-        />
+        <div>
+          <CreateItemModal
+            item={props.item}
+            refetch={props.refetch}
+            type="create"
+          />
+        </div>
         <DataTable
           columns={props.columns}
           data={props.data}

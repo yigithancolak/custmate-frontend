@@ -10,12 +10,14 @@ import {
   DialogTrigger
 } from '@/components/ui/dialog'
 import { ItemType } from '@/layouts/PageLayout/PageLayout'
-import { PenSquare } from 'lucide-react'
+import { capitalizeFirstLetter } from '@/lib/helpers/stringHelpers'
+import { PenSquare, Plus } from 'lucide-react'
 import { useState } from 'react'
 import { CreateCustomerForm } from '../CreateCustomerForm/CreateCustomerForm'
 import { CreateGroupForm } from '../CreateGroupForm/CreateGroupForm'
 import { CreateInstructorForm } from '../CreateInstructorForm/CreateInstructorForm'
 import { CreatePaymentForm } from '../CreatePaymentForm/CreatePaymentForm'
+import { ItemIcon } from '../ItemIcon/DashboardCardIcon'
 
 interface CreateItemModalProps {
   item: ItemType
@@ -54,7 +56,11 @@ export function CreateItemModal(props: CreateItemModalProps) {
       <DialogTrigger asChild>
         <Button variant="outline" className="p-3 mr-2">
           {props.type === 'create' ? (
-            `Create ${props.item}`
+            <div className="flex items-center">
+              <Plus className="h-full" />
+              <ItemIcon type={props.item} className="h-full" />
+              <span>Create {capitalizeFirstLetter(props.item)}</span>
+            </div>
           ) : (
             <PenSquare size={16} />
           )}

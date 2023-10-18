@@ -9,7 +9,8 @@ import {
 
 interface DashboardCardIconProps {
   type: 'dashboard' | ItemType
-  className: string
+  className?: string
+  size?: number
 }
 export function ItemIcon(props: DashboardCardIconProps) {
   switch (props.type) {
