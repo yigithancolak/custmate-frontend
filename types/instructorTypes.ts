@@ -8,7 +8,18 @@ export type InstructorItem = {
 }
 
 export type ListInstructorsResponse = {
-  listInstructors: InstructorItem[]
+  listInstructors: {
+    items: InstructorItem[]
+    totalCount: number
+  }
+}
+
+export type GetInstructorResponse = {
+  getInstructor: InstructorItem
+}
+
+export type GetInstructorVariables = {
+  id: string
 }
 
 export type ListInstructorsVariables = {
@@ -34,4 +45,12 @@ export type DeleteInstructorResponse = {
 
 export type DeleteInstructorVariables = {
   id: string
+}
+
+export type UpdateInstructorResponse = {
+  updateInstructor: string
+}
+
+export type UpdateInstructorInput = {
+  name: string
 }

@@ -11,12 +11,21 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select'
-import { CREATE_GROUP_MUTATION } from '@/lib/queries/group'
+import { formatTime } from '@/lib/helpers/dateHelpers'
+import {
+  CREATE_GROUP_MUTATION,
+  GET_GROUP_BY_ID,
+  UPDATE_GROUP_MUTATION
+} from '@/lib/queries/group'
 import { LIST_INSTRUCTORS_QUERY } from '@/lib/queries/instructor'
-import { createGroupSchema } from '@/lib/validation/group'
+import { createGroupSchema, updateGroupSchema } from '@/lib/validation/group'
 import {
   CreateGroupInput,
-  CreateGroupMutationResponse
+  CreateGroupMutationResponse,
+  GetGroupResponse,
+  GetGroupVariables,
+  UpdateGroupResponse,
+  UpdateGroupVariables
 } from '@/types/groupTypes'
 import {
   ListInstructorsResponse,
@@ -47,23 +56,51 @@ export interface CreateItemFormProps {
 export function CreateGroupForm(props: CreateItemFormProps) {
   const { toast } = useToast()
 
-  const { data, loading, error } = useQuery<
-    ListInstructorsResponse,
-    ListInstructorsVariables
-  >(LIST_INSTRUCTORS_QUERY, {
+  const {} = useQuery<GetGroupResponse, GetGroupVariables>(GET_GROUP_BY_ID, {
     variables: {
-      offset: 0,
-      limit: 100
+      id: props.itemId as string
+    },
+    skip: props.type === 'create',
+    onCompleted: (data) => {
+      form.reset({
+        instructorId: data.getGroup.instructor.id,
+        name: data.getGroup.name,
+        times: data.getGroup.times.map((t) => ({
+          ...t,
+          finish_hour: formatTime(t.finish_hour),
+          start_hour: formatTime(t.start_hour)
+        }))
+      })
     }
   })
+
+  const {
+    data: instructorsData,
+    loading: instructorsLoading,
+    error: instructorsError
+  } = useQuery<ListInstructorsResponse, ListInstructorsVariables>(
+    LIST_INSTRUCTORS_QUERY,
+    {
+      variables: {
+        offset: 0,
+        limit: 100
+      }
+    }
+  )
 
   const [createGroup, { loading: createGroupLoading }] = useMutation<
     CreateGroupMutationResponse,
     { input: CreateGroupInput }
   >(CREATE_GROUP_MUTATION)
 
+  const [updateGroup] = useMutation<UpdateGroupResponse, UpdateGroupVariables>(
+    UPDATE_GROUP_MUTATION
+  )
+
+  const schema = props.type === 'create' ? createGroupSchema : updateGroupSchema
+
   const form = useForm({
-    resolver: zodResolver(createGroupSchema),
+    resolver: zodResolver(schema),
     defaultValues: {
       name: '',
       instructorId: '',
@@ -76,10 +113,7 @@ export function CreateGroupForm(props: CreateItemFormProps) {
     name: 'times'
   })
 
-  //   console.log(form.formState.errors)
-
-  function onSubmit(values: z.infer<typeof createGroupSchema>) {
-    // console.log(values)
+  function onSubmitCreate(values: z.infer<typeof createGroupSchema>) {
     createGroup({
       variables: {
         input: {
@@ -104,17 +138,57 @@ export function CreateGroupForm(props: CreateItemFormProps) {
     })
   }
 
+  console.log(props.itemId)
+
+  function onSubmitUpdate(values: z.infer<typeof updateGroupSchema>) {
+    updateGroup({
+      variables: {
+        //TODO: Fix id = undefined
+        id: props.itemId as string,
+        input: {
+          name: values.name,
+          instructor: values.instructorId,
+          times: values.times
+        }
+      },
+      onCompleted: (data) => {
+        toast({
+          description: data.updateGroup
+        })
+        props.refetch()
+        props.closeFormModal()
+      },
+      onError: (err) => {
+        toast({
+          variant: 'destructive',
+          description: err.message
+        })
+      }
+    })
+  }
+
   const addTime = () => {
     append({ day: '', start_hour: '', finish_hour: '' })
   }
 
-  if (loading) {
+  let onSubmit: (values: z.infer<typeof schema>) => void
+
+  onSubmit = (values: z.infer<typeof schema>) => {
+    if (props.type === 'create') {
+      return onSubmitCreate(values as z.infer<typeof createGroupSchema>)
+    }
+    return onSubmitUpdate(values as z.infer<typeof updateGroupSchema>)
+  }
+
+  if (instructorsLoading) {
     return <p>Loading</p>
   }
 
-  if (error) {
+  if (instructorsError) {
     return <p>Error</p>
   }
+
+  console.log(form.formState.errors)
 
   return (
     <Form {...form}>
@@ -156,16 +230,18 @@ export function CreateGroupForm(props: CreateItemFormProps) {
                         <SelectValue placeholder="Select instructor" />
                       </SelectTrigger>
                       <SelectContent>
-                        {data?.listInstructors.map((instructor) => {
-                          return (
-                            <SelectItem
-                              key={instructor.id}
-                              value={instructor.id}
-                            >
-                              {instructor.name}
-                            </SelectItem>
-                          )
-                        })}
+                        {instructorsData?.listInstructors.items.map(
+                          (instructor) => {
+                            return (
+                              <SelectItem
+                                key={instructor.id}
+                                value={instructor.id}
+                              >
+                                {instructor.name}
+                              </SelectItem>
+                            )
+                          }
+                        )}
                       </SelectContent>
                     </Select>
                   </FormControl>

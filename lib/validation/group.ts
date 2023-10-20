@@ -32,3 +32,7 @@ export const createGroupSchema = z.object({
   instructorId: z.string().uuid('Not valid uuid'),
   times: z.array(timeSchema)
 })
+
+export const updateGroupSchema = createGroupSchema.extend({
+  id: z.string().uuid()
+})

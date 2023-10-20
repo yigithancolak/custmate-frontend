@@ -52,3 +52,26 @@ export const CREATE_CUSTOMER_MUTATION = gql`
     }
   }
 `
+
+export const UPDATE_CUSTOMER_MUTATION = gql`
+  mutation UpdateCustomer($id: ID!, $input: UpdateCustomerInput!) {
+    updateCustomer(id: $id, input: $input)
+  }
+`
+
+export const GET_CUSTOMER_BY_ID = gql`
+  query GetCustomer($id: ID!) {
+    getCustomer(id: $id) {
+      id
+      name
+      phoneNumber
+      lastPayment
+      nextPayment
+      active
+      groups {
+        id
+        name
+      }
+    }
+  }
+`

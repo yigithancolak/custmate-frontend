@@ -28,6 +28,11 @@ interface CreateItemModalProps {
 
 export function CreateItemModal(props: CreateItemModalProps) {
   const [isOpen, setIsOpen] = useState(false)
+
+  const closeFormModal = () => {
+    setIsOpen(false)
+  }
+
   let FormComponent
 
   switch (props.item) {
@@ -47,10 +52,6 @@ export function CreateItemModal(props: CreateItemModalProps) {
       return
   }
 
-  const closeFormModal = () => {
-    setIsOpen(false)
-  }
-
   return (
     <Dialog onOpenChange={() => setIsOpen(!isOpen)} open={isOpen}>
       <DialogTrigger asChild>
@@ -68,7 +69,9 @@ export function CreateItemModal(props: CreateItemModalProps) {
       </DialogTrigger>
       <DialogContent className="flex flex-col sm:max-w-[425px] overflow-y-auto max-h-[70vh]">
         <DialogHeader>
-          <DialogTitle>{`${props.type} ${props.item}`}</DialogTitle>
+          <DialogTitle>{`${capitalizeFirstLetter(
+            props.type
+          )} ${capitalizeFirstLetter(props.item)}`}</DialogTitle>
           <DialogDescription>
             Enter the {props.item} informations
           </DialogDescription>

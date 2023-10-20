@@ -3,7 +3,6 @@
 import { CreateItemModal } from '@/components/CreateItemModal/CreateItemModal'
 import { DataTable } from '@/components/DataTable/DataTable'
 import { DialogBox } from '@/components/DialogBox/DialogBox'
-import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
 import {
   DELETE_INSTRUCTOR_MUTATION,
@@ -18,17 +17,28 @@ import {
   ListInstructorsVariables
 } from '@/types/instructorTypes'
 import { useMutation, useQuery } from '@apollo/client'
-import { ColumnDef } from '@tanstack/react-table'
-import { PenSquare, Trash2 } from 'lucide-react'
+import { ColumnDef, PaginationState } from '@tanstack/react-table'
+import { Trash2 } from 'lucide-react'
+import { useState } from 'react'
 
 export default function InstructorsPage() {
-  const { data, loading, error, refetch } = useQuery<
+  const [instructors, setInstructors] = useState<InstructorItem[]>([])
+  const [totalCount, setTotalCount] = useState(0)
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10
+  })
+  const { loading, error, refetch } = useQuery<
     ListInstructorsResponse,
     ListInstructorsVariables
   >(LIST_INSTRUCTORS_QUERY, {
     variables: {
-      offset: 0,
-      limit: 10
+      offset: pagination.pageIndex * pagination.pageSize,
+      limit: pagination.pageSize
+    },
+    onCompleted(data) {
+      setInstructors(data.listInstructors.items)
+      setTotalCount(data.listInstructors.totalCount)
     }
   })
 
@@ -63,9 +73,12 @@ export default function InstructorsPage() {
       accessorKey: 'id',
       cell: (cell) => (
         <div className="flex flex-1 py-2">
-          <Button variant="outline" size="icon" className="mr-2">
-            <PenSquare size={16} />
-          </Button>
+          <CreateItemModal
+            item="instructors"
+            refetch={refetch}
+            type="update"
+            itemId={cell.getValue<string>()}
+          />
           <DialogBox
             title="Deleting group"
             description="Group will be deleted it is permanent. Are you sure ?"
@@ -89,17 +102,18 @@ export default function InstructorsPage() {
 
   if (error) return <p>Error: {error.message}</p>
 
-  const instructors = data?.listInstructors || []
-
   return (
     <main className="flex flex-col items-center w-full h-full">
       <h3 className="text-2xl text-center py-6">Instructors Of Organization</h3>
       <div className="flex w-10/12 md:w-10/12 flex-col gap-4">
-        <CreateItemModal item="instructors" refetch={refetch} />
+        <CreateItemModal item="instructors" refetch={refetch} type="create" />
         <DataTable
           columns={instructorColumns}
           data={instructors}
           loading={loading}
+          pagination={pagination}
+          setPagination={setPagination}
+          totalCount={totalCount}
         />
       </div>
     </main>

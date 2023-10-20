@@ -10,12 +10,24 @@ import {
   FormMessage
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { CREATE_CUSTOMER_MUTATION } from '@/lib/queries/customer'
+import { convertStringToDate } from '@/lib/helpers/dateHelpers'
+import {
+  CREATE_CUSTOMER_MUTATION,
+  GET_CUSTOMER_BY_ID,
+  UPDATE_CUSTOMER_MUTATION
+} from '@/lib/queries/customer'
 import { LIST_GROUPS_BY_ORGANIZATION_NO_SUB_ELEMENTS } from '@/lib/queries/group'
-import { createCustomerSchema } from '@/lib/validation/customer'
+import {
+  createCustomerSchema,
+  updateCustomerSchema
+} from '@/lib/validation/customer'
 import {
   CreateCustomerInput,
-  CreateCustomerResponse
+  CreateCustomerResponse,
+  GetCustomerResponse,
+  GetCustomerVariables,
+  UpdateCustomerResponse,
+  UpdateCustomerVariables
 } from '@/types/customerTypes'
 import {
   GroupItem,
@@ -26,7 +38,7 @@ import { useMutation, useQuery } from '@apollo/client'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { format } from 'date-fns'
 import { Save, X } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { CreateItemFormProps } from '../CreateGroupForm/CreateGroupForm'
@@ -48,7 +60,13 @@ export function CreateCustomerForm(props: CreateItemFormProps) {
     setGroupFieldCount((prevCount) => prevCount + 1)
   }
 
-  const removeGroupField = () => {
+  const removeGroupField = (idx: number) => {
+    //Remove value from form
+    const previousGroups = form.getValues().groups
+    const newGroups = previousGroups.filter((_, i) => i !== idx)
+    form.setValue('groups', newGroups)
+
+    //Decrease field count
     setGroupFieldCount((prevCount) => prevCount - 1)
   }
 
@@ -62,17 +80,49 @@ export function CreateCustomerForm(props: CreateItemFormProps) {
       variables: {
         offset: 0,
         limit: 100
+      },
+      onCompleted: (data) => {
+        setGroups(data.listGroupsByOrganization.items)
       }
     }
   )
+
+  const {
+    data: getCustomerData,
+    loading: getCustomerLoading,
+    error: getCustomerError
+  } = useQuery<GetCustomerResponse, GetCustomerVariables>(GET_CUSTOMER_BY_ID, {
+    skip: props.type === 'create',
+    variables: {
+      id: props.itemId as string
+    },
+    onCompleted: (data) => {
+      setGroupFieldCount(data.getCustomer.groups.length)
+      form.reset({
+        name: data.getCustomer.name,
+        groups: data.getCustomer.groups.map((g) => g.id),
+        lastPayment: convertStringToDate(data.getCustomer.lastPayment),
+        nextPayment: convertStringToDate(data.getCustomer.nextPayment),
+        phoneNumber: data.getCustomer.phoneNumber
+      })
+    }
+  })
 
   const [createCustomer, { loading: createCustomerLoading }] = useMutation<
     CreateCustomerResponse,
     { input: CreateCustomerInput }
   >(CREATE_CUSTOMER_MUTATION)
 
+  const [updateCustomer] = useMutation<
+    UpdateCustomerResponse,
+    UpdateCustomerVariables
+  >(UPDATE_CUSTOMER_MUTATION)
+
+  const schema =
+    props.type === 'create' ? createCustomerSchema : updateCustomerSchema
+
   const form = useForm({
-    resolver: zodResolver(createCustomerSchema),
+    resolver: zodResolver(schema),
     defaultValues: {
       name: '',
       groups: [] as string[],
@@ -82,7 +132,7 @@ export function CreateCustomerForm(props: CreateItemFormProps) {
     }
   })
 
-  function onSubmit(values: z.infer<typeof createCustomerSchema>) {
+  function onSubmitCreate(values: z.infer<typeof createCustomerSchema>) {
     createCustomer({
       variables: {
         input: {
@@ -109,17 +159,48 @@ export function CreateCustomerForm(props: CreateItemFormProps) {
     })
   }
 
-  useEffect(() => {
-    if (groupsData?.listGroupsByOrganization.items) {
-      setGroups(groupsData.listGroupsByOrganization.items)
-    }
-  }, [groupsData])
+  function onSubmitUpdate(values: z.infer<typeof updateCustomerSchema>) {
+    updateCustomer({
+      variables: {
+        id: props.itemId as string,
+        input: {
+          name: values.name as string,
+          groups: values.groups as string[],
+          lastPayment: format(values.lastPayment as Date, 'yyyy-MM-dd'),
+          nextPayment: format(values.nextPayment as Date, 'yyyy-MM-dd'),
+          phoneNumber: values.phoneNumber as string
+        }
+      },
+      onCompleted: (data) => {
+        toast({
+          description: data.updateCustomer
+        })
+        props.refetch()
+        props.closeFormModal()
+      },
+      onError: (err) => {
+        toast({
+          variant: 'destructive',
+          description: err.message
+        })
+      }
+    })
+  }
 
-  if (groupsLoading) {
+  let onSubmit: (values: z.infer<typeof schema>) => void
+
+  onSubmit = (values: z.infer<typeof schema>) => {
+    if (props.type === 'create') {
+      return onSubmitCreate(values as z.infer<typeof createCustomerSchema>)
+    }
+    return onSubmitUpdate(values)
+  }
+
+  if (groupsLoading || getCustomerLoading) {
     return <p>Loading</p>
   }
 
-  if (groupsError) {
+  if (groupsError || getCustomerError) {
     return <p>Error</p>
   }
 
@@ -190,7 +271,7 @@ export function CreateCustomerForm(props: CreateItemFormProps) {
             />
             {idx !== 0 && (
               <X
-                onClick={() => removeGroupField()}
+                onClick={() => removeGroupField(idx)}
                 className="cursor-pointer mt-6 mr-6"
               />
             )}

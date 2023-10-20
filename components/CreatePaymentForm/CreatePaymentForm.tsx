@@ -12,7 +12,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { convertStringToDate } from '@/lib/helpers/dateHelpers'
 import { LIST_CUSTOMERS_BY_GROUP } from '@/lib/queries/customer'
-import { LIST_GROUPS_BY_ORGANIZATION } from '@/lib/queries/group'
+import { LIST_GROUPS_BY_ORGANIZATION_NO_SUB_ELEMENTS } from '@/lib/queries/group'
 import {
   CREATE_PAYMENT_MUTATION,
   GET_PAYMENT_BY_ID,
@@ -37,11 +37,11 @@ import {
   UpdatePaymentInput,
   UpdatePaymentResponse
 } from '@/types/paymentTypes'
-import { useLazyQuery, useMutation, useQuery } from '@apollo/client'
+import { useMutation, useQuery } from '@apollo/client'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { format } from 'date-fns'
 import { Save } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { CreateItemFormProps } from '../CreateGroupForm/CreateGroupForm'
@@ -84,7 +84,7 @@ export function CreatePaymentForm(props: CreateItemFormProps) {
     loading: groupsLoading,
     error: groupsError
   } = useQuery<ListGroupsResponse, ListGroupsVariables>(
-    LIST_GROUPS_BY_ORGANIZATION,
+    LIST_GROUPS_BY_ORGANIZATION_NO_SUB_ELEMENTS,
     {
       variables: {
         offset: 0,
@@ -93,7 +93,7 @@ export function CreatePaymentForm(props: CreateItemFormProps) {
     }
   )
 
-  const [getCustomersOfGroups, { data: custormersOfGroupData }] = useLazyQuery<
+  const { data: custormersOfGroupData } = useQuery<
     ListCustomersByGroupResponse,
     ListCustomersByGroupVariables
   >(LIST_CUSTOMERS_BY_GROUP, {
@@ -101,37 +101,27 @@ export function CreatePaymentForm(props: CreateItemFormProps) {
       limit: 10000,
       offset: 0,
       groupId: selectedGroupId
-    }
+    },
+    skip: !selectedGroupId
   })
 
-  const {
-    loading: getPaymentLoading,
-    error: getPaymentError,
-    data: getPaymentData,
-    refetch: getPaymentRefetch
-  } = useQuery<GetPaymentResponse, GetPaymentVariables>(GET_PAYMENT_BY_ID, {
+  const { loading: getPaymentLoading, error: getPaymentError } = useQuery<
+    GetPaymentResponse,
+    GetPaymentVariables
+  >(GET_PAYMENT_BY_ID, {
     variables: {
       id: props.itemId as string
     },
-    skip: props.type === 'create'
-  })
-
-  useEffect(() => {
-    if (getPaymentData?.getPayment && props.type === 'update') {
+    skip: props.type === 'create',
+    onCompleted: (data) => {
       form.reset({
-        amount: String(getPaymentData.getPayment.amount),
-        currency: getPaymentData.getPayment.currency,
-        date: convertStringToDate(getPaymentData.getPayment.date),
-        paymentType: getPaymentData.getPayment.paymentType
+        amount: String(data.getPayment.amount),
+        currency: data.getPayment.currency,
+        date: convertStringToDate(data.getPayment.date),
+        paymentType: data.getPayment.paymentType
       })
     }
-  }, [getPaymentData])
-
-  useEffect(() => {
-    if (selectedGroupId) {
-      getCustomersOfGroups()
-    }
-  }, [selectedGroupId])
+  })
 
   const schema =
     props.type === 'create' ? createPaymentSchema : updatePaymentSchema
@@ -172,7 +162,9 @@ export function CreatePaymentForm(props: CreateItemFormProps) {
       },
       onCompleted: (data) => {
         toast({
-          description: `Payment has successfully created Amont: ${data.createPayment.amount} ${data.createPayment.currency.toUpperCase}`
+          description: `Payment has successfully created Amont: ${
+            data.createPayment.amount
+          } ${data.createPayment.currency.toUpperCase()}`
         })
         props.refetch()
         props.closeFormModal()
@@ -218,14 +210,11 @@ export function CreatePaymentForm(props: CreateItemFormProps) {
 
   let onSubmit: (values: z.infer<typeof schema>) => void
 
-  if (props.type === 'create') {
-    onSubmit = (values: z.infer<typeof schema>) => {
+  onSubmit = (values: z.infer<typeof schema>) => {
+    if (props.type === 'create') {
       return onSubmitCreate(values as z.infer<typeof createPaymentSchema>)
     }
-  } else {
-    onSubmit = (values: z.infer<typeof schema>) => {
-      return onSubmitUpdate(values)
-    }
+    return onSubmitUpdate(values)
   }
 
   if (groupsLoading || getPaymentLoading) {

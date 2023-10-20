@@ -64,3 +64,30 @@ export const DELETE_GROUP_MUTATION = gql`
     deleteGroup(id: $id)
   }
 `
+
+export const UPDATE_GROUP_MUTATION = gql`
+  mutation UpdateGroup($id: ID!, $input: UpdateGroupInput) {
+    updateGroup(id: $id, input: $input)
+  }
+`
+
+export const GET_GROUP_BY_ID = gql`
+  query GetGroup($id: ID!) {
+    getGroup(id: $id) {
+      id
+      name
+      instructor {
+        id
+        name
+      }
+      times {
+        day
+        start_hour
+        finish_hour
+      }
+      # customers {
+
+      # }
+    }
+  }
+`

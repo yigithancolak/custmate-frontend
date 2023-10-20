@@ -60,3 +60,29 @@ export type ListCustomersByGroupVariables = {
   offset?: number
   limit?: number
 }
+
+export type UpdateCustomerResponse = {
+  updateCustomer: string
+}
+
+export type UpdateCustomerInput = {
+  name?: string
+  phoneNumber?: string
+  groups?: string[]
+  lastPayment?: string
+  nextPayment?: string
+  active?: boolean
+}
+
+export type UpdateCustomerVariables = {
+  id: string
+  input: UpdateCustomerInput
+}
+
+export type GetCustomerResponse = {
+  getCustomer: CustomerItem
+}
+
+export type GetCustomerVariables = {
+  id: string
+}

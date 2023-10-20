@@ -1,6 +1,6 @@
 'use client'
+import { CreateItemModal } from '@/components/CreateItemModal/CreateItemModal'
 import { DialogBox } from '@/components/DialogBox/DialogBox'
-import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
 import { PageLayout } from '@/layouts/PageLayout/PageLayout'
 import {
@@ -18,8 +18,8 @@ import {
 import { TimeItem } from '@/types/timeTypes'
 import { useMutation, useQuery } from '@apollo/client'
 import { ColumnDef, PaginationState } from '@tanstack/react-table'
-import { PenSquare, Trash2 } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { Trash2 } from 'lucide-react'
+import { useState } from 'react'
 
 export default function GroupsPage() {
   const [groups, setGroups] = useState<GroupItem[]>([])
@@ -29,7 +29,6 @@ export default function GroupsPage() {
     pageSize: 10
   })
   const {
-    data,
     loading,
     error,
     refetch: refetchGroups
@@ -39,6 +38,10 @@ export default function GroupsPage() {
       variables: {
         offset: pagination.pageIndex * pagination.pageSize,
         limit: pagination.pageSize
+      },
+      onCompleted: (data) => {
+        setGroups(data.listGroupsByOrganization.items)
+        setTotalCount(data.listGroupsByOrganization.totalCount)
       }
     }
   )
@@ -74,9 +77,12 @@ export default function GroupsPage() {
       accessorKey: 'id',
       cell: (cell) => (
         <div className="flex flex-1 py-2">
-          <Button variant="outline" size="icon" className="mr-2">
-            <PenSquare size={16} />
-          </Button>
+          <CreateItemModal
+            item="groups"
+            refetch={refetchGroups}
+            type="update"
+            itemId={cell.getValue<string>()}
+          />
           <DialogBox
             title="Deleting group"
             description="Group will be deleted it is permanent. Are you sure ?"
@@ -111,13 +117,6 @@ export default function GroupsPage() {
       header: 'Number of Customers'
     }
   ]
-
-  useEffect(() => {
-    if (data?.listGroupsByOrganization.items) {
-      setGroups(data?.listGroupsByOrganization.items)
-      setTotalCount(data.listGroupsByOrganization.totalCount)
-    }
-  }, [data])
 
   if (error) return <p>Error: {error.message}</p>
 

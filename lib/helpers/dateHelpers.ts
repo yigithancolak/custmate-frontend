@@ -1,3 +1,5 @@
+import { format, parse } from 'date-fns'
+
 export const convertStringToDate = (dateString: string): Date => {
   const dateParts = dateString.split('-')
   const year = parseInt(dateParts[0], 10)
@@ -11,4 +13,9 @@ export const convertStringToDate = (dateString: string): Date => {
 
 export const adjustDateStringFormat = (stringDate: string) => {
   return stringDate.split('T')[0]
+}
+
+export function formatTime(timeString: string) {
+  const parsedTime = parse(timeString, 'HH:mm:ss', new Date())
+  return format(parsedTime, 'HH:mm')
 }

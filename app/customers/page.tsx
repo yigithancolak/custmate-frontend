@@ -1,6 +1,6 @@
 'use client'
+import { CreateItemModal } from '@/components/CreateItemModal/CreateItemModal'
 import { DialogBox } from '@/components/DialogBox/DialogBox'
-import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
 import { PageLayout } from '@/layouts/PageLayout/PageLayout'
 import {
@@ -16,8 +16,8 @@ import {
 } from '@/types/customerTypes'
 import { useMutation, useQuery } from '@apollo/client'
 import { ColumnDef, PaginationState } from '@tanstack/react-table'
-import { PenSquare, Trash2 } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { Trash2 } from 'lucide-react'
+import { useState } from 'react'
 
 export default function CustomersPage() {
   const [customers, setCustomers] = useState<CustomerItem[]>([])
@@ -28,7 +28,6 @@ export default function CustomersPage() {
   })
 
   const {
-    data,
     loading,
     error,
     refetch: refetchCustomers
@@ -39,6 +38,10 @@ export default function CustomersPage() {
         offset: pagination.pageIndex * pagination.pageSize,
         limit: pagination.pageSize,
         filter: {}
+      },
+      onCompleted(data) {
+        setCustomers(data.searchCustomers.items)
+        setTotalCount(data.searchCustomers.totalCount)
       }
     }
   )
@@ -74,9 +77,12 @@ export default function CustomersPage() {
       accessorKey: 'id',
       cell: (cell) => (
         <div className="flex flex-1 py-2">
-          <Button variant="outline" size="icon" className="mr-2">
-            <PenSquare size={16} />
-          </Button>
+          <CreateItemModal
+            item="customers"
+            refetch={refetchCustomers}
+            type="update"
+            itemId={cell.getValue<string>()}
+          />
           <DialogBox
             title="Deleting Customer"
             description="Customer will be deleted it is permanent. Are you sure ?"
@@ -125,13 +131,6 @@ export default function CustomersPage() {
     //   }
     // }
   ]
-
-  useEffect(() => {
-    if (data?.searchCustomers.items) {
-      setCustomers(data?.searchCustomers.items)
-      setTotalCount(data.searchCustomers.totalCount)
-    }
-  }, [data])
 
   if (error) return <p>Error: {error.message}</p>
 
