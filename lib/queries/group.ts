@@ -66,7 +66,7 @@ export const DELETE_GROUP_MUTATION = gql`
 `
 
 export const UPDATE_GROUP_MUTATION = gql`
-  mutation UpdateGroup($id: ID!, $input: UpdateGroupInput) {
+  mutation UpdateGroup($id: ID!, $input: UpdateGroupInput!) {
     updateGroup(id: $id, input: $input)
   }
 `

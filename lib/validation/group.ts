@@ -33,6 +33,4 @@ export const createGroupSchema = z.object({
   times: z.array(timeSchema)
 })
 
-export const updateGroupSchema = createGroupSchema.extend({
-  id: z.string().uuid()
-})
+// export const updateGroupSchema = createGroupSchema.extend({})

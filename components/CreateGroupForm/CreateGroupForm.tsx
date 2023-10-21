@@ -18,7 +18,7 @@ import {
   UPDATE_GROUP_MUTATION
 } from '@/lib/queries/group'
 import { LIST_INSTRUCTORS_QUERY } from '@/lib/queries/instructor'
-import { createGroupSchema, updateGroupSchema } from '@/lib/validation/group'
+import { createGroupSchema } from '@/lib/validation/group'
 import {
   CreateGroupInput,
   CreateGroupMutationResponse,
@@ -97,10 +97,8 @@ export function CreateGroupForm(props: CreateItemFormProps) {
     UPDATE_GROUP_MUTATION
   )
 
-  const schema = props.type === 'create' ? createGroupSchema : updateGroupSchema
-
   const form = useForm({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(createGroupSchema),
     defaultValues: {
       name: '',
       instructorId: '',
@@ -138,12 +136,9 @@ export function CreateGroupForm(props: CreateItemFormProps) {
     })
   }
 
-  console.log(props.itemId)
-
-  function onSubmitUpdate(values: z.infer<typeof updateGroupSchema>) {
+  function onSubmitUpdate(values: z.infer<typeof createGroupSchema>) {
     updateGroup({
       variables: {
-        //TODO: Fix id = undefined
         id: props.itemId as string,
         input: {
           name: values.name,
@@ -171,13 +166,13 @@ export function CreateGroupForm(props: CreateItemFormProps) {
     append({ day: '', start_hour: '', finish_hour: '' })
   }
 
-  let onSubmit: (values: z.infer<typeof schema>) => void
+  let onSubmit: (values: z.infer<typeof createGroupSchema>) => void
 
-  onSubmit = (values: z.infer<typeof schema>) => {
+  onSubmit = (values) => {
     if (props.type === 'create') {
-      return onSubmitCreate(values as z.infer<typeof createGroupSchema>)
+      return onSubmitCreate(values)
     }
-    return onSubmitUpdate(values as z.infer<typeof updateGroupSchema>)
+    return onSubmitUpdate(values)
   }
 
   if (instructorsLoading) {
@@ -187,8 +182,6 @@ export function CreateGroupForm(props: CreateItemFormProps) {
   if (instructorsError) {
     return <p>Error</p>
   }
-
-  console.log(form.formState.errors)
 
   return (
     <Form {...form}>
