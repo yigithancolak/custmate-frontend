@@ -47,6 +47,7 @@ import * as z from 'zod'
 import { CreateItemFormProps } from '../CreateGroupForm/CreateGroupForm'
 import { FormComboboxItem } from '../FormComboboxItem/FormComboboxItem'
 import { FormDatePickerItem } from '../FormDatePickerItem/FormDatePickerItem'
+import { FormModalLoading } from '../FormModalLoading/FormModalLoading'
 import { FormRadioItem } from '../FormRadioItem/FormRadioItem'
 import { useToast } from '../ui/use-toast'
 
@@ -218,7 +219,7 @@ export function CreatePaymentForm(props: CreateItemFormProps) {
   }
 
   if (groupsLoading || getPaymentLoading) {
-    return <p>Loading</p>
+    return <FormModalLoading fieldCount={6} />
   }
 
   if (groupsError || getPaymentError) {
@@ -296,6 +297,7 @@ export function CreatePaymentForm(props: CreateItemFormProps) {
                   handleSearchTermChange={handleGroupSearchChange}
                   items={groups}
                   searchTerm={searchedGroup}
+                  label="Select Group"
                 />
               )}
             />
@@ -312,6 +314,7 @@ export function CreatePaymentForm(props: CreateItemFormProps) {
                     handleSearchTermChange={hadleCustomerSearchChange}
                     items={customersOfGroup}
                     searchTerm={searchedCustomer}
+                    label="Select Customer"
                   />
                 )}
               />

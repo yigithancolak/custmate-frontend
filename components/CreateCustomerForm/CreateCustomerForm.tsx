@@ -37,13 +37,16 @@ import {
 import { useMutation, useQuery } from '@apollo/client'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { format } from 'date-fns'
-import { Save, X } from 'lucide-react'
+import { Plus, Save, X } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { CreateItemFormProps } from '../CreateGroupForm/CreateGroupForm'
 import { FormComboboxItem } from '../FormComboboxItem/FormComboboxItem'
 import { FormDatePickerItem } from '../FormDatePickerItem/FormDatePickerItem'
+import { FormModalLoading } from '../FormModalLoading/FormModalLoading'
+import { ItemIcon } from '../ItemIcon/DashboardCardIcon'
+import { DialogFooter } from '../ui/dialog'
 import { useToast } from '../ui/use-toast'
 
 export function CreateCustomerForm(props: CreateItemFormProps) {
@@ -197,7 +200,7 @@ export function CreateCustomerForm(props: CreateItemFormProps) {
   }
 
   if (groupsLoading || getCustomerLoading) {
-    return <p>Loading</p>
+    return <FormModalLoading fieldCount={5} />
   }
 
   if (groupsError || getCustomerError) {
@@ -266,6 +269,7 @@ export function CreateCustomerForm(props: CreateItemFormProps) {
                   handleSearchTermChange={handleGroupSearchChange}
                   items={groups}
                   searchTerm={searchedGroup}
+                  label="Select Group"
                 />
               )}
             />
@@ -279,17 +283,20 @@ export function CreateCustomerForm(props: CreateItemFormProps) {
         ))}
 
         <Button type="button" onClick={addGroupField} className="mt-3 w-full">
-          Add Group
+          <Plus />
+          <ItemIcon type="groups" />
         </Button>
 
-        <Button
-          type="submit"
-          disabled={createCustomerLoading}
-          className="mt-3 w-full"
-        >
-          <Save className="mr-2" />
-          <span>Save</span>
-        </Button>
+        <DialogFooter className="w-full">
+          <Button
+            type="submit"
+            disabled={createCustomerLoading}
+            className="mt-3"
+          >
+            <Save className="mr-2" />
+            <span>Save</span>
+          </Button>
+        </DialogFooter>
       </form>
     </Form>
   )

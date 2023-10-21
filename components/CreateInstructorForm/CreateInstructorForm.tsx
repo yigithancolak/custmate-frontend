@@ -31,6 +31,7 @@ import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { CreateItemFormProps } from '../CreateGroupForm/CreateGroupForm'
+import { FormModalLoading } from '../FormModalLoading/FormModalLoading'
 import { useToast } from '../ui/use-toast'
 
 export function CreateInstructorForm(props: CreateItemFormProps) {
@@ -131,7 +132,7 @@ export function CreateInstructorForm(props: CreateItemFormProps) {
   }
 
   if (getInstructorLoading) {
-    return <p>Loading</p>
+    return <FormModalLoading fieldCount={1} />
   }
 
   if (getInstructorError) {

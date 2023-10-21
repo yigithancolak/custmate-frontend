@@ -30,6 +30,7 @@ interface FormComboboxItemProps {
   handleSearchTermChange: (search: string) => void
   fieldName: 'groupId' | 'customerId' | `groups.${number}`
   handleItemSelect?: (itemId: string) => void
+  label: string
 }
 
 export function FormComboboxItem(props: FormComboboxItemProps) {
@@ -40,12 +41,13 @@ export function FormComboboxItem(props: FormComboboxItemProps) {
     searchTerm,
     handleSearchTermChange,
     fieldName,
-    handleItemSelect
+    handleItemSelect,
+    label
   } = props
 
   return (
-    <FormItem className="flex flex-col w-full ">
-      <FormLabel>Choose Group</FormLabel>
+    <FormItem className="flex flex-col w-full">
+      <FormLabel>{label}</FormLabel>
       <Popover>
         <PopoverTrigger asChild>
           <FormControl>

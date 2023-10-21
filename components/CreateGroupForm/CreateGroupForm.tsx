@@ -36,6 +36,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Clock3, Plus, Save, X } from 'lucide-react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { FormModalLoading } from '../FormModalLoading/FormModalLoading'
 import {
   Form,
   FormControl,
@@ -56,7 +57,10 @@ export interface CreateItemFormProps {
 export function CreateGroupForm(props: CreateItemFormProps) {
   const { toast } = useToast()
 
-  const {} = useQuery<GetGroupResponse, GetGroupVariables>(GET_GROUP_BY_ID, {
+  const { loading: getGroupLoading, error: getGroupError } = useQuery<
+    GetGroupResponse,
+    GetGroupVariables
+  >(GET_GROUP_BY_ID, {
     variables: {
       id: props.itemId as string
     },
@@ -175,11 +179,11 @@ export function CreateGroupForm(props: CreateItemFormProps) {
     return onSubmitUpdate(values)
   }
 
-  if (instructorsLoading) {
-    return <p>Loading</p>
+  if (getGroupLoading) {
+    return <FormModalLoading fieldCount={5} />
   }
 
-  if (instructorsError) {
+  if (getGroupError) {
     return <p>Error</p>
   }
 
