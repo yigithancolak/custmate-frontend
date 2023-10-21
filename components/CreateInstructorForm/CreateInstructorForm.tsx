@@ -27,7 +27,6 @@ import {
 import { useMutation, useQuery } from '@apollo/client'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Save } from 'lucide-react'
-import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { CreateItemFormProps } from '../CreateGroupForm/CreateGroupForm'
@@ -56,6 +55,11 @@ export function CreateInstructorForm(props: CreateItemFormProps) {
       skip: props.type === 'create',
       variables: {
         id: props.itemId as string
+      },
+      onCompleted(data) {
+        form.reset({
+          name: data.getInstructor.name
+        })
       }
     }
   )
@@ -66,14 +70,6 @@ export function CreateInstructorForm(props: CreateItemFormProps) {
       name: ''
     }
   })
-
-  useEffect(() => {
-    if (getInstructorData?.getInstructor && props.type === 'update') {
-      form.reset({
-        name: getInstructorData.getInstructor.name
-      })
-    }
-  }, [getInstructorData])
 
   function onSubmitCreate(values: z.infer<typeof createInstructorSchema>) {
     createInstructor({
