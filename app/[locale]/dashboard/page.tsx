@@ -14,8 +14,10 @@ import {
   ListPaymentsVariables
 } from '@/types/paymentTypes'
 import { useQuery } from '@apollo/client'
+import { useTranslations } from 'next-intl'
 
 export default function DashboardPage() {
+  const t = useTranslations('DashboardPage')
   const {
     data: groupsData,
     loading: groupsLoading,
@@ -89,16 +91,14 @@ export default function DashboardPage() {
 
   return (
     <main className="flex flex-col items-center w-full h-full">
-      <h3 className="text-2xl text-center py-6">
-        Organization Metrics and Dashboard
-      </h3>
+      <h3 className="text-2xl text-center py-6">{t('header')}</h3>
       <div className="flex w-10/12 md:w-8/12 flex-col gap-4">
         <DashboardCard
           type="groups"
           description="Groups Info"
           contents={[
             {
-              key: 'Count',
+              key: t('Cards.count'),
               value: String(groupsData?.listGroupsByOrganization.totalCount)
             }
           ]}
@@ -111,15 +111,15 @@ export default function DashboardPage() {
           description="Customers Info"
           contents={[
             {
-              key: 'Active',
+              key: t('Cards.Customers.active'),
               value: String(customersData?.searchCustomers.totalCount)
             },
             {
-              key: 'Upcoming payments',
+              key: t('Cards.Customers.upcomingPayments'),
               value: String(upcomingPaymentData?.searchCustomers.totalCount)
             },
             {
-              key: 'Late payments',
+              key: t('Cards.Customers.latePayments'),
               value: String(latePaymentData?.searchCustomers.totalCount)
             }
           ]}
@@ -131,10 +131,10 @@ export default function DashboardPage() {
 
         <DashboardCard
           type="payments"
-          description="Payments info"
+          description={t('Cards.Payments.desc')}
           contents={[
             {
-              key: 'Payments in this mounth',
+              key: t('Cards.Payments.thisMonth'),
               value: String(
                 monthlyPaymentData?.listPaymentsByOrganization.totalCount
               )

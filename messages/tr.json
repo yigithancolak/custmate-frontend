@@ -6,5 +6,27 @@
     "header": "Organizasyon Giriş",
     "password": "Şifre",
     "signin": "Giriş Yap"
+  },
+  "DashboardPage": {
+    "header": "Organizasyon Metrikleri ve Gösterge Paneli",
+    "Cards": {
+      "count": "Sayı",
+      "clickSee": "Görmek için tıkla",
+      "Groups": {
+        "desc": "Gruplar Özeti"
+      },
+
+      "Customers": {
+        "desc": "Müşteriler Özeti",
+        "active": "Aktif",
+        "upcomingPayments": "Yaklaşmakta Ödemeler",
+        "latePayments": "Geciken Ödemeler"
+      },
+
+      "Payments": {
+        "desc": "Ödemeler Özeti",
+        "thisMonth": "Bu Ay"
+      }
+    }
   }
 }

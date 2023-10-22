@@ -6,5 +6,27 @@
     "header": "Login",
     "password": "Password",
     "signin": "Sign In"
+  },
+  "DashboardPage": {
+    "header": "Organization Metrics and Dashboard",
+    "Cards": {
+      "count": "Count",
+      "clickSee": "Click to see",
+      "Groups": {
+        "desc": "Groups Info"
+      },
+
+      "Customers": {
+        "desc": "Customers Info",
+        "active": "Active",
+        "upcomingPayments": "Upcoming payments",
+        "latePayments": "Late payments"
+      },
+
+      "Payments": {
+        "desc": "Payments Info",
+        "thisMonth": "Payments in this mounth"
+      }
+    }
   }
 }

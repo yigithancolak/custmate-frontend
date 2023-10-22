@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/card'
 import { ItemType } from '@/layouts/PageLayout/PageLayout'
 import { capitalizeFirstLetter } from '@/lib/helpers/stringHelpers'
+import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { ItemIcon } from '../ItemIcon/DashboardCardIcon'
 import { Button } from '../ui/button'
@@ -27,6 +28,7 @@ interface DashboardCardProps {
 }
 
 export function DashboardCard(props: DashboardCardProps) {
+  const t = useTranslations('DashboardPage')
   const router = useRouter()
 
   if (props.loading) {
@@ -51,7 +53,9 @@ export function DashboardCard(props: DashboardCardProps) {
       })}
 
       <CardFooter>
-        <Button onClick={() => router.push(props.path)}>Click to see</Button>
+        <Button onClick={() => router.push(props.path)}>
+          {t('Cards.clickSee')}
+        </Button>
       </CardFooter>
     </Card>
   )
