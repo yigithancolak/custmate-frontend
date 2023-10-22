@@ -1,0 +1,10 @@
+{
+  "IndexPage": {
+    "title": "Hey merhaba"
+  },
+  "LoginPage": {
+    "header": "Organizasyon Giriş",
+    "password": "Şifre",
+    "signin": "Giriş Yap"
+  }
+}

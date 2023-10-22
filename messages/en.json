@@ -1,0 +1,10 @@
+{
+  "IndexPage": {
+    "title": "next-intl example"
+  },
+  "LoginPage": {
+    "header": "Login",
+    "password": "Password",
+    "signin": "Sign In"
+  }
+}
