@@ -1,5 +1,5 @@
 'use client'
-import { CreateItemModal } from '@/components/CreateItemModal/CreateItemModal'
+import { CreateUpdateItemModal } from '@/components/CreateUpdateItemModal/CreateUpdateItemModal'
 import { DialogBox } from '@/components/DialogBox/DialogBox'
 import { toast } from '@/components/ui/use-toast'
 import { PageLayout } from '@/layouts/PageLayout/PageLayout'
@@ -78,7 +78,7 @@ export default function PaymentsPage() {
       accessorKey: 'id',
       cell: (cell) => (
         <div className="flex flex-1 py-2">
-          <CreateItemModal
+          <CreateUpdateItemModal
             item="payments"
             refetch={refetchPayments}
             type="update"
@@ -121,6 +121,7 @@ export default function PaymentsPage() {
 
   return (
     <PageLayout
+      header="Payments of Organization"
       columns={paymentColumns}
       data={payments}
       item="payments"

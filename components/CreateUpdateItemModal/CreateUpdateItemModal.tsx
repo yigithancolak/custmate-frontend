@@ -13,20 +13,27 @@ import { ItemType } from '@/layouts/PageLayout/PageLayout'
 import { capitalizeFirstLetter } from '@/lib/helpers/stringHelpers'
 import { PenSquare, Plus } from 'lucide-react'
 import { useState } from 'react'
-import { CreateCustomerForm } from '../CreateCustomerForm/CreateCustomerForm'
-import { CreateGroupForm } from '../CreateGroupForm/CreateGroupForm'
-import { CreateInstructorForm } from '../CreateInstructorForm/CreateInstructorForm'
-import { CreatePaymentForm } from '../CreatePaymentForm/CreatePaymentForm'
+import { CustomerForm } from '../CustomerForm/CustomerForm'
+import { GroupForm } from '../GroupForm/GroupForm'
+import { InstructorForm } from '../InstructorForm/InstructorForm'
 import { ItemIcon } from '../ItemIcon/DashboardCardIcon'
+import { PaymentForm } from '../PaymentForm/PaymentForm'
 
-interface CreateItemModalProps {
-  item: ItemType
+interface BaseItemProps {
   refetch: () => void
   type: 'create' | 'update'
   itemId?: string
 }
 
-export function CreateItemModal(props: CreateItemModalProps) {
+export interface ModalFormProps extends BaseItemProps {
+  closeFormModal: () => void
+}
+
+export interface CreateUpdateItemModalProps extends BaseItemProps {
+  item: ItemType
+}
+
+export function CreateUpdateItemModal(props: CreateUpdateItemModalProps) {
   const [isOpen, setIsOpen] = useState(false)
 
   const closeFormModal = () => {
@@ -37,16 +44,16 @@ export function CreateItemModal(props: CreateItemModalProps) {
 
   switch (props.item) {
     case 'groups':
-      FormComponent = CreateGroupForm
+      FormComponent = GroupForm
       break
     case 'instructors':
-      FormComponent = CreateInstructorForm
+      FormComponent = InstructorForm
       break
     case 'customers':
-      FormComponent = CreateCustomerForm
+      FormComponent = CustomerForm
       break
     case 'payments':
-      FormComponent = CreatePaymentForm
+      FormComponent = PaymentForm
       break
     default:
       return

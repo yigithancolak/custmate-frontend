@@ -1,4 +1,6 @@
 {
+  "Components": {},
+
   "IndexPage": {
     "title": "Hey merhaba"
   },
@@ -28,5 +30,25 @@
         "thisMonth": "Bu Ay"
       }
     }
+  },
+  "CustomersPage": {
+    "header": "Üyeler",
+    "deleteMessage": "Üye başarıyla silindi",
+    "DeleteModal": {
+      "header": "Üye Siliniyor",
+      "desc": "Üye silinecek ve bu geri alınamaz bunu onaylıyor musunuz ?"
+    },
+    "ColumnHeaders": {
+      "operations": "Operasyonlar",
+      "name": "Üye İsmi",
+      "lastPayment": "Son Ödeme",
+      "nextPayment": "Gelecek Ödeme",
+      "phoneNumber": "Telefon Numarası",
+      "activity": "Aktiflik"
+    }
+  },
+  "GroupsPage": {
+    "header": "Gruplar",
+    "deleteMessage": "Grup başarıyla silindi"
   }
 }

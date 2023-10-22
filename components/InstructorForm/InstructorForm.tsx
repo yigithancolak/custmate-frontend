@@ -29,11 +29,11 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Save } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
-import { CreateItemFormProps } from '../CreateGroupForm/CreateGroupForm'
+import { ModalFormProps } from '../CreateUpdateItemModal/CreateUpdateItemModal'
 import { FormModalLoading } from '../FormModalLoading/FormModalLoading'
 import { useToast } from '../ui/use-toast'
 
-export function CreateInstructorForm(props: CreateItemFormProps) {
+export function InstructorForm(props: ModalFormProps) {
   const { toast } = useToast()
   const [createInstructor, { loading: createInstructorLoading }] = useMutation<
     CreateInstructorResponse,

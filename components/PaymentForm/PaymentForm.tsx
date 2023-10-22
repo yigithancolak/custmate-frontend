@@ -44,14 +44,14 @@ import { Save } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
-import { CreateItemFormProps } from '../CreateGroupForm/CreateGroupForm'
+import { ModalFormProps } from '../CreateUpdateItemModal/CreateUpdateItemModal'
 import { FormComboboxItem } from '../FormComboboxItem/FormComboboxItem'
 import { FormDatePickerItem } from '../FormDatePickerItem/FormDatePickerItem'
 import { FormModalLoading } from '../FormModalLoading/FormModalLoading'
 import { FormRadioItem } from '../FormRadioItem/FormRadioItem'
 import { useToast } from '../ui/use-toast'
 
-export function CreatePaymentForm(props: CreateItemFormProps) {
+export function PaymentForm(props: ModalFormProps) {
   const [searchedGroup, setSearchedGroup] = useState('')
   const [searchedCustomer, setSearchedCustomer] = useState('')
   const [selectedGroupId, setSelectedGroupId] = useState('')

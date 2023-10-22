@@ -1,4 +1,6 @@
 {
+  "Components": {},
+
   "IndexPage": {
     "title": "next-intl example"
   },
@@ -28,5 +30,25 @@
         "thisMonth": "Payments in this mounth"
       }
     }
+  },
+  "CustomersPage": {
+    "header": "Customers of Organization",
+    "deleteMessage": "Customer successfully deleted",
+    "DeleteModal": {
+      "header": "Deleting Customer",
+      "desc": "Customer will be deleted it is permanent. Are you sure ?"
+    },
+    "ColumnHeaders": {
+      "operations": "Operations",
+      "name": "Name of Customer",
+      "lastPayment": "Last Payment",
+      "nextPayment": "Next Payment",
+      "phoneNumber": "Phone Number",
+      "activity": "Activity"
+    }
+  },
+  "GroupsPage": {
+    "header": "Groups of Organization",
+    "deleteMessage": "Group successfully deleted"
   }
 }

@@ -41,7 +41,7 @@ import { Plus, Save, X } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { CreateItemFormProps } from '../CreateGroupForm/CreateGroupForm'
+import { ModalFormProps } from '../CreateUpdateItemModal/CreateUpdateItemModal'
 import { FormComboboxItem } from '../FormComboboxItem/FormComboboxItem'
 import { FormDatePickerItem } from '../FormDatePickerItem/FormDatePickerItem'
 import { FormModalLoading } from '../FormModalLoading/FormModalLoading'
@@ -49,7 +49,7 @@ import { ItemIcon } from '../ItemIcon/DashboardCardIcon'
 import { DialogFooter } from '../ui/dialog'
 import { useToast } from '../ui/use-toast'
 
-export function CreateCustomerForm(props: CreateItemFormProps) {
+export function CustomerForm(props: ModalFormProps) {
   const [groups, setGroups] = useState<GroupItem[]>([])
   const [searchedGroup, setSearchedGroup] = useState('')
   const [groupFieldCount, setGroupFieldCount] = useState(1)

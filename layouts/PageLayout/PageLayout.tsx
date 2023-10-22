@@ -1,6 +1,5 @@
-import { CreateItemModal } from '@/components/CreateItemModal/CreateItemModal'
+import { CreateUpdateItemModal } from '@/components/CreateUpdateItemModal/CreateUpdateItemModal'
 import { DataTable } from '@/components/DataTable/DataTable'
-import { capitalizeFirstLetter } from '@/lib/helpers/stringHelpers'
 import { ColumnDef, PaginationState } from '@tanstack/react-table'
 import { Dispatch, SetStateAction } from 'react'
 
@@ -12,6 +11,7 @@ export type ItemType =
   | 'payments'
 
 interface PageLayoutProps<T> {
+  header: string
   refetch: () => void
   item: ItemType
   columns: ColumnDef<T>[]
@@ -25,12 +25,10 @@ interface PageLayoutProps<T> {
 export function PageLayout<T extends any>(props: PageLayoutProps<T>) {
   return (
     <main className="flex flex-col items-center w-full h-full">
-      <h3 className="text-2xl text-center py-6">
-        {capitalizeFirstLetter(props.item)} Of Organization
-      </h3>
+      <h3 className="text-2xl text-center py-6">{props.header}</h3>
       <div className="flex w-10/12 md:w-10/12 flex-col gap-4">
         <div>
-          <CreateItemModal
+          <CreateUpdateItemModal
             item={props.item}
             refetch={props.refetch}
             type="create"

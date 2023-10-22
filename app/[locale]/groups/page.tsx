@@ -1,5 +1,5 @@
 'use client'
-import { CreateItemModal } from '@/components/CreateItemModal/CreateItemModal'
+import { CreateUpdateItemModal } from '@/components/CreateUpdateItemModal/CreateUpdateItemModal'
 import { DialogBox } from '@/components/DialogBox/DialogBox'
 import { toast } from '@/components/ui/use-toast'
 import { PageLayout } from '@/layouts/PageLayout/PageLayout'
@@ -19,9 +19,11 @@ import { TimeItem } from '@/types/timeTypes'
 import { useMutation, useQuery } from '@apollo/client'
 import { ColumnDef, PaginationState } from '@tanstack/react-table'
 import { Trash2 } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 
 export default function GroupsPage() {
+  const t = useTranslations('GroupsPage')
   const [groups, setGroups] = useState<GroupItem[]>([])
   const [totalCount, setTotalCount] = useState(0)
   const [pagination, setPagination] = useState<PaginationState>({
@@ -77,7 +79,7 @@ export default function GroupsPage() {
       accessorKey: 'id',
       cell: (cell) => (
         <div className="flex flex-1 py-2">
-          <CreateItemModal
+          <CreateUpdateItemModal
             item="groups"
             refetch={refetchGroups}
             type="update"
@@ -122,6 +124,7 @@ export default function GroupsPage() {
 
   return (
     <PageLayout
+      header={t('header')}
       columns={groupColumns}
       data={groups}
       item="groups"

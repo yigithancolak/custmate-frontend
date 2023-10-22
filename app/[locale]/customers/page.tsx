@@ -1,8 +1,9 @@
 'use client'
-import { CreateItemModal } from '@/components/CreateItemModal/CreateItemModal'
+import { CreateUpdateItemModal } from '@/components/CreateUpdateItemModal/CreateUpdateItemModal'
 import { DialogBox } from '@/components/DialogBox/DialogBox'
 import { toast } from '@/components/ui/use-toast'
 import { PageLayout } from '@/layouts/PageLayout/PageLayout'
+import { adjustDateStringFormat } from '@/lib/helpers/dateHelpers'
 import {
   DELETE_CUSTOMER_MUTATION,
   SEARCH_CUSTOMERS_QUERY
@@ -17,9 +18,11 @@ import {
 import { useMutation, useQuery } from '@apollo/client'
 import { ColumnDef, PaginationState } from '@tanstack/react-table'
 import { Trash2 } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 
 export default function CustomersPage() {
+  const t = useTranslations('CustomersPage')
   const [customers, setCustomers] = useState<CustomerItem[]>([])
   const [totalCount, setTotalCount] = useState(0)
   const [pagination, setPagination] = useState<PaginationState>({
@@ -58,7 +61,7 @@ export default function CustomersPage() {
       },
       onCompleted: () => {
         toast({
-          description: 'Customer successfully deleted'
+          description: t('deleteMessage')
         })
         refetchCustomers()
       },
@@ -73,19 +76,19 @@ export default function CustomersPage() {
 
   const customerColumns: ColumnDef<CustomerItem>[] = [
     {
-      header: 'Operations',
+      header: t('ColumnHeaders.operations'),
       accessorKey: 'id',
       cell: (cell) => (
         <div className="flex flex-1 py-2">
-          <CreateItemModal
+          <CreateUpdateItemModal
             item="customers"
             refetch={refetchCustomers}
             type="update"
             itemId={cell.getValue<string>()}
           />
           <DialogBox
-            title="Deleting Customer"
-            description="Customer will be deleted it is permanent. Are you sure ?"
+            title={t('DeleteModal.header')}
+            description={t('DeleteModal.desc')}
             trigger={<Trash2 size={16} color="red" />}
             fn={() => handleDeleteCustomer(cell.getValue<string>())}
             loading={deleteCustomerLoading}
@@ -94,31 +97,31 @@ export default function CustomersPage() {
       )
     },
     {
-      header: 'Name of Customer',
+      header: t('ColumnHeaders.name'),
       accessorKey: 'name'
     },
     {
-      header: 'Last Payment',
+      header: t('ColumnHeaders.lastPayment'),
       accessorKey: 'lastPayment',
       cell: (cell) => {
         const date = cell.getValue<string>()
-        return date.split('T')[0]
+        return adjustDateStringFormat(date)
       }
     },
     {
-      header: 'Next Payment',
+      header: t('ColumnHeaders.nextPayment'),
       accessorKey: 'nextPayment',
       cell: (cell) => {
         const date = cell.getValue<string>()
-        return date.split('T')[0]
+        return adjustDateStringFormat(date)
       }
     },
     {
-      header: 'Phone Number',
+      header: t('ColumnHeaders.phoneNumber'),
       accessorKey: 'phoneNumber'
     },
     {
-      header: 'Is Active',
+      header: t('ColumnHeaders.activity'),
       accessorKey: 'active'
     }
     //TODO: ADD GROUPS TO SEARCH CUSTOMERS RESULT IN BACKEND
@@ -136,6 +139,7 @@ export default function CustomersPage() {
 
   return (
     <PageLayout
+      header={t('header')}
       columns={customerColumns}
       data={customers}
       item="customers"

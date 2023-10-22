@@ -36,6 +36,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Clock3, Plus, Save, X } from 'lucide-react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { ModalFormProps } from '../CreateUpdateItemModal/CreateUpdateItemModal'
 import { FormModalLoading } from '../FormModalLoading/FormModalLoading'
 import {
   Form,
@@ -47,14 +48,7 @@ import {
 } from '../ui/form'
 import { useToast } from '../ui/use-toast'
 
-export interface CreateItemFormProps {
-  refetch: () => void
-  closeFormModal: () => void
-  type: 'create' | 'update'
-  itemId?: string
-}
-
-export function CreateGroupForm(props: CreateItemFormProps) {
+export function GroupForm(props: ModalFormProps) {
   const { toast } = useToast()
 
   const { loading: getGroupLoading, error: getGroupError } = useQuery<
