@@ -19,7 +19,7 @@ import { useMutation, useQuery } from '@apollo/client'
 import { ColumnDef, PaginationState } from '@tanstack/react-table'
 import { Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function CustomersPage() {
   const t = useTranslations('CustomersPage')
@@ -31,6 +31,7 @@ export default function CustomersPage() {
   })
 
   const {
+    data,
     loading,
     error,
     refetch: refetchCustomers
@@ -48,6 +49,11 @@ export default function CustomersPage() {
       }
     }
   )
+
+  useEffect(() => {
+    setCustomers(data?.searchCustomers.items || [])
+    setTotalCount(data?.searchCustomers.totalCount || 0)
+  }, [data])
 
   const [deleteCustomer, { loading: deleteCustomerLoading }] = useMutation<
     DeleteCustomerResponse,

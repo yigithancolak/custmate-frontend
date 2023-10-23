@@ -4,13 +4,6 @@ import { Button } from '@/components/ui/button'
 import { DialogFooter } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select'
 import { formatTime } from '@/lib/helpers/dateHelpers'
 import {
   CREATE_GROUP_MUTATION,
@@ -28,15 +21,19 @@ import {
   UpdateGroupVariables
 } from '@/types/groupTypes'
 import {
+  InstructorItem,
   ListInstructorsResponse,
   ListInstructorsVariables
 } from '@/types/instructorTypes'
 import { useMutation, useQuery } from '@apollo/client'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Clock3, Plus, Save, X } from 'lucide-react'
+import { useTranslations } from 'next-intl'
+import { useState } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { ModalFormProps } from '../CreateUpdateItemModal/CreateUpdateItemModal'
+import { FormComboboxItem } from '../FormComboboxItem/FormComboboxItem'
 import { FormModalLoading } from '../FormModalLoading/FormModalLoading'
 import {
   Form,
@@ -49,7 +46,15 @@ import {
 import { useToast } from '../ui/use-toast'
 
 export function GroupForm(props: ModalFormProps) {
+  const [instructors, setInstructors] = useState<InstructorItem[]>([])
+  const [searchedInstructor, setSearchedInstructor] = useState('')
+
+  const t = useTranslations('Components.CreateUpdateForms.Group')
   const { toast } = useToast()
+
+  const handleInstructorSearchChange = (search: string) => {
+    setSearchedInstructor(search)
+  }
 
   const { loading: getGroupLoading, error: getGroupError } = useQuery<
     GetGroupResponse,
@@ -72,19 +77,18 @@ export function GroupForm(props: ModalFormProps) {
     }
   })
 
-  const {
-    data: instructorsData,
-    loading: instructorsLoading,
-    error: instructorsError
-  } = useQuery<ListInstructorsResponse, ListInstructorsVariables>(
-    LIST_INSTRUCTORS_QUERY,
-    {
-      variables: {
-        offset: 0,
-        limit: 100
-      }
+  const { data: instructorsData } = useQuery<
+    ListInstructorsResponse,
+    ListInstructorsVariables
+  >(LIST_INSTRUCTORS_QUERY, {
+    variables: {
+      offset: 0,
+      limit: 100
+    },
+    onCompleted(data) {
+      setInstructors(data.listInstructors.items)
     }
-  )
+  })
 
   const [createGroup, { loading: createGroupLoading }] = useMutation<
     CreateGroupMutationResponse,
@@ -120,10 +124,10 @@ export function GroupForm(props: ModalFormProps) {
       },
       onCompleted: (data) => {
         toast({
-          description: `Group named ${data.createGroup.name} successfully created`
+          description: t('createdMessage', { name: data.createGroup.name })
         })
-        props.refetch()
         props.closeFormModal()
+        props.refetch()
       },
       onError: (err) => {
         toast({
@@ -203,41 +207,20 @@ export function GroupForm(props: ModalFormProps) {
           </div>
 
           {/* INSTRUCTOR FIELD */}
-          <div className="w-full">
+          <div className="flex w-full">
             <FormField
               control={form.control}
               name="instructorId"
               render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel htmlFor="group-instructor">
-                    Choose instructor
-                  </FormLabel>
-                  <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <SelectTrigger id="group-instructor">
-                        <SelectValue placeholder="Select instructor" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {instructorsData?.listInstructors.items.map(
-                          (instructor) => {
-                            return (
-                              <SelectItem
-                                key={instructor.id}
-                                value={instructor.id}
-                              >
-                                {instructor.name}
-                              </SelectItem>
-                            )
-                          }
-                        )}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+                <FormComboboxItem
+                  field={field}
+                  fieldName="instructorId"
+                  form={form}
+                  handleSearchTermChange={handleInstructorSearchChange}
+                  items={instructors}
+                  label="Instructor"
+                  searchTerm={searchedInstructor}
+                />
               )}
             />
           </div>

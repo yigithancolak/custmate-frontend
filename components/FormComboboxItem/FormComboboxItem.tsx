@@ -15,6 +15,7 @@ import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import { CustomerItem } from '@/types/customerTypes'
 import { GroupItem } from '@/types/groupTypes'
+import { InstructorItem } from '@/types/instructorTypes'
 import { Check, ChevronsUpDown } from 'lucide-react'
 import { ControllerRenderProps, UseFormReturn } from 'react-hook-form'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
@@ -24,11 +25,12 @@ interface FormComboboxItemProps {
     | ControllerRenderProps<any, 'groupId'>
     | ControllerRenderProps<any, 'customerId'>
     | ControllerRenderProps<any, `groups.${number}`>
-  items: GroupItem[] | CustomerItem[]
+    | ControllerRenderProps<any, 'instructorId'>
+  items: GroupItem[] | CustomerItem[] | InstructorItem[]
   form: UseFormReturn<any, any, undefined>
   searchTerm: string
   handleSearchTermChange: (search: string) => void
-  fieldName: 'groupId' | 'customerId' | `groups.${number}`
+  fieldName: 'groupId' | 'customerId' | `groups.${number}` | 'instructorId'
   handleItemSelect?: (itemId: string) => void
   label: string
 }
@@ -46,7 +48,7 @@ export function FormComboboxItem(props: FormComboboxItemProps) {
   } = props
 
   return (
-    <FormItem className="flex flex-col w-full">
+    <FormItem className="flex w-full items-center gap-3">
       <FormLabel>{label}</FormLabel>
       <Popover>
         <PopoverTrigger asChild>
@@ -55,26 +57,26 @@ export function FormComboboxItem(props: FormComboboxItemProps) {
               variant="outline"
               role="combobox"
               className={cn(
-                'w-[240px] justify-between',
+                'flex justify-between w-full',
                 !field.value && 'text-muted-foreground'
               )}
             >
               {field.value
                 ? items.find((item) => item.id === field.value)?.name
-                : 'Select group'}
+                : 'Select'}
               <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
             </Button>
           </FormControl>
         </PopoverTrigger>
-        <PopoverContent className="w-[240px] p-0 max-h-[200px] overflow-y-auto">
+        <PopoverContent className="w-[300px] p-0 max-h-[200px] overflow-y-auto">
           <Command>
             <Input
               className="w-full"
               value={searchTerm}
               onChange={(e) => handleSearchTermChange(e.target.value)}
-              placeholder="Search group..."
+              placeholder="Search"
             />
-            <CommandEmpty>No group found.</CommandEmpty>
+            <CommandEmpty>No result found.</CommandEmpty>
             <CommandGroup>
               {items.map(
                 (item) =>

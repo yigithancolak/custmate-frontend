@@ -12,6 +12,7 @@ import { RadioGroup, RadioGroupItem } from '../ui/radio-group'
 interface FormRadioItemProps<K extends 'currency' | 'paymentType'> {
   field: ControllerRenderProps<any, K>
   array: any[]
+  label: string
 }
 
 export function FormRadioItem<K extends 'currency' | 'paymentType'>(
@@ -19,7 +20,7 @@ export function FormRadioItem<K extends 'currency' | 'paymentType'>(
 ) {
   return (
     <FormItem className="space-y-3 w-full">
-      <FormLabel>Currency</FormLabel>
+      <FormLabel>{props.label}</FormLabel>
       <FormControl>
         <RadioGroup
           onValueChange={props.field.onChange}

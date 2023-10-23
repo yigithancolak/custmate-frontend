@@ -19,7 +19,7 @@ import {
 import { useMutation, useQuery } from '@apollo/client'
 import { ColumnDef, PaginationState } from '@tanstack/react-table'
 import { Trash2 } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function InstructorsPage() {
   const [instructors, setInstructors] = useState<InstructorItem[]>([])
@@ -28,7 +28,7 @@ export default function InstructorsPage() {
     pageIndex: 0,
     pageSize: 10
   })
-  const { loading, error, refetch } = useQuery<
+  const { data, loading, error, refetch } = useQuery<
     ListInstructorsResponse,
     ListInstructorsVariables
   >(LIST_INSTRUCTORS_QUERY, {
@@ -41,6 +41,11 @@ export default function InstructorsPage() {
       setTotalCount(data.listInstructors.totalCount)
     }
   })
+
+  useEffect(() => {
+    setInstructors(data?.listInstructors.items || [])
+    setTotalCount(data?.listInstructors.totalCount || 0)
+  }, [data])
 
   const [deleteInstructor, { loading: deleteInstructorLoading }] = useMutation<
     DeleteInstructorResponse,

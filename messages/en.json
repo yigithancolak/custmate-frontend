@@ -1,5 +1,11 @@
 {
-  "Components": {},
+  "Components": {
+    "CreateUpdateForms": {
+      "Group": {
+        "createdMessage": "Group named {name} successfully created"
+      }
+    }
+  },
 
   "IndexPage": {
     "title": "next-intl example"

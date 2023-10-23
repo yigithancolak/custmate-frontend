@@ -23,10 +23,15 @@ import {
   updatePaymentSchema
 } from '@/lib/validation/payment'
 import {
+  CustomerItem,
   ListCustomersByGroupResponse,
   ListCustomersByGroupVariables
 } from '@/types/customerTypes'
-import { ListGroupsResponse, ListGroupsVariables } from '@/types/groupTypes'
+import {
+  GroupItem,
+  ListGroupsResponse,
+  ListGroupsVariables
+} from '@/types/groupTypes'
 import {
   CreatePaymentInput,
   CreatePaymentResponse,
@@ -55,6 +60,8 @@ export function PaymentForm(props: ModalFormProps) {
   const [searchedGroup, setSearchedGroup] = useState('')
   const [searchedCustomer, setSearchedCustomer] = useState('')
   const [selectedGroupId, setSelectedGroupId] = useState('')
+  const [groups, setGroups] = useState<GroupItem[]>([])
+  const [customersOfGroup, setCustomersOfGroup] = useState<CustomerItem[]>([])
 
   const { toast } = useToast()
 
@@ -90,21 +97,28 @@ export function PaymentForm(props: ModalFormProps) {
       variables: {
         offset: 0,
         limit: 1000
+      },
+      onCompleted(data) {
+        setGroups(data.listGroupsByOrganization.items)
       }
     }
   )
 
-  const { data: custormersOfGroupData } = useQuery<
-    ListCustomersByGroupResponse,
-    ListCustomersByGroupVariables
-  >(LIST_CUSTOMERS_BY_GROUP, {
-    variables: {
-      limit: 10000,
-      offset: 0,
-      groupId: selectedGroupId
-    },
-    skip: !selectedGroupId
-  })
+  const { data: custormersOfGroupData, refetch: refetchCustomersOfGroup } =
+    useQuery<ListCustomersByGroupResponse, ListCustomersByGroupVariables>(
+      LIST_CUSTOMERS_BY_GROUP,
+      {
+        variables: {
+          limit: 10000,
+          offset: 0,
+          groupId: selectedGroupId
+        },
+        skip: !selectedGroupId,
+        onCompleted(data) {
+          setCustomersOfGroup(data.listCustomersByGroup)
+        }
+      }
+    )
 
   const { loading: getPaymentLoading, error: getPaymentError } = useQuery<
     GetPaymentResponse,
@@ -206,9 +220,6 @@ export function PaymentForm(props: ModalFormProps) {
     })
   }
 
-  const groups = groupsData?.listGroupsByOrganization.items || []
-  const customersOfGroup = custormersOfGroupData?.listCustomersByGroup || []
-
   let onSubmit: (values: z.infer<typeof schema>) => void
 
   onSubmit = (values: z.infer<typeof schema>) => {
@@ -232,38 +243,42 @@ export function PaymentForm(props: ModalFormProps) {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col items-center gap-6"
       >
-        <FormField
-          control={form.control}
-          name="amount"
-          render={({ field }) => (
-            <FormItem className="w-full">
-              <FormLabel>Amount</FormLabel>
-              <FormControl>
-                <Input
-                  type="number"
-                  className="w-1/2"
-                  placeholder="Amount"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className="flex justify-between gap-3">
+          <FormField
+            control={form.control}
+            name="amount"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>Amount</FormLabel>
+                <FormControl>
+                  <Input type="number" placeholder="Amount" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="currency"
-          render={({ field }) => (
-            <FormRadioItem field={field} array={Object.values(Currency)} />
-          )}
-        />
-
+          <FormField
+            control={form.control}
+            name="currency"
+            render={({ field }) => (
+              <FormRadioItem
+                label="Currency"
+                field={field}
+                array={Object.values(Currency)}
+              />
+            )}
+          />
+        </div>
         <FormField
           control={form.control}
           name="paymentType"
           render={({ field }) => (
-            <FormRadioItem field={field} array={Object.values(PaymentType)} />
+            <FormRadioItem
+              label="Payment Type"
+              field={field}
+              array={Object.values(PaymentType)}
+            />
           )}
         />
 

@@ -20,7 +20,7 @@ import { useMutation, useQuery } from '@apollo/client'
 import { ColumnDef, PaginationState } from '@tanstack/react-table'
 import { Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function GroupsPage() {
   const t = useTranslations('GroupsPage')
@@ -31,6 +31,7 @@ export default function GroupsPage() {
     pageSize: 10
   })
   const {
+    data,
     loading,
     error,
     refetch: refetchGroups
@@ -47,6 +48,11 @@ export default function GroupsPage() {
       }
     }
   )
+
+  useEffect(() => {
+    setGroups(data?.listGroupsByOrganization.items || [])
+    setTotalCount(data?.listGroupsByOrganization.totalCount || 0)
+  }, [data])
 
   const [deleteGroup, { loading: deleteGroupLoading }] = useMutation<
     DeleteGroupResponse,

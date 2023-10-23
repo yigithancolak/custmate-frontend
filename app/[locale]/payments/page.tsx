@@ -18,7 +18,7 @@ import {
 import { useMutation, useQuery } from '@apollo/client'
 import { ColumnDef, PaginationState } from '@tanstack/react-table'
 import { Trash2 } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function PaymentsPage() {
   const [payments, setPayments] = useState<PaymentItem[]>([])
@@ -28,6 +28,7 @@ export default function PaymentsPage() {
     pageSize: 10
   })
   const {
+    data,
     loading,
     error,
     refetch: refetchPayments
@@ -46,6 +47,11 @@ export default function PaymentsPage() {
       }
     }
   )
+
+  useEffect(() => {
+    setPayments(data?.listPaymentsByOrganization.items || [])
+    setTotalCount(data?.listPaymentsByOrganization.totalCount || 0)
+  }, [data])
 
   const [deletePayment, { loading: deletePaymentLoading }] = useMutation<
     DeletePaymentResponse,

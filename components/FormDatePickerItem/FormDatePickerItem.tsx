@@ -27,7 +27,7 @@ export function FormDatePickerItem<
 >(props: FormDatePickerItemProps<K>) {
   const { field, label } = props
   return (
-    <FormItem className="w-full">
+    <FormItem className="flex justify-between items-center gap-6">
       <FormLabel className="mr-3">{label}</FormLabel>
       <Popover>
         <PopoverTrigger asChild>
