@@ -41,6 +41,20 @@
         "Errors": {
           "timeFormat": "Must be HH:MM format"
         }
+      },
+      "Payment": {
+        "createdMessage": "Payment successfully created. Amount: ${amount} ${currency}",
+        "updatedMessage": "Payment updated successfully",
+        "save": "Save Payment",
+        "Labels": {
+          "amount": "Amount",
+          "currency": "Currency",
+          "paymentType": "Payment Type",
+          "paymentDate": "Payment Date",
+          "nextPayment": "Next Payment",
+          "selectGroup": "Select Group",
+          "selectCustomer": "Select Customer"
+        }
       }
     },
     "DeleteDialogBox": {
@@ -108,6 +122,20 @@
       "instructor": "Instructor",
       "times": "Times",
       "customerCount": "Customer Count"
+    }
+  },
+  "PaymentsPage": {
+    "header": "Payments of Organization",
+    "deleteMessage": "Payment successfully deleted",
+    "DeleteModal": {
+      "header": "Deleting Payment",
+      "desc": "Payment will be deleted and it is permanent. Are you sure ?"
+    },
+    "ColumnHeaders": {
+      "operations": "Operations",
+      "amount": "Amount",
+      "date": "Date",
+      "paymentType": "Payment Type"
     }
   }
 }

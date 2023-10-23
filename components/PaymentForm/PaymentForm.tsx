@@ -46,6 +46,7 @@ import { useMutation, useQuery } from '@apollo/client'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { format } from 'date-fns'
 import { Save } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
@@ -62,6 +63,7 @@ export function PaymentForm(props: ModalFormProps) {
   const [selectedGroupId, setSelectedGroupId] = useState('')
   const [groups, setGroups] = useState<GroupItem[]>([])
   const [customersOfGroup, setCustomersOfGroup] = useState<CustomerItem[]>([])
+  const t = useTranslations('Components.CreateUpdateForms.Payment')
 
   const { toast } = useToast()
 
@@ -177,9 +179,10 @@ export function PaymentForm(props: ModalFormProps) {
       },
       onCompleted: (data) => {
         toast({
-          description: `Payment has successfully created Amont: ${
-            data.createPayment.amount
-          } ${data.createPayment.currency.toUpperCase()}`
+          description: t('createdMessage', {
+            amount: data.createPayment.amount,
+            currency: data.createPayment.currency
+          })
         })
         props.refetch()
         props.closeFormModal()
@@ -196,7 +199,7 @@ export function PaymentForm(props: ModalFormProps) {
   function onSubmitUpdate(values: z.infer<typeof updatePaymentSchema>) {
     updatePayment({
       variables: {
-        id: props.itemId || '',
+        id: props.itemId as string,
         input: {
           amount: Number(values.amount),
           currency: values.currency,
@@ -206,7 +209,7 @@ export function PaymentForm(props: ModalFormProps) {
       },
       onCompleted: (data) => {
         toast({
-          description: data.updatePayment
+          description: t('updatedMessage')
         })
         props.refetch()
         props.closeFormModal()
@@ -249,7 +252,7 @@ export function PaymentForm(props: ModalFormProps) {
             name="amount"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>Amount</FormLabel>
+                <FormLabel>{t('Labels.amount')}</FormLabel>
                 <FormControl>
                   <Input type="number" placeholder="Amount" {...field} />
                 </FormControl>
@@ -263,7 +266,7 @@ export function PaymentForm(props: ModalFormProps) {
             name="currency"
             render={({ field }) => (
               <FormRadioItem
-                label="Currency"
+                label={t('Labels.currency')}
                 field={field}
                 array={Object.values(Currency)}
               />
@@ -275,7 +278,7 @@ export function PaymentForm(props: ModalFormProps) {
           name="paymentType"
           render={({ field }) => (
             <FormRadioItem
-              label="Payment Type"
+              label={t('Labels.paymentType')}
               field={field}
               array={Object.values(PaymentType)}
             />
@@ -286,7 +289,7 @@ export function PaymentForm(props: ModalFormProps) {
           control={form.control}
           name="date"
           render={({ field }) => (
-            <FormDatePickerItem field={field} label="Payment Date" />
+            <FormDatePickerItem field={field} label={t('Labels.paymentDate')} />
           )}
         />
 
@@ -296,7 +299,10 @@ export function PaymentForm(props: ModalFormProps) {
               control={form.control}
               name="nextPaymentDate"
               render={({ field }) => (
-                <FormDatePickerItem field={field} label="Next Payment" />
+                <FormDatePickerItem
+                  field={field}
+                  label={t('Labels.nextPayment')}
+                />
               )}
             />
 
@@ -312,7 +318,7 @@ export function PaymentForm(props: ModalFormProps) {
                   handleSearchTermChange={handleGroupSearchChange}
                   items={groups}
                   searchTerm={searchedGroup}
-                  label="Select Group"
+                  label={t('Labels.selectGroup')}
                 />
               )}
             />
@@ -329,7 +335,7 @@ export function PaymentForm(props: ModalFormProps) {
                     handleSearchTermChange={hadleCustomerSearchChange}
                     items={customersOfGroup}
                     searchTerm={searchedCustomer}
-                    label="Select Customer"
+                    label={t('Labels.selectCustomer')}
                   />
                 )}
               />
@@ -339,7 +345,7 @@ export function PaymentForm(props: ModalFormProps) {
 
         <Button type="submit" disabled={createPaymentLoading} className="mt-3">
           <Save className="mr-2" />
-          <span>Save</span>
+          <span>{t('save')}</span>
         </Button>
       </form>
     </Form>

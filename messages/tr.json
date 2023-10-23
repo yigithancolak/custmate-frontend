@@ -41,6 +41,20 @@
         "Errors": {
           "timeFormat": "Saatler SS:DD formatında olmalı"
         }
+      },
+      "Payment": {
+        "createdMessage": "Ödeme başarıyla oluşturuldu. Miktar: ${amount} ${currency}",
+        "updatedMessage": "Ödeme başarıyla güncellendi",
+        "save": "Ödemeyi Kaydet",
+        "Labels": {
+          "amount": "Miktar",
+          "currency": "Para Birimi",
+          "paymentType": "Ödeme Türü",
+          "paymentDate": "Ödeme Tarihi",
+          "nextPayment": "Gelecek Ödeme",
+          "selectGroup": "Grup Seçimi",
+          "selectCustomer": "Üye Seçimi"
+        }
       }
     },
     "DeleteDialogBox": {
@@ -97,7 +111,7 @@
   },
   "GroupsPage": {
     "header": "Gruplar",
-    "deleteMessage": "Grup başarıyla silindi.",
+    "deleteMessage": "Grup başarıyla silindi",
     "DeleteModal": {
       "header": "Grup Siliniyor",
       "desc": "Grup silinecek ve bu işlem geri alınamaz bunu onaylıyor musunuz ?"
@@ -108,6 +122,20 @@
       "instructor": "Eğitmen",
       "times": "Zamanlar",
       "customerCount": "Üye Sayısı"
+    }
+  },
+  "PaymentsPage": {
+    "header": "Ödemeler",
+    "deleteMessage": "Ödeme başarıyla silindi",
+    "DeleteModal": {
+      "header": "Ödeme Siliniyor",
+      "desc": "Ödeme silinecek ve bu işlem geri alınamaz bunu onaylıyor musunuz ?"
+    },
+    "ColumnHeaders": {
+      "operations": "Operasyonlar",
+      "amount": "Miktar",
+      "date": "Tarih",
+      "paymentType": "Ödeme Türü"
     }
   }
 }

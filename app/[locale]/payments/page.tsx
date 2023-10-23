@@ -18,9 +18,12 @@ import {
 import { useMutation, useQuery } from '@apollo/client'
 import { ColumnDef, PaginationState } from '@tanstack/react-table'
 import { Trash2 } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
 
 export default function PaymentsPage() {
+  const t = useTranslations('PaymentsPage')
+
   const [payments, setPayments] = useState<PaymentItem[]>([])
   const [totalCount, setTotalCount] = useState(0)
   const [pagination, setPagination] = useState<PaginationState>({
@@ -65,7 +68,7 @@ export default function PaymentsPage() {
       },
       onCompleted: () => {
         toast({
-          description: 'Payment successfully deleted'
+          description: t('deleteMessage')
         })
         refetchPayments()
       },
@@ -91,8 +94,8 @@ export default function PaymentsPage() {
             itemId={cell.getValue<string>()}
           />
           <DialogBox
-            title="Deleting payment"
-            description="Payment will be deleted it is permanent. Are you sure ?"
+            title={t('DeleteModal.header')}
+            description={t('DeleteModal.desc')}
             trigger={<Trash2 size={16} color="red" />}
             fn={() => handleDeletePayment(cell.getValue<string>())}
             loading={deletePaymentLoading}
@@ -101,20 +104,20 @@ export default function PaymentsPage() {
       )
     },
     {
-      accessorKey: 'amount',
-      header: 'Amount'
+      header: t('ColumnHeaders.amount'),
+      accessorKey: 'amount'
     },
     {
+      header: t('ColumnHeaders.date'),
       accessorKey: 'date',
-      header: 'Date',
       cell: (cell) => {
         const date = cell.getValue<string>()
         return adjustDateStringFormat(date)
       }
     },
     {
-      accessorKey: 'paymentType',
-      header: 'Payment type'
+      header: t('ColumnHeaders.paymentType'),
+      accessorKey: 'paymentType'
     }
     // {
     //   accessorKey: 'customer',
@@ -127,7 +130,7 @@ export default function PaymentsPage() {
 
   return (
     <PageLayout
-      header="Payments of Organization"
+      header={t('header')}
       columns={paymentColumns}
       data={payments}
       item="payments"
