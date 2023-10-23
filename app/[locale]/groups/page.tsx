@@ -81,7 +81,7 @@ export default function GroupsPage() {
 
   const groupColumns: ColumnDef<GroupItem>[] = [
     {
-      header: 'Operations',
+      header: t('ColumnHeaders.operations'),
       accessorKey: 'id',
       cell: (cell) => (
         <div className="flex flex-1 py-2">
@@ -92,8 +92,8 @@ export default function GroupsPage() {
             itemId={cell.getValue<string>()}
           />
           <DialogBox
-            title="Deleting group"
-            description="Group will be deleted it is permanent. Are you sure ?"
+            title={t('DeleteModal.header')}
+            description={t('DeleteModal.desc')}
             trigger={<Trash2 size={16} color="red" />}
             fn={() => handleDeleteGroup(cell.getValue<string>())}
             loading={deleteGroupLoading}
@@ -102,16 +102,16 @@ export default function GroupsPage() {
       )
     },
     {
-      accessorKey: 'name',
-      header: 'Group Name'
+      header: t('ColumnHeaders.name'),
+      accessorKey: 'name'
     },
     {
-      accessorKey: 'instructor.name',
-      header: 'Instructor'
+      header: t('ColumnHeaders.instructor'),
+      accessorKey: 'instructor.name'
     },
     {
+      header: t('ColumnHeaders.times'),
       accessorKey: 'times',
-      header: 'Days',
       cell: (item) =>
         item.cell.getValue<TimeItem[]>().map((t, i) => (
           <p key={i}>
@@ -120,9 +120,9 @@ export default function GroupsPage() {
         ))
     },
     {
+      header: t('ColumnHeaders.customerCount'),
       accessorKey: 'customers',
-      cell: (item) => item.cell.getValue<CustomerItem[]>()?.length || 0,
-      header: 'Number of Customers'
+      cell: (item) => item.cell.getValue<CustomerItem[]>()?.length || 0
     }
   ]
 

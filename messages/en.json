@@ -1,9 +1,51 @@
 {
   "Components": {
     "CreateUpdateForms": {
+      "createButton": "Create {item}",
+      "title": "{type} {item}",
+      "desc": "Enter the {item} informations",
+      "Types": {
+        "create": "Create",
+        "update": "Update"
+      },
+      "Items": {
+        "groups": "Group",
+        "instructors": "Instructor",
+        "payments": "Payment",
+        "customers": "Customer"
+      },
+      "Customer": {
+        "createdMessage": "Customer named {name} successfully created",
+        "updatedMessage": "Customer updated successfully",
+        "save": "Save Group",
+        "Labels": {
+          "name": "Name of Customer",
+          "phoneNumber": "Phone Number",
+          "lastPayment": "Last Payment",
+          "nextPayment": "Next Payment",
+          "selectGroup": "Select Group"
+        }
+      },
       "Group": {
-        "createdMessage": "Group named {name} successfully created"
+        "createdMessage": "Group named {name} successfully created",
+        "updatedMessage": "Group updated successfully",
+        "save": "Save Group",
+        "Labels": {
+          "name": "Group Name",
+          "instructor": "Instructor",
+          "times": "Times",
+          "day": "Day",
+          "startHour": "Start Hour",
+          "finishHour": "Finish Hour"
+        },
+        "Errors": {
+          "timeFormat": "Must be HH:MM format"
+        }
       }
+    },
+    "DeleteDialogBox": {
+      "continue": "Continue",
+      "cancel": "Cancel"
     }
   },
 
@@ -42,7 +84,7 @@
     "deleteMessage": "Customer successfully deleted",
     "DeleteModal": {
       "header": "Deleting Customer",
-      "desc": "Customer will be deleted it is permanent. Are you sure ?"
+      "desc": "Customer will be deleted and it is permanent. Are you sure ?"
     },
     "ColumnHeaders": {
       "operations": "Operations",
@@ -55,6 +97,17 @@
   },
   "GroupsPage": {
     "header": "Groups of Organization",
-    "deleteMessage": "Group successfully deleted"
+    "deleteMessage": "Group successfully deleted",
+    "DeleteModal": {
+      "header": "Deleting Group",
+      "desc": "Group will be deleted and it is permanent. Are you sure ?"
+    },
+    "ColumnHeaders": {
+      "operations": "Operations",
+      "name": "Group Name",
+      "instructor": "Instructor",
+      "times": "Times",
+      "customerCount": "Customer Count"
+    }
   }
 }

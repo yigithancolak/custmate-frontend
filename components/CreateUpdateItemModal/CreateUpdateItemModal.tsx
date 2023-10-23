@@ -10,8 +10,8 @@ import {
   DialogTrigger
 } from '@/components/ui/dialog'
 import { ItemType } from '@/layouts/PageLayout/PageLayout'
-import { capitalizeFirstLetter } from '@/lib/helpers/stringHelpers'
 import { PenSquare, Plus } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 import { CustomerForm } from '../CustomerForm/CustomerForm'
 import { GroupForm } from '../GroupForm/GroupForm'
@@ -35,6 +35,8 @@ export interface CreateUpdateItemModalProps extends BaseItemProps {
 
 export function CreateUpdateItemModal(props: CreateUpdateItemModalProps) {
   const [isOpen, setIsOpen] = useState(false)
+
+  const t = useTranslations('Components.CreateUpdateForms')
 
   const closeFormModal = () => {
     setIsOpen(false)
@@ -67,7 +69,9 @@ export function CreateUpdateItemModal(props: CreateUpdateItemModalProps) {
             <div className="flex items-center">
               <Plus className="h-full" />
               <ItemIcon type={props.item} className="h-full" />
-              <span>Create {capitalizeFirstLetter(props.item)}</span>
+              <span>
+                {t('createButton', { item: t(`Items.${props.item}`) })}
+              </span>
             </div>
           ) : (
             <PenSquare size={16} />
@@ -76,11 +80,14 @@ export function CreateUpdateItemModal(props: CreateUpdateItemModalProps) {
       </DialogTrigger>
       <DialogContent className="flex flex-col sm:max-w-[425px] overflow-y-auto max-h-[70vh]">
         <DialogHeader>
-          <DialogTitle>{`${capitalizeFirstLetter(
-            props.type
-          )} ${capitalizeFirstLetter(props.item)}`}</DialogTitle>
+          <DialogTitle>
+            {t('title', {
+              type: t(`Types.${props.type}`),
+              item: t(`Items.${props.item}`)
+            })}
+          </DialogTitle>
           <DialogDescription>
-            Enter the {props.item} informations
+            {t('desc', { item: t(`Items.${props.item}`) })}
           </DialogDescription>
         </DialogHeader>
         <FormComponent

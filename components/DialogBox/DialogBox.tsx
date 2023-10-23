@@ -10,6 +10,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger
 } from '@/components/ui/alert-dialog'
+import { useTranslations } from 'next-intl'
 import { ReactNode } from 'react'
 
 interface DialogBoxProps {
@@ -21,6 +22,7 @@ interface DialogBoxProps {
 }
 
 export function DialogBox(props: DialogBoxProps) {
+  const t = useTranslations('Components.DeleteDialogBox')
   return (
     <AlertDialog>
       <AlertDialogTrigger>{props.trigger}</AlertDialogTrigger>
@@ -30,12 +32,12 @@ export function DialogBox(props: DialogBoxProps) {
           <AlertDialogDescription>{props.description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>{t('cancel')} </AlertDialogCancel>
           <AlertDialogAction
             onClick={() => props.fn()}
             disabled={props.loading}
           >
-            Continue
+            {t('continue')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

@@ -38,6 +38,7 @@ import { useMutation, useQuery } from '@apollo/client'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { format } from 'date-fns'
 import { Plus, Save, X } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -54,6 +55,7 @@ export function CustomerForm(props: ModalFormProps) {
   const [searchedGroup, setSearchedGroup] = useState('')
   const [groupFieldCount, setGroupFieldCount] = useState(1)
   const { toast } = useToast()
+  const t = useTranslations('Components.CreateUpdateForms.Customer')
 
   const handleGroupSearchChange = (search: string) => {
     setSearchedGroup(search)
@@ -73,28 +75,23 @@ export function CustomerForm(props: ModalFormProps) {
     setGroupFieldCount((prevCount) => prevCount - 1)
   }
 
-  const {
-    data: groupsData,
-    loading: groupsLoading,
-    error: groupsError
-  } = useQuery<ListGroupsResponse, ListGroupsVariables>(
-    LIST_GROUPS_BY_ORGANIZATION_NO_SUB_ELEMENTS,
-    {
-      variables: {
-        offset: 0,
-        limit: 100
-      },
-      onCompleted: (data) => {
-        setGroups(data.listGroupsByOrganization.items)
-      }
+  const { loading: groupsLoading, error: groupsError } = useQuery<
+    ListGroupsResponse,
+    ListGroupsVariables
+  >(LIST_GROUPS_BY_ORGANIZATION_NO_SUB_ELEMENTS, {
+    variables: {
+      offset: 0,
+      limit: 100
+    },
+    onCompleted: (data) => {
+      setGroups(data.listGroupsByOrganization.items)
     }
-  )
+  })
 
-  const {
-    data: getCustomerData,
-    loading: getCustomerLoading,
-    error: getCustomerError
-  } = useQuery<GetCustomerResponse, GetCustomerVariables>(GET_CUSTOMER_BY_ID, {
+  const { loading: getCustomerLoading, error: getCustomerError } = useQuery<
+    GetCustomerResponse,
+    GetCustomerVariables
+  >(GET_CUSTOMER_BY_ID, {
     skip: props.type === 'create',
     variables: {
       id: props.itemId as string
@@ -148,7 +145,7 @@ export function CustomerForm(props: ModalFormProps) {
       },
       onCompleted: (data) => {
         toast({
-          description: `Customer named ${data.createCustomer.name} has successfully created`
+          description: t('createdMessage', { name: data.createCustomer.name })
         })
         props.refetch()
         props.closeFormModal()
@@ -176,7 +173,7 @@ export function CustomerForm(props: ModalFormProps) {
       },
       onCompleted: (data) => {
         toast({
-          description: data.updateCustomer
+          description: t('updatedMessage')
         })
         props.refetch()
         props.closeFormModal()
@@ -218,9 +215,9 @@ export function CustomerForm(props: ModalFormProps) {
           name="name"
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>Name</FormLabel>
+              <FormLabel>{t('Labels.name')}</FormLabel>
               <FormControl>
-                <Input placeholder="Name of Customer" {...field} />
+                <Input placeholder={t('Labels.name')} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -232,9 +229,9 @@ export function CustomerForm(props: ModalFormProps) {
           name="phoneNumber"
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>Phone Number</FormLabel>
+              <FormLabel>{t('Labels.phoneNumber')}</FormLabel>
               <FormControl>
-                <Input placeholder="Phone Number" {...field} />
+                <Input placeholder={t('Labels.phoneNumber')} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -244,7 +241,7 @@ export function CustomerForm(props: ModalFormProps) {
           control={form.control}
           name="lastPayment"
           render={({ field }) => (
-            <FormDatePickerItem field={field} label="Last Payment" />
+            <FormDatePickerItem field={field} label={t('Labels.lastPayment')} />
           )}
         />
 
@@ -252,7 +249,7 @@ export function CustomerForm(props: ModalFormProps) {
           control={form.control}
           name="nextPayment"
           render={({ field }) => (
-            <FormDatePickerItem field={field} label="Next Payment" />
+            <FormDatePickerItem field={field} label={t('Labels.nextPayment')} />
           )}
         />
 
@@ -269,7 +266,7 @@ export function CustomerForm(props: ModalFormProps) {
                   handleSearchTermChange={handleGroupSearchChange}
                   items={groups}
                   searchTerm={searchedGroup}
-                  label="Select Group"
+                  label={t('Labels.selectGroup')}
                 />
               )}
             />
@@ -294,7 +291,7 @@ export function CustomerForm(props: ModalFormProps) {
             className="mt-3"
           >
             <Save className="mr-2" />
-            <span>Save</span>
+            <span>{t('save')}</span>
           </Button>
         </DialogFooter>
       </form>

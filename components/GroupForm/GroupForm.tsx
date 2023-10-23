@@ -77,18 +77,18 @@ export function GroupForm(props: ModalFormProps) {
     }
   })
 
-  const { data: instructorsData } = useQuery<
-    ListInstructorsResponse,
-    ListInstructorsVariables
-  >(LIST_INSTRUCTORS_QUERY, {
-    variables: {
-      offset: 0,
-      limit: 100
-    },
-    onCompleted(data) {
-      setInstructors(data.listInstructors.items)
+  useQuery<ListInstructorsResponse, ListInstructorsVariables>(
+    LIST_INSTRUCTORS_QUERY,
+    {
+      variables: {
+        offset: 0,
+        limit: 100
+      },
+      onCompleted(data) {
+        setInstructors(data.listInstructors.items)
+      }
     }
-  })
+  )
 
   const [createGroup, { loading: createGroupLoading }] = useMutation<
     CreateGroupMutationResponse,
@@ -150,7 +150,7 @@ export function GroupForm(props: ModalFormProps) {
       },
       onCompleted: (data) => {
         toast({
-          description: data.updateGroup
+          description: t('updatedMessage')
         })
         props.refetch()
         props.closeFormModal()
@@ -196,7 +196,7 @@ export function GroupForm(props: ModalFormProps) {
               name="name"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel htmlFor="group-name">Name</FormLabel>
+                  <FormLabel htmlFor="group-name">{t('Labels.name')}</FormLabel>
                   <FormControl>
                     <Input {...field} id="group-name" />
                   </FormControl>
@@ -218,7 +218,7 @@ export function GroupForm(props: ModalFormProps) {
                   form={form}
                   handleSearchTermChange={handleInstructorSearchChange}
                   items={instructors}
-                  label="Instructor"
+                  label={t('Labels.instructor')}
                   searchTerm={searchedInstructor}
                 />
               )}
@@ -230,7 +230,7 @@ export function GroupForm(props: ModalFormProps) {
             {fields.map((_, index) => (
               <div key={index} className="my-4">
                 <div className="flex justify-between items-center mb-2">
-                  <Label className="text-right">Times</Label>
+                  <Label className="text-right">{t('Labels.times')}</Label>
                   {index !== 0 && (
                     <X
                       onClick={() => remove(index)}
@@ -244,7 +244,9 @@ export function GroupForm(props: ModalFormProps) {
                   name={`times.${index}.day`}
                   render={({ field }) => (
                     <FormItem className="w-full">
-                      <FormLabel htmlFor={`day-${index}`}>Day</FormLabel>
+                      <FormLabel htmlFor={`day-${index}`}>
+                        {t('Labels.day')}
+                      </FormLabel>
                       <FormControl>
                         <Input
                           {...field}
@@ -270,7 +272,7 @@ export function GroupForm(props: ModalFormProps) {
                       render={({ field }) => (
                         <FormItem className="w-full">
                           <FormLabel htmlFor={`start-hour-${index}`}>
-                            Start Hour
+                            {t('Labels.startHour')}
                           </FormLabel>
                           <FormControl>
                             <Input
@@ -282,7 +284,7 @@ export function GroupForm(props: ModalFormProps) {
                           {form.getFieldState(`times.${index}.start_hour`)
                             .error && (
                             <p className="text-sm font-semibold text-red-500">
-                              Must be HH:MM format
+                              {t('Errors.timeFormat')}
                             </p>
                           )}
                         </FormItem>
@@ -297,7 +299,7 @@ export function GroupForm(props: ModalFormProps) {
                       render={({ field }) => (
                         <FormItem className="w-full">
                           <FormLabel htmlFor={`finish_hour-${index}`}>
-                            Finish Hour
+                            {t('Labels.finishHour')}
                           </FormLabel>
                           <FormControl>
                             <Input
@@ -309,7 +311,7 @@ export function GroupForm(props: ModalFormProps) {
                           {form.getFieldState(`times.${index}.finish_hour`)
                             .error && (
                             <p className="text-sm font-semibold text-red-500">
-                              Must be HH:MM format
+                              {t('Errors.timeFormat')}
                             </p>
                           )}
                         </FormItem>
@@ -328,7 +330,7 @@ export function GroupForm(props: ModalFormProps) {
         <DialogFooter>
           <Button type="submit" disabled={createGroupLoading}>
             <Save className="mr-2" />
-            <span>Save</span>
+            <span>{t('save')}</span>
           </Button>
         </DialogFooter>
       </form>

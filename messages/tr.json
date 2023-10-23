@@ -1,5 +1,53 @@
 {
-  "Components": {},
+  "Components": {
+    "CreateUpdateForms": {
+      "createButton": "{item} Oluştur",
+      "title": "{item} {type}",
+      "desc": "{item} bilgilerini girin",
+      "Types": {
+        "create": "Oluşturma",
+        "update": "Güncelleme"
+      },
+      "Items": {
+        "groups": "Grup",
+        "instructors": "Eğitmen",
+        "payments": "Ödeme",
+        "customers": "Üye"
+      },
+      "Customer": {
+        "createdMessage": "{name} isimli üye başarıyla oluşturuldu",
+        "updatedMessage": "Üye başarıyla güncellendi",
+        "save": "Üyeyi Kaydet",
+        "Labels": {
+          "name": "Üye İsmi",
+          "phoneNumber": "Telefon Numarası",
+          "lastPayment": "Son Ödeme",
+          "nextPayment": "Gelecek Ödeme",
+          "selectGroup": "Grup Seçimi"
+        }
+      },
+      "Group": {
+        "createdMessage": "{name} isimli grup başarıyla oluşturuldu",
+        "updatedMessage": "Grup başarıyla güncellendi",
+        "save": "Grubu Kaydet",
+        "Labels": {
+          "name": "Grup İsmi",
+          "instructor": "Eğitmen",
+          "times": "Zamanlar",
+          "day": "Gün",
+          "startHour": "Başlangıç Saati",
+          "finishHour": "Bitiş Saati"
+        },
+        "Errors": {
+          "timeFormat": "Saatler SS:DD formatında olmalı"
+        }
+      }
+    },
+    "DeleteDialogBox": {
+      "continue": "Devam",
+      "cancel": "İptal"
+    }
+  },
 
   "IndexPage": {
     "title": "Hey merhaba"
@@ -36,7 +84,7 @@
     "deleteMessage": "Üye başarıyla silindi",
     "DeleteModal": {
       "header": "Üye Siliniyor",
-      "desc": "Üye silinecek ve bu geri alınamaz bunu onaylıyor musunuz ?"
+      "desc": "Üye silinecek ve bu işlem geri alınamaz bunu onaylıyor musunuz ?"
     },
     "ColumnHeaders": {
       "operations": "Operasyonlar",
@@ -49,6 +97,17 @@
   },
   "GroupsPage": {
     "header": "Gruplar",
-    "deleteMessage": "Grup başarıyla silindi"
+    "deleteMessage": "Grup başarıyla silindi.",
+    "DeleteModal": {
+      "header": "Grup Siliniyor",
+      "desc": "Grup silinecek ve bu işlem geri alınamaz bunu onaylıyor musunuz ?"
+    },
+    "ColumnHeaders": {
+      "operations": "Operasyonlar",
+      "name": "Grup İsmi",
+      "instructor": "Eğitmen",
+      "times": "Zamanlar",
+      "customerCount": "Üye Sayısı"
+    }
   }
 }
