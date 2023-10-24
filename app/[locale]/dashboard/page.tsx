@@ -1,6 +1,12 @@
 'use client'
 
 import { DashboardCard } from '@/components/DashboardCard/DashboardCard'
+import {
+  getFirstDayOfMonth,
+  getFirstDayOfYear,
+  getLastDayOfMonth,
+  getLastDayOfYear
+} from '@/lib/helpers/dateHelpers'
 import { SEARCH_CUSTOMERS_QUERY } from '@/lib/queries/customer'
 import { LIST_GROUPS_BY_ORGANIZATION } from '@/lib/queries/group'
 import { LIST_PAYMENTS_FOR_MONTH } from '@/lib/queries/payment'
@@ -83,8 +89,22 @@ export default function DashboardPage() {
     LIST_PAYMENTS_FOR_MONTH,
     {
       variables: {
-        startDate: '2023-10-01',
-        endDate: '2023-11-01'
+        startDate: getFirstDayOfMonth(),
+        endDate: getLastDayOfMonth()
+      }
+    }
+  )
+
+  const {
+    data: yearlyPaymentData,
+    loading: yearlyPaymentLoading,
+    error: yearlyPaymentError
+  } = useQuery<ListPaymentsResponse, ListPaymentsVariables>(
+    LIST_PAYMENTS_FOR_MONTH,
+    {
+      variables: {
+        startDate: getFirstDayOfYear(),
+        endDate: getLastDayOfYear()
       }
     }
   )
@@ -138,10 +158,16 @@ export default function DashboardPage() {
               value: String(
                 monthlyPaymentData?.listPaymentsByOrganization.totalCount
               )
+            },
+            {
+              key: t('Cards.Payments.thisYear'),
+              value: String(
+                yearlyPaymentData?.listPaymentsByOrganization.totalCount
+              )
             }
           ]}
           path="/payments"
-          loading={monthlyPaymentLoading}
+          loading={monthlyPaymentLoading || yearlyPaymentLoading}
         />
       </div>
     </main>

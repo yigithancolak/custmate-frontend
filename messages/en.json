@@ -89,7 +89,8 @@
 
       "Payments": {
         "desc": "Payments Info",
-        "thisMonth": "Payments in this mounth"
+        "thisMonth": "Payments in this mounth",
+        "thisYear": "Payments in this year"
       }
     }
   },
@@ -136,6 +137,19 @@
       "amount": "Amount",
       "date": "Date",
       "paymentType": "Payment Type"
+    }
+  },
+  "InstructorsPage": {
+    "header": "Instructors of Organization",
+    "deleteMessage": "Instructor successfully deleted",
+    "DeleteModal": {
+      "header": "Deleting Instructor",
+      "desc": "Instructor will be deleted and it is permanent. Are you sure ?"
+    },
+    "ColumnHeaders": {
+      "operations": "Operations",
+      "name": "Name of Instructor",
+      "groupCount": "Count of Groups"
     }
   }
 }

@@ -19,9 +19,11 @@ import {
 import { useMutation, useQuery } from '@apollo/client'
 import { ColumnDef, PaginationState } from '@tanstack/react-table'
 import { Trash2 } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
 
 export default function InstructorsPage() {
+  const t = useTranslations('InstructorsPage')
   const [instructors, setInstructors] = useState<InstructorItem[]>([])
   const [totalCount, setTotalCount] = useState(0)
   const [pagination, setPagination] = useState<PaginationState>({
@@ -59,7 +61,7 @@ export default function InstructorsPage() {
       },
       onCompleted: () => {
         toast({
-          description: "Instructor and instructor's groups successfully deleted"
+          description: t('deleteMessage')
         })
         refetch()
       },
@@ -74,7 +76,7 @@ export default function InstructorsPage() {
 
   const instructorColumns: ColumnDef<InstructorItem>[] = [
     {
-      header: 'Operations',
+      header: t('ColumnHeaders.operations'),
       accessorKey: 'id',
       cell: (cell) => (
         <div className="flex flex-1 py-2">
@@ -95,12 +97,12 @@ export default function InstructorsPage() {
       )
     },
     {
-      accessorKey: 'name',
-      header: 'Instructor Name'
+      header: t('ColumnHeaders.name'),
+      accessorKey: 'name'
     },
     {
+      header: t('ColumnHeaders.groupCount'),
       accessorKey: 'groups',
-      header: 'Number of Groups',
       cell: (item) => item.cell.getValue<GroupItem[]>()?.length || 0
     }
   ]
@@ -109,7 +111,7 @@ export default function InstructorsPage() {
 
   return (
     <PageLayout
-      header="Instructors of Organization"
+      header={t('header')}
       columns={instructorColumns}
       data={instructors}
       item="instructors"

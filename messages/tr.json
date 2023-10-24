@@ -89,7 +89,8 @@
 
       "Payments": {
         "desc": "Ödemeler Özeti",
-        "thisMonth": "Bu Ay"
+        "thisMonth": "Bu Ay Alınan Ödeme",
+        "thisYear": "Bu Yıl Alınan Ödeme"
       }
     }
   },
@@ -136,6 +137,19 @@
       "amount": "Miktar",
       "date": "Tarih",
       "paymentType": "Ödeme Türü"
+    }
+  },
+  "InstructorsPage": {
+    "header": "Eğitmenler",
+    "deleteMessage": "Eğitmen başarıyla silindi",
+    "DeleteModal": {
+      "header": "Eğitmen Siliniyor",
+      "desc": "Eğitmen silinecek ve bu işlem geri alınamaz bunu onaylıyor musunuz ?"
+    },
+    "ColumnHeaders": {
+      "operations": "Operasyonlar",
+      "name": "Eğitmenin İsmi",
+      "groupCount": "Grup Sayısı"
     }
   }
 }
