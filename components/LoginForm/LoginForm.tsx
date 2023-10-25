@@ -24,7 +24,10 @@ import { useToast } from '../ui/use-toast'
 export function LoginForm() {
   const t = useTranslations('LoginPage')
   const [login, { loading }] = useMutation<LoginResponse, LoginVariables>(
-    LOGIN_MUTATION
+    LOGIN_MUTATION,
+    {
+      context: { skipAuth: true }
+    }
   )
 
   const { toast } = useToast()

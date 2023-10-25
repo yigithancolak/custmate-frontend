@@ -2,7 +2,6 @@ import Header from '@/components/Header/Header'
 import { Toaster } from '@/components/ui/toaster'
 import { ApolloWrapper } from '@/providers/ApolloProvider'
 import { AuthProvider } from '@/providers/AuthProvider'
-import { ThemeProvider } from '@/providers/ThemeProvider'
 import type { Metadata } from 'next'
 import { NextIntlClientProvider } from 'next-intl'
 import { Inter } from 'next/font/google'
@@ -45,16 +44,9 @@ export default async function LocaleLayout({
         <NextIntlClientProvider locale={locale} messages={messages}>
           <AuthProvider>
             <ApolloWrapper>
-              <ThemeProvider
-                attribute="class"
-                defaultTheme="system"
-                enableSystem
-                disableTransitionOnChange
-              >
-                <Header />
-                <Toaster />
-                {children}
-              </ThemeProvider>
+              <Header />
+              <Toaster />
+              {children}
             </ApolloWrapper>
           </AuthProvider>
         </NextIntlClientProvider>

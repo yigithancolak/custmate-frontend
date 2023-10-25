@@ -3,40 +3,40 @@ import { useRouter } from 'next/navigation'
 import { PropsWithChildren, createContext, useContext, useState } from 'react'
 
 interface AuthContextType {
-  isAuthenticated: boolean
+  accessToken: string
   login: (token: string) => void
   logout: () => void
 }
 
 const AuthContext = createContext<AuthContextType | undefined>({
-  isAuthenticated: false,
+  accessToken: '',
   login: () => {},
   logout: () => {}
 })
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+  const [accessToken, setAccessToken] = useState<string>(() => {
     if (typeof window !== 'undefined') {
-      return !!localStorage.getItem('accessToken')
+      return localStorage.getItem('accessToken') || ''
     }
-    return false
+    return ''
   })
   const router = useRouter()
 
   const login = (token: string) => {
     localStorage.setItem('accessToken', token)
-    setIsAuthenticated(true)
+    setAccessToken(token)
     router.replace('/dashboard')
   }
 
   const logout = () => {
     localStorage.removeItem('accessToken')
-    setIsAuthenticated(false)
-    router.push('/auth')
+    setAccessToken('false')
+    router.replace('/auth')
   }
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ accessToken, login, logout }}>
       {children}
     </AuthContext.Provider>
   )

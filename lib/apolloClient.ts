@@ -8,18 +8,18 @@ import { setContext } from '@apollo/client/link/context'
 import { onError } from '@apollo/client/link/error'
 import { envVariables } from './envVariables'
 
-export const createApolloClient = (logout: () => void) => {
+export const createApolloClient = (accessToken: string, logout: () => void) => {
   const httpLink = createHttpLink({
     uri: `${envVariables.SERVER_URL}/query`,
     credentials: 'same-origin'
   })
 
-  const authLink = setContext((_, { headers }) => {
-    const token = localStorage.getItem('accessToken')
+  const authLink = setContext((_, { headers, skipAuth }) => {
+    if (skipAuth) return { headers }
     return {
       headers: {
         ...headers,
-        Authorization: token ? `Bearer ${token}` : ''
+        Authorization: accessToken ? `Bearer ${accessToken}` : ''
       }
     }
   })
