@@ -80,10 +80,6 @@ export function GroupForm(props: ModalFormProps) {
   useQuery<ListInstructorsResponse, ListInstructorsVariables>(
     LIST_INSTRUCTORS_QUERY,
     {
-      variables: {
-        offset: 0,
-        limit: 100
-      },
       onCompleted(data) {
         setInstructors(data.listInstructors.items)
       }

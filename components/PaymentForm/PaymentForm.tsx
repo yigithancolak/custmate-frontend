@@ -96,10 +96,6 @@ export function PaymentForm(props: ModalFormProps) {
   } = useQuery<ListGroupsResponse, ListGroupsVariables>(
     LIST_GROUPS_BY_ORGANIZATION_NO_SUB_ELEMENTS,
     {
-      variables: {
-        offset: 0,
-        limit: 1000
-      },
       onCompleted(data) {
         setGroups(data.listGroupsByOrganization.items)
       }
@@ -111,8 +107,6 @@ export function PaymentForm(props: ModalFormProps) {
       LIST_CUSTOMERS_BY_GROUP,
       {
         variables: {
-          limit: 10000,
-          offset: 0,
           groupId: selectedGroupId
         },
         skip: !selectedGroupId,

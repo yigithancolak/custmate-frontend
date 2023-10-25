@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 export const LIST_INSTRUCTORS_QUERY = gql`
-  query ListInstructors($offset: Int!, $limit: Int!) {
+  query ListInstructors($offset: Int, $limit: Int) {
     listInstructors(offset: $offset, limit: $limit) {
       items {
         id

@@ -26,7 +26,7 @@ export const LIST_GROUPS_BY_ORGANIZATION = gql`
 `
 
 export const LIST_GROUPS_BY_ORGANIZATION_NO_SUB_ELEMENTS = gql`
-  query ListGroupsByOrganization($offset: Int = 0, $limit: Int = 10) {
+  query ListGroupsByOrganization($offset: Int, $limit: Int) {
     listGroupsByOrganization(offset: $offset, limit: $limit) {
       totalCount
       items {

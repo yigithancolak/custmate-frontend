@@ -79,10 +79,6 @@ export function CustomerForm(props: ModalFormProps) {
     ListGroupsResponse,
     ListGroupsVariables
   >(LIST_GROUPS_BY_ORGANIZATION_NO_SUB_ELEMENTS, {
-    variables: {
-      offset: 0,
-      limit: 100
-    },
     onCompleted: (data) => {
       setGroups(data.listGroupsByOrganization.items)
     }
