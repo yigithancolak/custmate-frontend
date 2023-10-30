@@ -20,12 +20,10 @@ import { useMutation, useQuery } from '@apollo/client'
 import { ColumnDef, PaginationState } from '@tanstack/react-table'
 import { Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 export default function InstructorsPage() {
   const t = useTranslations('InstructorsPage')
-  const [instructors, setInstructors] = useState<InstructorItem[]>([])
-  const [totalCount, setTotalCount] = useState(0)
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10
@@ -37,17 +35,8 @@ export default function InstructorsPage() {
     variables: {
       offset: pagination.pageIndex * pagination.pageSize,
       limit: pagination.pageSize
-    },
-    onCompleted(data) {
-      setInstructors(data.listInstructors.items)
-      setTotalCount(data.listInstructors.totalCount)
     }
   })
-
-  useEffect(() => {
-    setInstructors(data?.listInstructors.items || [])
-    setTotalCount(data?.listInstructors.totalCount || 0)
-  }, [data])
 
   const [deleteInstructor, { loading: deleteInstructorLoading }] = useMutation<
     DeleteInstructorResponse,
@@ -113,10 +102,10 @@ export default function InstructorsPage() {
     <PageLayout
       header={t('header')}
       columns={instructorColumns}
-      data={instructors}
+      data={data?.listInstructors.items || []}
       item="instructors"
       loading={loading}
-      totalCount={totalCount}
+      totalCount={data?.listInstructors.totalCount || 0}
       pagination={pagination}
       refetch={refetch}
       setPagination={setPagination}

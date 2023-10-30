@@ -20,12 +20,10 @@ import { useMutation, useQuery } from '@apollo/client'
 import { ColumnDef, PaginationState } from '@tanstack/react-table'
 import { Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 export default function GroupsPage() {
   const t = useTranslations('GroupsPage')
-  const [groups, setGroups] = useState<GroupItem[]>([])
-  const [totalCount, setTotalCount] = useState(0)
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10
@@ -41,18 +39,9 @@ export default function GroupsPage() {
       variables: {
         offset: pagination.pageIndex * pagination.pageSize,
         limit: pagination.pageSize
-      },
-      onCompleted: (data) => {
-        setGroups(data.listGroupsByOrganization.items)
-        setTotalCount(data.listGroupsByOrganization.totalCount)
       }
     }
   )
-
-  useEffect(() => {
-    setGroups(data?.listGroupsByOrganization.items || [])
-    setTotalCount(data?.listGroupsByOrganization.totalCount || 0)
-  }, [data])
 
   const [deleteGroup, { loading: deleteGroupLoading }] = useMutation<
     DeleteGroupResponse,
@@ -132,10 +121,10 @@ export default function GroupsPage() {
     <PageLayout
       header={t('header')}
       columns={groupColumns}
-      data={groups}
+      data={data?.listGroupsByOrganization.items || []}
       item="groups"
       loading={loading}
-      totalCount={totalCount}
+      totalCount={data?.listGroupsByOrganization.totalCount || 0}
       pagination={pagination}
       refetch={refetchGroups}
       setPagination={setPagination}

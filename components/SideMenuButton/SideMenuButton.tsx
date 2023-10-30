@@ -96,7 +96,7 @@ export function SideMenuButton() {
 
         <div className="flex flex-row-reverse mt-10">
           <Button onClick={() => logOut()}>
-            <LogOut />
+            <LogOut className="mr-2 h-4 w-4" /> Logout
           </Button>
         </div>
       </SheetContent>

@@ -19,13 +19,10 @@ import { useMutation, useQuery } from '@apollo/client'
 import { ColumnDef, PaginationState } from '@tanstack/react-table'
 import { Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 export default function PaymentsPage() {
   const t = useTranslations('PaymentsPage')
-
-  const [payments, setPayments] = useState<PaymentItem[]>([])
-  const [totalCount, setTotalCount] = useState(0)
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10
@@ -43,18 +40,9 @@ export default function PaymentsPage() {
         limit: pagination.pageSize,
         startDate: '2023-10-15',
         endDate: '2024-01-01'
-      },
-      onCompleted(data) {
-        setPayments(data.listPaymentsByOrganization.items)
-        setTotalCount(data.listPaymentsByOrganization.totalCount)
       }
     }
   )
-
-  useEffect(() => {
-    setPayments(data?.listPaymentsByOrganization.items || [])
-    setTotalCount(data?.listPaymentsByOrganization.totalCount || 0)
-  }, [data])
 
   const [deletePayment, { loading: deletePaymentLoading }] = useMutation<
     DeletePaymentResponse,
@@ -132,13 +120,13 @@ export default function PaymentsPage() {
     <PageLayout
       header={t('header')}
       columns={paymentColumns}
-      data={payments}
+      data={data?.listPaymentsByOrganization.items || []}
       item="payments"
       loading={loading}
       pagination={pagination}
       refetch={refetchPayments}
       setPagination={setPagination}
-      totalCount={totalCount}
+      totalCount={data?.listPaymentsByOrganization.totalCount || 0}
     />
   )
 }

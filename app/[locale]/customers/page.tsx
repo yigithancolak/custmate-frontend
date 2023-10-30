@@ -19,12 +19,10 @@ import { useMutation, useQuery } from '@apollo/client'
 import { ColumnDef, PaginationState } from '@tanstack/react-table'
 import { Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 export default function CustomersPage() {
   const t = useTranslations('CustomersPage')
-  const [customers, setCustomers] = useState<CustomerItem[]>([])
-  const [totalCount, setTotalCount] = useState(0)
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10
@@ -42,18 +40,9 @@ export default function CustomersPage() {
         offset: pagination.pageIndex * pagination.pageSize,
         limit: pagination.pageSize,
         filter: {}
-      },
-      onCompleted(data) {
-        setCustomers(data.searchCustomers.items)
-        setTotalCount(data.searchCustomers.totalCount)
       }
     }
   )
-
-  useEffect(() => {
-    setCustomers(data?.searchCustomers.items || [])
-    setTotalCount(data?.searchCustomers.totalCount || 0)
-  }, [data])
 
   const [deleteCustomer, { loading: deleteCustomerLoading }] = useMutation<
     DeleteCustomerResponse,
@@ -147,13 +136,13 @@ export default function CustomersPage() {
     <PageLayout
       header={t('header')}
       columns={customerColumns}
-      data={customers}
+      data={data?.searchCustomers.items || []}
       item="customers"
       loading={loading}
       pagination={pagination}
       refetch={refetchCustomers}
       setPagination={setPagination}
-      totalCount={totalCount}
+      totalCount={data?.searchCustomers.totalCount || 0}
     />
   )
 }

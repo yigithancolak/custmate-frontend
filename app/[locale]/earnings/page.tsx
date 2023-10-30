@@ -85,11 +85,14 @@ export default function EarningsPage() {
       <div className="flex w-10/12 md:w-10/12 flex-col gap-4">
         <div className="flex justify-between items-center gap-6 border-2 p-3 rounded-sm">
           <div className="flex flex-col gap-2">
-            <span className="text-xs md:text-base">Pick the range</span>
+            <span className="text-xs md:text-base font-semibold">
+              Pick the range
+            </span>
             <DatePickerWithRange date={date} setDate={setDate} />
           </div>
 
           <div className="flex flex-col md:flex-row  md:items-center gap-3 p-3 text-xs md:text-base whitespace-nowrap">
+            <span className="font-bold">Total: </span>
             <Badge>{totalEarning.TRY} &#8378;</Badge>
             <Badge>{totalEarning.USD} &#36;</Badge>
             <Badge>{totalEarning.EUR} &#8364;</Badge>
