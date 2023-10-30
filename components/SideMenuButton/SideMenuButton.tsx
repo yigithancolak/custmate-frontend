@@ -18,7 +18,7 @@ import { SideMenuTab } from '../SideMenuTab/SideMenuTab'
 import { Button } from '../ui/button'
 
 export type SideMenuTabComponents = {
-  type: 'dashboard' | ItemType
+  type: 'dashboard' | 'earnings' | ItemType
   path: string
 }
 
@@ -42,6 +42,10 @@ const tabs: SideMenuTabComponents[] = [
   {
     type: 'instructors',
     path: '/instructors'
+  },
+  {
+    type: 'earnings',
+    path: '/earnings'
   }
 ]
 

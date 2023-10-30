@@ -33,9 +33,6 @@ export default function DashboardPage() {
         endDateOfMonth: getLastDayOfMonth(),
         startDateOfYear: getFirstDayOfYear(),
         endDateOfYear: getLastDayOfYear()
-      },
-      onCompleted(data) {
-        console.log(data)
       }
     }
   )

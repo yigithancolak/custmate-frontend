@@ -1,5 +1,6 @@
 import { ItemType } from '@/layouts/PageLayout/PageLayout'
 import {
+  CandlestickChart,
   DollarSign,
   GraduationCap,
   Group,
@@ -8,7 +9,7 @@ import {
 } from 'lucide-react'
 
 interface DashboardCardIconProps {
-  type: 'dashboard' | ItemType
+  type: 'dashboard' | 'earnings' | ItemType
   className?: string
   size?: number
 }
@@ -24,5 +25,7 @@ export function ItemIcon(props: DashboardCardIconProps) {
       return <GraduationCap {...props} />
     case 'payments':
       return <DollarSign {...props} />
+    case 'earnings':
+      return <CandlestickChart {...props} />
   }
 }
