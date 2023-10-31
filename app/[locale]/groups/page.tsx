@@ -1,8 +1,10 @@
 'use client'
 import { CreateUpdateItemModal } from '@/components/CreateUpdateItemModal/CreateUpdateItemModal'
 import { DialogBox } from '@/components/DialogBox/DialogBox'
+import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
 import { PageLayout } from '@/layouts/PageLayout/PageLayout'
+import { formatTime } from '@/lib/helpers/dateHelpers'
 import {
   DELETE_GROUP_MUTATION,
   LIST_GROUPS_BY_ORGANIZATION
@@ -18,11 +20,13 @@ import {
 import { TimeItem } from '@/types/timeTypes'
 import { useMutation, useQuery } from '@apollo/client'
 import { ColumnDef, PaginationState } from '@tanstack/react-table'
-import { Trash2 } from 'lucide-react'
+import { Eye, Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 export default function GroupsPage() {
+  const router = useRouter()
   const t = useTranslations('GroupsPage')
   const daysT = useTranslations('Common.Days')
   const [pagination, setPagination] = useState<PaginationState>({
@@ -40,6 +44,9 @@ export default function GroupsPage() {
       variables: {
         offset: pagination.pageIndex * pagination.pageSize,
         limit: pagination.pageSize
+      },
+      onCompleted(data) {
+        console.log(data)
       }
     }
   )
@@ -75,12 +82,23 @@ export default function GroupsPage() {
       accessorKey: 'id',
       cell: (cell) => (
         <div className="flex flex-1 py-2">
+          <Button
+            variant="outline"
+            className="p-3 mr-2"
+            onClick={() => {
+              router.push(`/groups/${cell.getValue<string>()}`)
+            }}
+          >
+            <Eye size={16} />
+          </Button>
+
           <CreateUpdateItemModal
             item="groups"
             refetch={refetchGroups}
             type="update"
             itemId={cell.getValue<string>()}
           />
+
           <DialogBox
             title={t('DeleteModal.header')}
             description={t('DeleteModal.desc')}
@@ -105,8 +123,8 @@ export default function GroupsPage() {
       cell: (item) =>
         item.cell.getValue<TimeItem[]>().map((t, i) => (
           <p key={i}>
-            {daysT(t.day)} {t.start_hour.slice(0, -3)} -{' '}
-            {t.finish_hour.slice(0, -3)}
+            {daysT(t.day)} {formatTime(t.start_hour)} -{' '}
+            {formatTime(t.finish_hour)}
           </p>
         ))
     },

@@ -30,6 +30,13 @@ export const LIST_CUSTOMERS_BY_GROUP = gql`
       id
       name
       phoneNumber
+      groups {
+        id
+        name
+      }
+      lastPayment
+      nextPayment
+      active
     }
   }
 `
