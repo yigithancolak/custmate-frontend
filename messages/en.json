@@ -1,5 +1,29 @@
 {
+  "Common": {
+    "Days": {
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday",
+      "sunday": "Sunday"
+    }
+  },
   "Components": {
+    "SideMenu": {
+      "title": "Welcome {name}",
+      "desc": "Start management of your organization now. Use the tabs below to see your performance.",
+      "logout": "Logout",
+      "Tabs": {
+        "dashboard": "Dashboard",
+        "groups": "Groups",
+        "customers": "Customers",
+        "payments": "Payments",
+        "instructors": "Instructors",
+        "earnings": "Earnings"
+      }
+    },
     "CreateUpdateForms": {
       "createButton": "Create {item}",
       "title": "{type} {item}",

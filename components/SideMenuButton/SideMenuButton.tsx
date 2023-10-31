@@ -13,7 +13,8 @@ import { useAuth } from '@/providers/AuthProvider'
 import { GetOrganizationResponse } from '@/types/organizationTypes'
 import { useQuery } from '@apollo/client'
 import { AlignJustify, LogOut } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useTranslations } from 'next-intl'
+import { useState } from 'react'
 import { SideMenuTab } from '../SideMenuTab/SideMenuTab'
 import { Button } from '../ui/button'
 
@@ -52,7 +53,7 @@ const tabs: SideMenuTabComponents[] = [
 export function SideMenuButton() {
   const [isSheetOpen, setIsSheetOpen] = useState(false)
   const { logout: setLogout } = useAuth()
-  const [orgName, setOrgName] = useState<string>('')
+  const t = useTranslations('Components.SideMenu')
 
   const logOut = () => {
     setLogout()
@@ -62,12 +63,6 @@ export function SideMenuButton() {
   const { data, loading, error } =
     useQuery<GetOrganizationResponse>(GET_ORGANIZATION)
 
-  useEffect(() => {
-    if (data && data.getOrganization) {
-      setOrgName(data.getOrganization.name)
-    }
-  }, [data])
-
   return (
     <Sheet onOpenChange={() => setIsSheetOpen(!isSheetOpen)} open={isSheetOpen}>
       <SheetTrigger>
@@ -75,11 +70,10 @@ export function SideMenuButton() {
       </SheetTrigger>
       <SheetContent side="left">
         <SheetHeader>
-          <SheetTitle>Welcome {orgName} </SheetTitle>
-          <SheetDescription>
-            Start management of your organization now. Use the tabs below to see
-            your performance.
-          </SheetDescription>
+          <SheetTitle>
+            {t('title', { name: data?.getOrganization.name || '...' })}
+          </SheetTitle>
+          <SheetDescription>{t('desc')}</SheetDescription>
         </SheetHeader>
         <ul className="flex flex-1 flex-col gap-4 mt-10">
           {tabs.map((t, i) => {
@@ -96,7 +90,7 @@ export function SideMenuButton() {
 
         <div className="flex flex-row-reverse mt-10">
           <Button onClick={() => logOut()}>
-            <LogOut className="mr-2 h-4 w-4" /> Logout
+            <LogOut className="mr-2 h-4 w-4" /> {t('logout')}
           </Button>
         </div>
       </SheetContent>

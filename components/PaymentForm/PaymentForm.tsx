@@ -53,6 +53,7 @@ import * as z from 'zod'
 import { ModalFormProps } from '../CreateUpdateItemModal/CreateUpdateItemModal'
 import { FormComboboxItem } from '../FormComboboxItem/FormComboboxItem'
 import { FormDatePickerItem } from '../FormDatePickerItem/FormDatePickerItem'
+import { FormError } from '../FormError/FormError'
 import { FormModalLoading } from '../FormModalLoading/FormModalLoading'
 import { FormRadioItem } from '../FormRadioItem/FormRadioItem'
 import { useToast } from '../ui/use-toast'
@@ -231,7 +232,7 @@ export function PaymentForm(props: ModalFormProps) {
   }
 
   if (groupsError || getPaymentError) {
-    return <p>Error</p>
+    return <FormError />
   }
 
   return (

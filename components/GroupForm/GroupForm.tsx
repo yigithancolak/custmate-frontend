@@ -34,6 +34,7 @@ import { useFieldArray, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { ModalFormProps } from '../CreateUpdateItemModal/CreateUpdateItemModal'
 import { FormComboboxItem } from '../FormComboboxItem/FormComboboxItem'
+import { FormError } from '../FormError/FormError'
 import { FormModalLoading } from '../FormModalLoading/FormModalLoading'
 import {
   Form,
@@ -43,13 +44,32 @@ import {
   FormLabel,
   FormMessage
 } from '../ui/form'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '../ui/select'
 import { useToast } from '../ui/use-toast'
+
+const daysOfWeek = [
+  'monday',
+  'tuesday',
+  'wednesday',
+  'thursday',
+  'friday',
+  'saturday',
+  'sunday'
+]
 
 export function GroupForm(props: ModalFormProps) {
   const [instructors, setInstructors] = useState<InstructorItem[]>([])
   const [searchedInstructor, setSearchedInstructor] = useState('')
 
   const t = useTranslations('Components.CreateUpdateForms.Group')
+  const daysT = useTranslations('Common.Days')
+
   const { toast } = useToast()
 
   const handleInstructorSearchChange = (search: string) => {
@@ -178,7 +198,7 @@ export function GroupForm(props: ModalFormProps) {
   }
 
   if (getGroupError) {
-    return <p>Error</p>
+    return <FormError />
   }
 
   return (
@@ -243,23 +263,31 @@ export function GroupForm(props: ModalFormProps) {
                       <FormLabel htmlFor={`day-${index}`}>
                         {t('Labels.day')}
                       </FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          id={`day-${index}`}
-                          className="col-span-3 w-full mb-2"
-                        />
-                      </FormControl>
-                      {form.getFieldState(`times.${index}.start_hour`)
-                        .error && (
-                        <p className="text-sm font-semibold text-red-500">
-                          Invalid day
-                        </p>
-                      )}
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger id={`day-${index}`}>
+                            <SelectValue
+                              placeholder={
+                                field.value ? daysT(field.value) : ''
+                              }
+                            />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {daysOfWeek.map((d, i) => (
+                            <SelectItem key={i} value={d}>
+                              {daysT(d)}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </FormItem>
                   )}
                 />
-
+                {/* id={`day-${index}`} */}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <FormField

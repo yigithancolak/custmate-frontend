@@ -24,6 +24,7 @@ import { useState } from 'react'
 
 export default function GroupsPage() {
   const t = useTranslations('GroupsPage')
+  const daysT = useTranslations('Common.Days')
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10
@@ -104,7 +105,8 @@ export default function GroupsPage() {
       cell: (item) =>
         item.cell.getValue<TimeItem[]>().map((t, i) => (
           <p key={i}>
-            {t.day} {t.start_hour.slice(0, -3)} - {t.finish_hour.slice(0, -3)}
+            {daysT(t.day)} {t.start_hour.slice(0, -3)} -{' '}
+            {t.finish_hour.slice(0, -3)}
           </p>
         ))
     },

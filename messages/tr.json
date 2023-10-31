@@ -1,5 +1,29 @@
 {
+  "Common": {
+    "Days": {
+      "monday": "Pazatesi",
+      "tuesday": "Salı",
+      "wednesday": "Çarşamba",
+      "thursday": "Perşembe",
+      "friday": "Cuma",
+      "saturday": "Cumartesi",
+      "sunday": "Pazar"
+    }
+  },
   "Components": {
+    "SideMenu": {
+      "title": "Hoşgeldin {name}",
+      "desc": "Organizasyonunu yönetmeye şimdi başla. Aşağıdaki butonları kullanarak perfonmansını görüntüleyebilirsin.",
+      "logout": "Çıkış Yap",
+      "Tabs": {
+        "dashboard": "Panel",
+        "groups": "Gruplar",
+        "customers": "Üyeler",
+        "payments": "Ödemeler",
+        "instructors": "Eğitmenler",
+        "earnings": "Kazançlar"
+      }
+    },
     "CreateUpdateForms": {
       "createButton": "{item} Oluştur",
       "title": "{item} {type}",

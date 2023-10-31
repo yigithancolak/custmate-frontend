@@ -45,6 +45,7 @@ import { z } from 'zod'
 import { ModalFormProps } from '../CreateUpdateItemModal/CreateUpdateItemModal'
 import { FormComboboxItem } from '../FormComboboxItem/FormComboboxItem'
 import { FormDatePickerItem } from '../FormDatePickerItem/FormDatePickerItem'
+import { FormError } from '../FormError/FormError'
 import { FormModalLoading } from '../FormModalLoading/FormModalLoading'
 import { ItemIcon } from '../ItemIcon/DashboardCardIcon'
 import { DialogFooter } from '../ui/dialog'
@@ -197,7 +198,7 @@ export function CustomerForm(props: ModalFormProps) {
   }
 
   if (groupsError || getCustomerError) {
-    return <p>Error</p>
+    return <FormError />
   }
 
   return (

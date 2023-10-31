@@ -17,7 +17,7 @@ import {
 } from '@/types/customerTypes'
 import { useMutation, useQuery } from '@apollo/client'
 import { ColumnDef, PaginationState } from '@tanstack/react-table'
-import { Trash2 } from 'lucide-react'
+import { Activity, ShieldAlert, Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 
@@ -117,7 +117,14 @@ export default function CustomersPage() {
     },
     {
       header: t('ColumnHeaders.activity'),
-      accessorKey: 'active'
+      accessorKey: 'active',
+      cell: (cell) => {
+        return cell.getValue<boolean>() ? (
+          <Activity className="text-green-400" />
+        ) : (
+          <ShieldAlert className="text-yellow-300" />
+        )
+      }
     }
     //TODO: ADD GROUPS TO SEARCH CUSTOMERS RESULT IN BACKEND
     // {

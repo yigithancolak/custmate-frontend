@@ -30,6 +30,7 @@ import { Save } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { ModalFormProps } from '../CreateUpdateItemModal/CreateUpdateItemModal'
+import { FormError } from '../FormError/FormError'
 import { FormModalLoading } from '../FormModalLoading/FormModalLoading'
 import { useToast } from '../ui/use-toast'
 
@@ -132,7 +133,7 @@ export function InstructorForm(props: ModalFormProps) {
   }
 
   if (getInstructorError) {
-    return <p>Error</p>
+    return <FormError />
   }
 
   return (
