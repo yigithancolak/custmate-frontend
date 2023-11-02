@@ -176,7 +176,7 @@
     "ColumnHeaders": {
       "operations": "Operasyonlar",
       "name": "Eğitmenin İsmi",
-      "groupCount": "Grup Sayısı"
+      "groups": "Gruplar"
     }
   }
 }

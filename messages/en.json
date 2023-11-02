@@ -176,7 +176,7 @@
     "ColumnHeaders": {
       "operations": "Operations",
       "name": "Name of Instructor",
-      "groupCount": "Count of Groups"
+      "groups": "Groups"
     }
   }
 }

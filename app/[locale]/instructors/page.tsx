@@ -20,9 +20,11 @@ import { useMutation, useQuery } from '@apollo/client'
 import { ColumnDef, PaginationState } from '@tanstack/react-table'
 import { Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 export default function InstructorsPage() {
+  const router = useRouter()
   const t = useTranslations('InstructorsPage')
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
@@ -90,9 +92,25 @@ export default function InstructorsPage() {
       accessorKey: 'name'
     },
     {
-      header: t('ColumnHeaders.groupCount'),
+      header: t('ColumnHeaders.groups'),
       accessorKey: 'groups',
-      cell: (item) => item.cell.getValue<GroupItem[]>()?.length || 0
+      cell: (cell) => {
+        const groupsOfInstructor = cell.getValue<GroupItem[]>()
+
+        return (
+          <div>
+            {groupsOfInstructor.map((g) => (
+              <p
+                key={g.id}
+                className="underline cursor-pointer"
+                onClick={() => router.push(`/groups/${g.id}`)}
+              >
+                {g.name}
+              </p>
+            ))}
+          </div>
+        )
+      }
     }
   ]
 
