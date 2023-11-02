@@ -121,6 +121,7 @@
   "CustomersPage": {
     "header": "Customers of Organization",
     "deleteMessage": "Customer successfully deleted",
+    "infoHeader": "Customer Info",
     "DeleteModal": {
       "header": "Deleting Customer",
       "desc": "Customer will be deleted and it is permanent. Are you sure ?"
@@ -131,12 +132,14 @@
       "lastPayment": "Last Payment",
       "nextPayment": "Next Payment",
       "phoneNumber": "Phone Number",
+      "groups": "Groups",
       "activity": "Activity"
     }
   },
   "GroupsPage": {
     "header": "Groups of Organization",
     "deleteMessage": "Group successfully deleted",
+    "infoHeader": "Group Info",
     "DeleteModal": {
       "header": "Deleting Group",
       "desc": "Group will be deleted and it is permanent. Are you sure ?"

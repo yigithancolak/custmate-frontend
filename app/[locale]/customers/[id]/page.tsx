@@ -49,6 +49,7 @@ export default function SingleCustomerPage() {
   })
   const { toast } = useToast()
   const t = useTranslations('PaymentsPage')
+  const customersT = useTranslations('CustomersPage')
   const { id } = useParams()
   const [date, setDate] = useState<DateRange | undefined>({
     from: new Date(),
@@ -167,12 +168,26 @@ export default function SingleCustomerPage() {
         <div className="flex justify-center items-center gap-4 p-3 border-2">
           <PersonStanding size={100} />
           <div>
-            <h4 className="text-sm font-semibold underline">Customer Info</h4>
-            <p className="text-sm">Name: {customerInfo.name}</p>
-            <p className="text-sm">Phone: {customerInfo.phone}</p>
-            <p className="text-sm">Last Payment: {customerInfo.lastPayment}</p>
-            <p className="text-sm">Next Payment: {customerInfo.nextPayment}</p>
-            <h4 className="text-sm font-semibold mt-2 underline">Groups</h4>
+            <h4 className="text-sm font-semibold underline">
+              {customersT('infoHeader')}
+            </h4>
+            <p className="text-sm">
+              {customersT('ColumnHeaders.name')}: {customerInfo.name}
+            </p>
+            <p className="text-sm">
+              {customersT('ColumnHeaders.phoneNumber')}: {customerInfo.phone}
+            </p>
+            <p className="text-sm">
+              {customersT('ColumnHeaders.lastPayment')}:{' '}
+              {customerInfo.lastPayment}
+            </p>
+            <p className="text-sm">
+              {customersT('ColumnHeaders.nextPayment')}:{' '}
+              {customerInfo.nextPayment}
+            </p>
+            <h4 className="text-sm font-semibold mt-2 underline">
+              {customersT('ColumnHeaders.groups')}
+            </h4>
             {customerInfo.groups.map((g) => (
               <p key={g.id}>{g.name}</p>
             ))}

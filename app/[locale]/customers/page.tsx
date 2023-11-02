@@ -16,6 +16,7 @@ import {
   SearchCustomersResponse,
   SearchCustomersVariables
 } from '@/types/customerTypes'
+import { GroupItem } from '@/types/groupTypes'
 import { useMutation, useQuery } from '@apollo/client'
 import { ColumnDef, PaginationState } from '@tanstack/react-table'
 import { Activity, Eye, ShieldAlert, Trash2 } from 'lucide-react'
@@ -128,6 +129,27 @@ export default function CustomersPage() {
       accessorKey: 'phoneNumber'
     },
     {
+      header: t('ColumnHeaders.groups'),
+      accessorKey: 'groups',
+      cell: (cell) => {
+        const groupsOfCustomer = cell.getValue<GroupItem[]>()
+
+        return (
+          <div>
+            {groupsOfCustomer.map((g) => (
+              <p
+                key={g.id}
+                className="underline cursor-pointer"
+                onClick={() => router.push(`/groups/${g.id}`)}
+              >
+                {g.name}
+              </p>
+            ))}
+          </div>
+        )
+      }
+    },
+    {
       header: t('ColumnHeaders.activity'),
       accessorKey: 'active',
       cell: (cell) => {
@@ -138,15 +160,6 @@ export default function CustomersPage() {
         )
       }
     }
-    //TODO: ADD GROUPS TO SEARCH CUSTOMERS RESULT IN BACKEND
-    // {
-    //   header: 'Groups Count',
-    //   accessorKey: 'groups',
-    //   cell: (cell) => {
-    //     const groupsOfCustomer = cell.getValue<GroupItem[]>()
-    //     return groupsOfCustomer.length
-    //   }
-    // }
   ]
 
   if (error) return <p>Error: {error.message}</p>

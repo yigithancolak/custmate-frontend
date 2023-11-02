@@ -3,6 +3,7 @@ import { CreateUpdateItemModal } from '@/components/CreateUpdateItemModal/Create
 import { DataTable2 } from '@/components/DataTable/DataTable2'
 import { DialogBox } from '@/components/DialogBox/DialogBox'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast'
 import { adjustDateStringFormat, formatTime } from '@/lib/helpers/dateHelpers'
 import {
@@ -17,18 +18,23 @@ import {
   ListCustomersByGroupResponse,
   ListCustomersByGroupVariables
 } from '@/types/customerTypes'
-import { GetGroupResponse, GetGroupVariables } from '@/types/groupTypes'
+import {
+  GetGroupResponse,
+  GetGroupVariables,
+  GroupItem
+} from '@/types/groupTypes'
 import { useMutation, useQuery } from '@apollo/client'
 import { ColumnDef, PaginationState } from '@tanstack/react-table'
-import { Activity, Group, ShieldAlert, Trash2 } from 'lucide-react'
+import { Activity, Eye, Group, ShieldAlert, Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { notFound, useParams } from 'next/navigation'
+import { notFound, useParams, useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 export default function SingleGroupPage() {
   const { id } = useParams()
   const t = useTranslations('CustomersPage')
   const groupsT = useTranslations('GroupsPage')
+  const router = useRouter()
   const daysT = useTranslations('Common.Days')
 
   const { toast } = useToast()
@@ -96,6 +102,15 @@ export default function SingleGroupPage() {
       accessorKey: 'id',
       cell: (cell) => (
         <div className="flex flex-1 py-2">
+          <Button
+            variant="outline"
+            className="p-3 mr-2"
+            onClick={() => {
+              router.push(`/customers/${cell.getValue<string>()}`)
+            }}
+          >
+            <Eye size={16} />
+          </Button>
           <CreateUpdateItemModal
             item="customers"
             refetch={refetchCustomers}
@@ -137,6 +152,27 @@ export default function SingleGroupPage() {
       accessorKey: 'phoneNumber'
     },
     {
+      header: t('ColumnHeaders.groups'),
+      accessorKey: 'groups',
+      cell: (cell) => {
+        const groupsOfCustomer = cell.getValue<GroupItem[]>()
+
+        return (
+          <div>
+            {groupsOfCustomer.map((g) => (
+              <p
+                key={g.id}
+                className="underline cursor-pointer"
+                onClick={() => router.push(`/groups/${g.id}`)}
+              >
+                {g.name}
+              </p>
+            ))}
+          </div>
+        )
+      }
+    },
+    {
       header: t('ColumnHeaders.activity'),
       accessorKey: 'active',
       cell: (cell) => {
@@ -162,21 +198,27 @@ export default function SingleGroupPage() {
         <div className="flex justify-center items-center gap-4 p-3 border-2">
           <Group size={100} />
           <div>
-            <h4 className="text-sm font-semibold underline">Group Info</h4>
-            <p className="text-sm">Name: {getGroupData?.getGroup.name}</p>
-            <h4 className="text-sm font-semibold underline">Instructor</h4>
+            <h4 className="text-sm font-semibold underline">
+              {groupsT('infoHeader')}
+            </h4>
             <p className="text-sm">
-              Name: {getGroupData?.getGroup.instructor.name}
+              {groupsT('ColumnHeaders.name')}: {getGroupData?.getGroup.name}
             </p>
+            <h4 className="text-sm font-semibold underline">
+              {groupsT('ColumnHeaders.instructor')}
+            </h4>
+            <p className="text-sm">{getGroupData?.getGroup.instructor.name}</p>
 
-            <h4 className="text-sm font-semibold mt-2 underline">Times</h4>
+            <h4 className="text-sm font-semibold mt-2 underline">
+              {groupsT('ColumnHeaders.times')}
+            </h4>
             {getGroupData?.getGroup.times.map((time, i) => (
-              <p key={i}>
-                {daysT(time.day)}{' '}
+              <div key={i}>
+                <span>{daysT(time.day)} </span>
                 <Badge>
                   {formatTime(time.start_hour)} - {formatTime(time.finish_hour)}
                 </Badge>
-              </p>
+              </div>
             ))}
           </div>
         </div>
