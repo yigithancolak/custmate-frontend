@@ -1,6 +1,7 @@
 'use client'
 import { CreateUpdateItemModal } from '@/components/CreateUpdateItemModal/CreateUpdateItemModal'
 import { DialogBox } from '@/components/DialogBox/DialogBox'
+import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
 import { PageLayout } from '@/layouts/PageLayout/PageLayout'
 import { adjustDateStringFormat } from '@/lib/helpers/dateHelpers'
@@ -17,11 +18,13 @@ import {
 } from '@/types/customerTypes'
 import { useMutation, useQuery } from '@apollo/client'
 import { ColumnDef, PaginationState } from '@tanstack/react-table'
-import { Activity, ShieldAlert, Trash2 } from 'lucide-react'
+import { Activity, Eye, ShieldAlert, Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 export default function CustomersPage() {
+  const router = useRouter()
   const t = useTranslations('CustomersPage')
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
@@ -75,6 +78,15 @@ export default function CustomersPage() {
       accessorKey: 'id',
       cell: (cell) => (
         <div className="flex flex-1 py-2">
+          <Button
+            variant="outline"
+            className="p-3 mr-2"
+            onClick={() => {
+              router.push(`/customers/${cell.getValue<string>()}`)
+            }}
+          >
+            <Eye size={16} />
+          </Button>
           <CreateUpdateItemModal
             item="customers"
             refetch={refetchCustomers}

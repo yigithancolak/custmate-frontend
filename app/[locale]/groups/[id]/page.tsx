@@ -2,12 +2,7 @@
 import { CreateUpdateItemModal } from '@/components/CreateUpdateItemModal/CreateUpdateItemModal'
 import { DataTable2 } from '@/components/DataTable/DataTable2'
 import { DialogBox } from '@/components/DialogBox/DialogBox'
-import { Button } from '@/components/ui/button'
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger
-} from '@/components/ui/hover-card'
+import { Badge } from '@/components/ui/badge'
 import { useToast } from '@/components/ui/use-toast'
 import { adjustDateStringFormat, formatTime } from '@/lib/helpers/dateHelpers'
 import {
@@ -25,7 +20,7 @@ import {
 import { GetGroupResponse, GetGroupVariables } from '@/types/groupTypes'
 import { useMutation, useQuery } from '@apollo/client'
 import { ColumnDef, PaginationState } from '@tanstack/react-table'
-import { Activity, Info, ShieldAlert, Trash2 } from 'lucide-react'
+import { Activity, Group, ShieldAlert, Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { notFound, useParams } from 'next/navigation'
 import { useState } from 'react'
@@ -164,46 +159,33 @@ export default function SingleGroupPage() {
         {getGroupData?.getGroup.name}
       </h3>
       <div className="flex w-10/12 md:w-10/12 flex-col gap-4">
+        <div className="flex justify-center items-center gap-4 p-3 border-2">
+          <Group size={100} />
+          <div>
+            <h4 className="text-sm font-semibold underline">Group Info</h4>
+            <p className="text-sm">Name: {getGroupData?.getGroup.name}</p>
+            <h4 className="text-sm font-semibold underline">Instructor</h4>
+            <p className="text-sm">
+              Name: {getGroupData?.getGroup.instructor.name}
+            </p>
+
+            <h4 className="text-sm font-semibold mt-2 underline">Times</h4>
+            {getGroupData?.getGroup.times.map((time, i) => (
+              <p key={i}>
+                {daysT(time.day)}{' '}
+                <Badge>
+                  {formatTime(time.start_hour)} - {formatTime(time.finish_hour)}
+                </Badge>
+              </p>
+            ))}
+          </div>
+        </div>
         <div className="flex gap-2 items-center justify-between">
           <CreateUpdateItemModal
             item="customers"
             refetch={refetchCustomers}
             type="create"
           />
-          <HoverCard>
-            <HoverCardTrigger asChild>
-              <Button variant="link">
-                <Info />
-              </Button>
-            </HoverCardTrigger>
-            <HoverCardContent className="w-auto">
-              <div className="flex flex-col gap-2 items-start pt-2">
-                <p>
-                  <span className="font-semibold">
-                    {groupsT('ColumnHeaders.name')}:
-                  </span>{' '}
-                  {getGroupData?.getGroup.name}
-                </p>
-                <p>
-                  <span className="font-semibold">
-                    {groupsT('ColumnHeaders.instructor')}:
-                  </span>{' '}
-                  {getGroupData?.getGroup.instructor.name}
-                </p>
-                <span className="font-semibold underline">
-                  {groupsT('ColumnHeaders.times')}
-                </span>
-                <ul>
-                  {getGroupData?.getGroup.times.map((time, i) => (
-                    <li key={i}>
-                      {daysT(time.day)} {formatTime(time.start_hour)} -
-                      {formatTime(time.finish_hour)}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </HoverCardContent>
-          </HoverCard>
         </div>
         <DataTable2
           columns={customerColumns}

@@ -44,9 +44,6 @@ export default function GroupsPage() {
       variables: {
         offset: pagination.pageIndex * pagination.pageSize,
         limit: pagination.pageSize
-      },
-      onCompleted(data) {
-        console.log(data)
       }
     }
   )

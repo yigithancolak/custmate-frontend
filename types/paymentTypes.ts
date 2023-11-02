@@ -7,6 +7,13 @@ export type ListPaymentsResponse = {
   }
 }
 
+export type ListPaymentsByCustomerResponse = {
+  listPaymentsByCustomer: {
+    totalCount: number
+    items: PaymentItem[]
+  }
+}
+
 export type PaymentItem = {
   id: string
   amount: number
@@ -32,6 +39,10 @@ export type ListPaymentsVariables = {
   limit?: number
   startDate: string
   endDate: string
+}
+
+export type ListPaymentsByCustomerVariables = ListPaymentsVariables & {
+  customerId: string
 }
 
 export type GetPaymentResponse = {

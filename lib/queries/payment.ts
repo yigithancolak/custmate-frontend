@@ -52,6 +52,33 @@ export const LIST_PAYMENTS_BY_ORGANIZATION = gql`
   }
 `
 
+export const LIST_PAYMENTS_BY_CUSTOMER = gql`
+  query ListPaymentsByCustomer(
+    $customerId: ID!
+    $offset: Int = 0
+    $limit: Int = 10
+    $startDate: String!
+    $endDate: String!
+  ) {
+    listPaymentsByCustomer(
+      customerId: $customerId
+      offset: $offset
+      limit: $limit
+      startDate: $startDate
+      endDate: $endDate
+    ) {
+      totalCount
+      items {
+        id
+        amount
+        date
+        paymentType
+        currency
+      }
+    }
+  }
+`
+
 export const GET_PAYMENT_BY_ID = gql`
   query GetPayment($id: ID!) {
     getPayment(id: $id) {
