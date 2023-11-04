@@ -29,3 +29,11 @@ export const updateCustomerSchema = z.object({
     .optional(),
   active: z.boolean().optional()
 })
+
+export const searchCustomerFilterSchema = z.object({
+  name: z.string().optional(),
+  phoneNumber: z.string().optional(),
+  active: z.boolean().optional(),
+  latePayment: z.boolean().optional(),
+  upcomingPayment: z.boolean().optional()
+})

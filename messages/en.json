@@ -11,6 +11,12 @@
     }
   },
   "Components": {
+    "CustomerFilterPopover": {
+      "name": "Customer Name",
+      "phoneNumber": "Phone Number",
+      "latePayments": "Late payments",
+      "upcomingPayments": "Upcoming payments"
+    },
     "SideMenu": {
       "title": "Welcome {name}",
       "desc": "Start management of your organization now. Use the tabs below to see your performance.",

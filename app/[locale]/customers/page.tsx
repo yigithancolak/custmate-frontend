@@ -1,18 +1,22 @@
 'use client'
 import { CreateUpdateItemModal } from '@/components/CreateUpdateItemModal/CreateUpdateItemModal'
+import { CustomerFilterPopover } from '@/components/CustomerFilterPopover/CustomerFilterPopover'
+import { DataTable } from '@/components/DataTable/DataTable'
+import { DateWarningToolTip } from '@/components/DateWarningToolTip/DateWarningToolTip'
 import { DialogBox } from '@/components/DialogBox/DialogBox'
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
-import { PageLayout } from '@/layouts/PageLayout/PageLayout'
 import { adjustDateStringFormat } from '@/lib/helpers/dateHelpers'
 import {
   DELETE_CUSTOMER_MUTATION,
   SEARCH_CUSTOMERS_QUERY
 } from '@/lib/queries/customer'
+import { searchCustomerFilterSchema } from '@/lib/validation/customer'
 import {
   CustomerItem,
   DeleteCustomerResponse,
   DeleteCustomerVariables,
+  SearchCustomerFilter,
   SearchCustomersResponse,
   SearchCustomersVariables
 } from '@/types/customerTypes'
@@ -23,6 +27,7 @@ import { Activity, Eye, ShieldAlert, Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { z } from 'zod'
 
 export default function CustomersPage() {
   const router = useRouter()
@@ -31,6 +36,37 @@ export default function CustomersPage() {
     pageIndex: 0,
     pageSize: 10
   })
+  const [filters, setFilters] = useState<SearchCustomerFilter>({})
+
+  const handleFilterChange = (
+    values: z.infer<typeof searchCustomerFilterSchema>
+  ) => {
+    const choosenValues: z.infer<typeof searchCustomerFilterSchema> = {}
+
+    if (values.name !== '') {
+      choosenValues.name = values.name
+    }
+
+    if (values.phoneNumber !== '') {
+      choosenValues.phoneNumber = values.phoneNumber
+    }
+
+    if (values.latePayment) {
+      choosenValues.latePayment = true
+    }
+
+    if (values.upcomingPayment) {
+      choosenValues.upcomingPayment = true
+    }
+
+    if (values.active) {
+      choosenValues.active = values.active
+    }
+
+    console.log(choosenValues)
+
+    setFilters(choosenValues)
+  }
 
   const {
     data,
@@ -43,7 +79,7 @@ export default function CustomersPage() {
       variables: {
         offset: pagination.pageIndex * pagination.pageSize,
         limit: pagination.pageSize,
-        filter: {}
+        filter: filters
       }
     }
   )
@@ -113,6 +149,7 @@ export default function CustomersPage() {
       accessorKey: 'lastPayment',
       cell: (cell) => {
         const date = cell.getValue<string>()
+
         return adjustDateStringFormat(date)
       }
     },
@@ -121,7 +158,7 @@ export default function CustomersPage() {
       accessorKey: 'nextPayment',
       cell: (cell) => {
         const date = cell.getValue<string>()
-        return adjustDateStringFormat(date)
+        return <DateWarningToolTip dateString={date} />
       }
     },
     {
@@ -165,16 +202,26 @@ export default function CustomersPage() {
   if (error) return <p>Error: {error.message}</p>
 
   return (
-    <PageLayout
-      header={t('header')}
-      columns={customerColumns}
-      data={data?.searchCustomers.items || []}
-      item="customers"
-      loading={loading}
-      pagination={pagination}
-      refetch={refetchCustomers}
-      setPagination={setPagination}
-      totalCount={data?.searchCustomers.totalCount || 0}
-    />
+    <main className="flex flex-col items-center w-full h-full">
+      <h3 className="text-2xl text-center py-6">{t('header')}</h3>
+      <div className="flex w-10/12 md:w-10/12 flex-col gap-4">
+        <div className="flex justify-between">
+          <CreateUpdateItemModal
+            item="customers"
+            refetch={refetchCustomers}
+            type="create"
+          />
+          <CustomerFilterPopover handleFilterChange={handleFilterChange} />
+        </div>
+        <DataTable
+          columns={customerColumns}
+          data={data?.searchCustomers.items || []}
+          loading={loading}
+          totalCount={data?.searchCustomers.totalCount || 0}
+          pagination={pagination}
+          setPagination={setPagination}
+        />
+      </div>
+    </main>
   )
 }

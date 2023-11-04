@@ -11,6 +11,12 @@
     }
   },
   "Components": {
+    "CustomerFilterPopover": {
+      "name": "Üye İsmi",
+      "phoneNumber": "Telefon Numarası",
+      "latePayments": "Geciken Ödemeler",
+      "upcomingPayments": "Yaklaşmakta Ödemeler"
+    },
     "SideMenu": {
       "title": "Hoşgeldin {name}",
       "desc": "Organizasyonunu yönetmeye şimdi başla. Aşağıdaki butonları kullanarak performansını görüntüleyebilirsin.",
