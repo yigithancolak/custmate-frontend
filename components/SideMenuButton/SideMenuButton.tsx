@@ -29,6 +29,10 @@ const tabs: SideMenuTabComponents[] = [
     path: '/dashboard'
   },
   {
+    type: 'instructors',
+    path: '/instructors'
+  },
+  {
     type: 'groups',
     path: '/groups'
   },
@@ -40,10 +44,7 @@ const tabs: SideMenuTabComponents[] = [
     type: 'payments',
     path: '/payments'
   },
-  {
-    type: 'instructors',
-    path: '/instructors'
-  },
+
   {
     type: 'earnings',
     path: '/earnings'
