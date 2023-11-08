@@ -33,7 +33,7 @@ import { DateRange } from 'react-day-picker'
 
 type CustomerInfo = {
   name: string
-  phone: string
+  phoneNumber: string
   lastPayment: string
   nextPayment: string
   groups: GroupItem[]
@@ -42,7 +42,7 @@ type CustomerInfo = {
 export default function SingleCustomerPage() {
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({
     name: '',
-    phone: '',
+    phoneNumber: '',
     lastPayment: '',
     nextPayment: '',
     groups: []
@@ -67,7 +67,7 @@ export default function SingleCustomerPage() {
     onCompleted(data) {
       setCustomerInfo({
         name: data.getCustomer.name,
-        phone: data.getCustomer.phoneNumber,
+        phoneNumber: data.getCustomer.phoneNumber,
         lastPayment: adjustDateStringFormat(data.getCustomer.lastPayment),
         nextPayment: adjustDateStringFormat(data.getCustomer.nextPayment),
         groups: data.getCustomer.groups
@@ -168,24 +168,26 @@ export default function SingleCustomerPage() {
         <div className="flex justify-center items-center gap-4 p-3 border-2">
           <PersonStanding size={100} />
           <div>
-            <h4 className="text-sm font-semibold underline">
+            <h4 className="text-base font-bold underline">
               {customersT('infoHeader')}
             </h4>
-            <p className="text-sm">
-              {customersT('ColumnHeaders.name')}: {customerInfo.name}
-            </p>
-            <p className="text-sm">
-              {customersT('ColumnHeaders.phoneNumber')}: {customerInfo.phone}
-            </p>
-            <p className="text-sm">
-              {customersT('ColumnHeaders.lastPayment')}:{' '}
-              {customerInfo.lastPayment}
-            </p>
-            <p className="text-sm">
-              {customersT('ColumnHeaders.nextPayment')}:{' '}
-              {customerInfo.nextPayment}
-            </p>
-            <h4 className="text-sm font-semibold mt-2 underline">
+            {Object.keys(customerInfo).map((key) => {
+              if (key === 'groups') return null
+
+              const displayKey = key as keyof Omit<CustomerInfo, 'groups'>
+
+              return (
+                <div key={key} className="text-sm">
+                  <span className="font-semibold">
+                    {customersT(`ColumnHeaders.${key}`)}:{' '}
+                  </span>
+                  <span className="block break-words">
+                    {customerInfo[displayKey]}
+                  </span>
+                </div>
+              )
+            })}
+            <h4 className="text-base font-bold mt-2 underline">
               {customersT('ColumnHeaders.groups')}
             </h4>
             {customerInfo.groups.map((g) => (
@@ -194,7 +196,7 @@ export default function SingleCustomerPage() {
           </div>
         </div>
 
-        <h3 className="text-2xl text-center py-3">Payments of Customer</h3>
+        <h3 className="text-2xl text-center py-3">{t('header')}</h3>
 
         <div className="flex gap-2 items-center justify-between">
           <CreateUpdateItemModal
