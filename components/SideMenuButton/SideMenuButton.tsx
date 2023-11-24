@@ -53,7 +53,7 @@ const tabs: SideMenuTabComponents[] = [
 
 export function SideMenuButton() {
   const [isSheetOpen, setIsSheetOpen] = useState(false)
-  const { logout: setLogout } = useAuth()
+  const { logout: setLogout, accessToken } = useAuth()
   const t = useTranslations('Components.SideMenu')
 
   const logOut = () => {
@@ -61,14 +61,20 @@ export function SideMenuButton() {
     setIsSheetOpen(false)
   }
 
-  const { data, loading, error } =
-    useQuery<GetOrganizationResponse>(GET_ORGANIZATION)
+  const { data, loading, error } = useQuery<GetOrganizationResponse>(
+    GET_ORGANIZATION,
+    {
+      skip: !accessToken
+    }
+  )
+
+  if (loading || !accessToken) {
+    return null
+  }
 
   return (
     <Sheet onOpenChange={() => setIsSheetOpen(!isSheetOpen)} open={isSheetOpen}>
-      <SheetTrigger>
-        <AlignJustify />
-      </SheetTrigger>
+      <SheetTrigger>{accessToken && <AlignJustify />}</SheetTrigger>
       <SheetContent side="left">
         <SheetHeader>
           <SheetTitle>

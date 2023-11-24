@@ -94,7 +94,9 @@
   },
 
   "IndexPage": {
-    "title": "next-intl example"
+    "title": "Welcome to Custmate CRM",
+    "desc": "Custmate is a system for organizations to manage customers with minimal effort. Registering is disabled for now.",
+    "haveAccount": "Click here if you have an account"
   },
   "LoginPage": {
     "header": "Login",

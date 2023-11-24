@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
   const logout = () => {
     localStorage.removeItem('accessToken')
-    setAccessToken('false')
+    setAccessToken('')
     router.replace('/auth')
   }
 

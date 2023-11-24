@@ -94,7 +94,9 @@
   },
 
   "IndexPage": {
-    "title": "Hey merhaba"
+    "title": "Custmate CRM'e Hoş Geldiniz",
+    "desc": "Custmate organizasyonunuzu ve müşterilerinizi kolayca yönetmeniz için dizayn edilmiş bir CRM'dir. Üye olma özelliği şimdilik aktif değildir.",
+    "haveAccount": "Üyeliğiniz varsa buraya tıklayın"
   },
   "LoginPage": {
     "header": "Organizasyon Giriş",
