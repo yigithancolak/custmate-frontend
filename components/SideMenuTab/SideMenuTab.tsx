@@ -18,7 +18,7 @@ export function SideMenuTab(props: SideMenuTabProps) {
   const t = useTranslations('Components.SideMenu.Tabs')
 
   return (
-    <li className="flex flex-1 border-2 rounded-md items-center">
+    <li className="flex flex-1 border-2 border-gray-700 rounded-md items-center shadow-sm">
       <Button
         variant="ghost"
         className="w-full h-full p-4 relative"

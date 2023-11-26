@@ -74,7 +74,9 @@ export function SideMenuButton() {
 
   return (
     <Sheet onOpenChange={() => setIsSheetOpen(!isSheetOpen)} open={isSheetOpen}>
-      <SheetTrigger>{accessToken && <AlignJustify />}</SheetTrigger>
+      <SheetTrigger>
+        {accessToken && <AlignJustify strokeWidth={3} />}
+      </SheetTrigger>
       <SheetContent side="left">
         <SheetHeader>
           <SheetTitle>
@@ -96,7 +98,7 @@ export function SideMenuButton() {
         </ul>
 
         <div className="flex flex-row-reverse mt-10">
-          <Button onClick={() => logOut()}>
+          <Button variant="destructive" onClick={() => logOut()}>
             <LogOut className="mr-2 h-4 w-4" /> {t('logout')}
           </Button>
         </div>

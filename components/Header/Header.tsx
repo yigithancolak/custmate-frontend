@@ -1,25 +1,26 @@
 'use client'
 import Image from 'next/image'
+import Link from 'next/link'
 import { SideMenuButton } from '../SideMenuButton/SideMenuButton'
 import { ToggleModeMenu } from '../ToggleModeMenu/ToggleModeMenu'
 
 export default function Header() {
   return (
-    <header className="flex justify-between items-center p-3">
-      <div>
+    <header className="flex justify-between items-center p-4 bg-slate-50 shadow-md">
+      <div className="w-10">
         <SideMenuButton />
       </div>
 
-      <div>
+      <Link href="/dashboard">
         <Image
           src="/../../custmate.svg"
           width={80}
           height={80}
           alt="custmate logo"
         />
-      </div>
+      </Link>
 
-      <div>
+      <div className="w-10">
         <ToggleModeMenu />
       </div>
     </header>

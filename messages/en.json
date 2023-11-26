@@ -1,5 +1,12 @@
 {
   "Common": {
+    "Items": {
+      "instructors": "Instructors",
+      "groups": "Groups",
+      "customers": "Customers",
+      "payments": "Payments",
+      "earnings": "Earnings"
+    },
     "Days": {
       "monday": "Monday",
       "tuesday": "Tuesday",
@@ -101,7 +108,11 @@
   "LoginPage": {
     "header": "Login",
     "password": "Password",
-    "signin": "Sign In"
+    "signin": "Sign In",
+    "Messages": {
+      "success": "User successfully logged in",
+      "error": "Problem occured while login. Check your email and password is true."
+    }
   },
   "DashboardPage": {
     "header": "Organization Metrics and Dashboard",

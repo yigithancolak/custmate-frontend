@@ -49,14 +49,14 @@ export function LoginForm() {
       },
       onCompleted: (data) => {
         toast({
-          description: 'User Successfully Logged In'
+          description: t('Messages.success')
         })
         setLogin(data.login.accessToken)
       },
-      onError: (err) => {
+      onError: () => {
         toast({
           variant: 'destructive',
-          description: err.message
+          description: t('Messages.error')
         })
       }
     })

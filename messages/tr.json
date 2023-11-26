@@ -1,5 +1,12 @@
 {
   "Common": {
+    "Items": {
+      "instructors": "Eğitmenler",
+      "groups": "Gruplar",
+      "customers": "Üyeler",
+      "payments": "Ödemeler",
+      "earnings": "Kazançlar"
+    },
     "Days": {
       "monday": "Pazatesi",
       "tuesday": "Salı",
@@ -101,7 +108,11 @@
   "LoginPage": {
     "header": "Organizasyon Giriş",
     "password": "Şifre",
-    "signin": "Giriş Yap"
+    "signin": "Giriş Yap",
+    "Messages": {
+      "success": "Kullanıcı girişi başarılı",
+      "error": "Bir problem oluştu. Email ve şifrenizi tekrar kontrol edin."
+    }
   },
   "DashboardPage": {
     "header": "Organizasyon Metrikleri ve Gösterge Paneli",
