@@ -1,6 +1,12 @@
 'use client'
-import { useRouter } from 'next/navigation'
-import { PropsWithChildren, createContext, useContext, useState } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
+import {
+  PropsWithChildren,
+  createContext,
+  useContext,
+  useEffect,
+  useState
+} from 'react'
 
 interface AuthContextType {
   accessToken: string
@@ -15,6 +21,7 @@ const AuthContext = createContext<AuthContextType | undefined>({
 })
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
+  const path = usePathname()
   const [accessToken, setAccessToken] = useState<string>(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('accessToken') || ''
@@ -34,6 +41,12 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     setAccessToken('')
     router.replace('/auth')
   }
+
+  useEffect(() => {
+    if (!accessToken && !path.includes('/auth')) {
+      router.replace('/auth')
+    }
+  }, [path])
 
   return (
     <AuthContext.Provider value={{ accessToken, login, logout }}>
