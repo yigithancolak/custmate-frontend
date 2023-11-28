@@ -105,10 +105,14 @@
     "desc": "Custmate organizasyonunuzu ve müşterilerinizi kolayca yönetmeniz için dizayn edilmiş bir CRM'dir. Üye olma özelliği şimdilik aktif değildir.",
     "haveAccount": "Üyeliğiniz varsa buraya tıklayın"
   },
-  "LoginPage": {
-    "header": "Organizasyon Giriş",
+  "AuthPage": {
+    "header": "ORGANİZASYON GİRİŞİ VE ÜYE OLMA",
     "password": "Şifre",
     "signin": "Giriş Yap",
+    "Sections": {
+      "login": "GİRİŞ",
+      "register": "ÜYE OL"
+    },
     "Messages": {
       "success": "Kullanıcı girişi başarılı",
       "error": "Bir problem oluştu. Email ve şifrenizi tekrar kontrol edin."

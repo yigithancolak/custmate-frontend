@@ -25,10 +25,10 @@ export function ToggleModeMenu() {
         <DropdownMenuItem onClick={() => setTheme('light')}>
           Light
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('dark')}>
+        <DropdownMenuItem disabled onClick={() => setTheme('dark')}>
           Dark
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('system')}>
+        <DropdownMenuItem disabled onClick={() => setTheme('system')}>
           System
         </DropdownMenuItem>
       </DropdownMenuContent>

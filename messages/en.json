@@ -105,10 +105,14 @@
     "desc": "Custmate is a system for organizations to manage customers with minimal effort. Registering is disabled for now.",
     "haveAccount": "Click here if you have an account"
   },
-  "LoginPage": {
-    "header": "Login",
+  "AuthPage": {
+    "header": "LOGIN OR REGISTER YOUR ORGANIZATION",
     "password": "Password",
     "signin": "Sign In",
+    "Sections": {
+      "login": "LOGIN",
+      "register": "REGISTER"
+    },
     "Messages": {
       "success": "User successfully logged in",
       "error": "Problem occured while login. Check your email and password is true."

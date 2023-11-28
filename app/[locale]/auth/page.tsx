@@ -1,16 +1,14 @@
 'use client'
 
-import { LoginForm } from '@/components/LoginForm/LoginForm'
+import { AuthForm } from '@/components/AuthForm/AuthForm'
 import { useTranslations } from 'next-intl'
 
 export default function LoginPage() {
-  const t = useTranslations('LoginPage')
+  const t = useTranslations('AuthPage')
   return (
     <main className="flex flex-col items-center w-full h-full">
-      <h3 className="text-2xl text-center py-6">{t('header')}</h3>
-      <div className="flex w-10/12 md:w-6/12 ">
-        <LoginForm />
-      </div>
+      <h3 className="text-3xl text-center py-6 px-3">{t('header')}</h3>
+      <AuthForm />
     </main>
   )
 }
