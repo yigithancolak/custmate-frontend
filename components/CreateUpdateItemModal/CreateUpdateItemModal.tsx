@@ -64,7 +64,7 @@ export function CreateUpdateItemModal(props: CreateUpdateItemModalProps) {
   return (
     <Dialog onOpenChange={() => setIsOpen(!isOpen)} open={isOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="p-3 mr-2">
+        <Button variant="outline" className="p-3">
           {props.type === 'create' ? (
             <div className="flex items-center">
               <Plus className="h-full" />

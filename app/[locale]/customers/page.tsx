@@ -63,8 +63,6 @@ export default function CustomersPage() {
       choosenValues.active = values.active
     }
 
-    console.log(choosenValues)
-
     setFilters(choosenValues)
   }
 
