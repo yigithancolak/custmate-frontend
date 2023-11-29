@@ -36,7 +36,7 @@ export function DashboardCard(props: DashboardCardProps) {
   }
 
   return (
-    <Card className="relative flex flex-col flex-1 items-center shadow-md">
+    <Card className="relative flex flex-col flex-1 items-center shadow-md hover:animate-scale">
       <div className="absolute left-10 top-1/2 -translate-y-1/2 hidden md:block w-1/6">
         <ItemIcon className="w-full h-full" type={props.type} />
       </div>

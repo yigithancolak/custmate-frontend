@@ -6,7 +6,7 @@ import { ToggleModeMenu } from '../ToggleModeMenu/ToggleModeMenu'
 
 export default function Header() {
   return (
-    <header className="flex justify-between items-center p-4 bg-slate-50 shadow-md">
+    <header className="flex justify-between items-center p-4 bg-slate-50 shadow-md h-[10vh] sticky top-0 z-20">
       <div className="w-10">
         <SideMenuButton />
       </div>
