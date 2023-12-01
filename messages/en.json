@@ -109,6 +109,7 @@
     "header": "LOGIN OR REGISTER YOUR ORGANIZATION",
     "password": "Password",
     "signin": "Sign In",
+    "testUser": "Test User",
     "Sections": {
       "login": "LOGIN",
       "register": "REGISTER"

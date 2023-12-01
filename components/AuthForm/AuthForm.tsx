@@ -16,7 +16,7 @@ import { useAuth } from '@/providers/AuthProvider'
 import { LoginResponse, LoginVariables } from '@/types/authTypes'
 import { useMutation } from '@apollo/client'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Lock } from 'lucide-react'
+import { Lock, TestTubes } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
@@ -64,8 +64,29 @@ export function AuthForm() {
     })
   }
 
+  function testUserLogin() {
+    login({
+      variables: {
+        email: 'test@test.com',
+        password: 'test'
+      },
+      onCompleted: (data) => {
+        toast({
+          description: t('Messages.success')
+        })
+        setLogin(data.login.accessToken)
+      },
+      onError: () => {
+        toast({
+          variant: 'destructive',
+          description: t('Messages.error')
+        })
+      }
+    })
+  }
+
   return (
-    <Card className="w-4/5 md:w-1/2 p-3">
+    <Card className="w-4/5 md:w-1/2 p-3 bg-stone-200">
       <div className="flex justify-center  mb-4">
         <Button className="py-1 px-3 w-1/2 rounded-r-none" variant="outline">
           {t('Sections.login')}
@@ -111,13 +132,26 @@ export function AuthForm() {
               </FormItem>
             )}
           />
-          <Button
-            type="submit"
-            className="mt-6 w-full text-lg"
-            disabled={loading}
-          >
-            {t('signin')}
-          </Button>
+          <div className="flex w-full gap-4">
+            <Button
+              type="button"
+              className="mt-6 w-full md:text-lg"
+              disabled={loading}
+              onClick={() => testUserLogin()}
+              variant="outline"
+            >
+              <TestTubes className="mr-2" />
+              {t('testUser')}
+            </Button>
+
+            <Button
+              type="submit"
+              className="mt-6 w-full md:text-lg"
+              disabled={loading}
+            >
+              {t('signin')}
+            </Button>
+          </div>
         </form>
       </Form>
     </Card>

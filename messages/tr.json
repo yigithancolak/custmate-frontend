@@ -109,6 +109,7 @@
     "header": "ORGANİZASYON GİRİŞİ VE ÜYE OLMA",
     "password": "Şifre",
     "signin": "Giriş Yap",
+    "testUser": "Test Girişi",
     "Sections": {
       "login": "GİRİŞ",
       "register": "ÜYE OL"
